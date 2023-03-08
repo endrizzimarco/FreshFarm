@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
-import { msalInstance } from 'src/boot/msal'
+import { useAuthStore } from 'stores/auth.js'
 
 const essentialLinks = [
   {
@@ -48,43 +48,11 @@ const essentialLinks = [
   }
 ]
 
+const store = useAuthStore()
 const leftDrawerOpen = ref(false)
-const isAuthenticated = ref(false)
-
-const checkAuthenticated = () => {
-  const accounts = msalInstance.getAllAccounts()
-  isAuthenticated.value = accounts?.length > 0
-}
-const signIn = async () => {
-  try {
-    const loginRequest = { scopes: [] }
-    const loginResponse = await msalInstance.loginPopup(loginRequest)
-    isAuthenticated.value = !!loginResponse.account
-  } catch (err) {
-    // reset password flow
-    if (err.errorMessage && err.errorMessage.indexOf('AADB2C90118') > -1) {
-      try {
-        const passwordResetResponse = await msalInstance.loginPopup({
-          authority: import.meta.env.VITE_MSAL_PASSWORD_RESET_AUTHORITY
-        })
-        isAuthenticated.value = !!passwordResetResponse.account
-      } catch (passwordResetError) {
-        console.error(passwordResetError)
-      }
-    } else {
-      console.error(err)
-      isAuthenticated.value = false
-    }
-  }
-}
-
-const signOut = async () => {
-  await msalInstance.logoutPopup()
-  isAuthenticated.value = false
-}
 
 onMounted(() => {
-  checkAuthenticated()
+  store.initAuth()
 })
 </script>
 
@@ -95,8 +63,8 @@ onMounted(() => {
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
 
         <q-toolbar-title> FreshFarm </q-toolbar-title>
-        <q-btn v-if="!isAuthenticated" color="primary" label="Sign in" @click="signIn()" />
-        <q-btn v-else color="primary" label="Sign out" @click="signOut()" />
+        <q-btn v-if="!store.isAuthenticated" color="primary" label="Sign in" @click="store.signIn" />
+        <q-btn v-else color="primary" label="Sign out" @click="store.signOut" />
       </q-toolbar>
     </q-header>
 
