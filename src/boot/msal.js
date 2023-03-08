@@ -1,5 +1,4 @@
 // Boot file that runs before the app is created
-import { boot } from 'quasar/wrappers'
 import * as msal from '@azure/msal-browser'
 
 const msalConfig = {
@@ -13,7 +12,3 @@ const msalConfig = {
 let msalInstance = new msal.PublicClientApplication(msalConfig)
 
 export { msalInstance }
-
-export default boot(async ({ app }) => {
-  console.log('boot', import.meta.env.VITE_MSAL_CLIENT_ID)
-})
