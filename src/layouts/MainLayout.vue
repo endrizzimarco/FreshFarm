@@ -65,7 +65,7 @@ const signIn = async () => {
     if (err.errorMessage && err.errorMessage.indexOf('AADB2C90118') > -1) {
       try {
         const passwordResetResponse = await msalInstance.loginPopup({
-          authority: 'https://freshfarm3014.b2clogin.com/freshfarm3014.onmicrosoft.com/B2C_1_PasswordReset/'
+          authority: import.meta.env.VITE_MSAL_PASSWORD_RESET_AUTHORITY
         })
         isAuthenticated.value = !!passwordResetResponse.account
       } catch (passwordResetError) {
@@ -95,7 +95,6 @@ onMounted(() => {
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
 
         <q-toolbar-title> FreshFarm </q-toolbar-title>
-        {{ isAuthenticated }}
         <q-btn v-if="!isAuthenticated" color="primary" label="Sign in" @click="signIn()" />
         <q-btn v-else color="primary" label="Sign out" @click="signOut()" />
       </q-toolbar>
