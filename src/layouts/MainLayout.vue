@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useAuthStore } from 'stores/auth.js'
 
@@ -50,10 +50,6 @@ const essentialLinks = [
 
 const store = useAuthStore()
 const leftDrawerOpen = ref(false)
-
-onMounted(() => {
-  store.initAuth()
-})
 </script>
 
 <template>
