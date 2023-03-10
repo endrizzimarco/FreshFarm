@@ -12,16 +12,20 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = accounts?.length > 0
     },
 
+    async handleRedirectPromise() {
+      await msalInstance.handleRedirectPromise()
+    },
+
     async signIn() {
       try {
         const loginRequest = { scopes: [] }
-        const loginResponse = await msalInstance.loginPopup(loginRequest)
+        const loginResponse = await msalInstance.loginRedirect(loginRequest)
         this.isAuthenticated = !!loginResponse.account
       } catch (err) {
         // reset password flow
         if (err.errorMessage && err.errorMessage.indexOf('AADB2C90118') > -1) {
           try {
-            const passwordResetResponse = await msalInstance.loginPopup({
+            const passwordResetResponse = await msalInstance.loginRedirect({
               authority: import.meta.env.VITE_MSAL_PASSWORD_RESET_AUTHORITY
             })
             this.isAuthenticated = !!passwordResetResponse.account
@@ -36,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async signOut() {
-      await msalInstance.logoutPopup()
+      await msalInstance.logoutRedirect()
       this.isAuthenticated = false
     },
 
@@ -50,7 +54,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         if (error.errorCode === 'no_account_error') {
           try {
-            const response = await msalInstance.acquireTokenPopup({
+            const response = await msalInstance.acquireTokenRedirect({
               scopes: [],
               account: msalInstance.getAllAccounts()[0]
             })
