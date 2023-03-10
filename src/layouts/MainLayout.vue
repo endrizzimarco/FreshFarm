@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useAuthStore } from 'stores/auth.js'
+import { ref } from 'vue'
 
 const essentialLinks = [
   {
