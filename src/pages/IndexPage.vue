@@ -1,10 +1,87 @@
-<script setup>
-import { useFunctionsStore } from 'stores/functions.js'
-</script>
-
 <template>
   <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width: 200px; height: 200px" />
-    <q-btn @click="useFunctionsStore().test()">Test</q-btn>
+    <div id="map" :style="{ height: '100vh', width: '100%' }"></div>
   </q-page>
 </template>
+
+<script>
+import mapboxgl from 'mapbox-gl'
+
+export default {
+  // mounted() {
+  //   mapboxgl.accessToken =
+  //     'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+  //   const map = new mapboxgl.Map({
+  //     container: 'map',
+  //     style: 'mapbox://styles/mapbox/streets-v11',
+  //     center: [-0.5608289, 51.2426316], // University of Surrey
+  //     zoom: 12
+  //   })
+
+  //   // Add the missing image to the map
+  //   map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png', function (error, image) {
+  //     if (error) throw error
+  //     map.addImage('rectangle-yellow-6', image)
+  //     // Create the marker using the new image
+  //     const marker = new mapboxgl.Marker({
+  //       color: 'yellow',
+  //       scale: 0.5,
+  //       // Use the new image for the marker
+  //       icon: 'rectangle-yellow-6'
+  //     })
+  //       .setLngLat([-0.5608289, 51.2426316])
+  //       .addTo(map)
+  //   })
+  // }
+  mounted() {
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-0.5608289, 51.2426316], // University of Surrey
+      zoom: 16
+    })
+
+    // Add the missing image to the map
+    map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png', function (error, image) {
+      if (error) throw error
+      map.addImage('rectangle-yellow-6', image)
+      // Create the marker using the new image
+      const marker = new mapboxgl.Marker({
+        color: 'yellow',
+        scale: 0.5,
+        // Use the new image for the marker
+        icon: 'rectangle-yellow-6'
+      })
+        .setLngLat([-0.5608289, 51.2426316])
+        .addTo(map)
+
+      // Create a popup
+      const popup = new mapboxgl.Popup({ offset: 25 }).setText('pop up')
+      // Assign the popup to the marker
+      marker.setPopup(popup)
+      // Show the popup when the marker is clicked
+      marker.on('click', function () {
+        marker.togglePopup()
+      })
+    })
+  }
+}
+</script>
+
+<style scoped>
+#map {
+  height: 100vh;
+  width: 100%;
+}
+
+.marker {
+  background-image: url('https://i.imgur.com/MK4NUzI.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+</style>
