@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div id="map" :style="{ height: '100vh', width: '100%' }"></div>
+    <div id="map" class="window-height window-width"></div>
   </q-page>
 </template>
 
@@ -9,9 +9,7 @@ import mapboxgl from 'mapbox-gl'
 
 export default {
   mounted() {
-    // mapboxgl.accessToken = 'process.env.VITE_MAP_API_KEY'
-    mapboxgl.accessToken =
-      'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+    mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
 
     const map = new mapboxgl.Map({
       container: 'map',
