@@ -8,39 +8,16 @@
 import mapboxgl from 'mapbox-gl'
 
 export default {
-  // mounted() {
-  //   mapboxgl.accessToken =
-  //     'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
-  //   const map = new mapboxgl.Map({
-  //     container: 'map',
-  //     style: 'mapbox://styles/mapbox/streets-v11',
-  //     center: [-0.5608289, 51.2426316], // University of Surrey
-  //     zoom: 12
-  //   })
-
-  //   // Add the missing image to the map
-  //   map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png', function (error, image) {
-  //     if (error) throw error
-  //     map.addImage('rectangle-yellow-6', image)
-  //     // Create the marker using the new image
-  //     const marker = new mapboxgl.Marker({
-  //       color: 'yellow',
-  //       scale: 0.5,
-  //       // Use the new image for the marker
-  //       icon: 'rectangle-yellow-6'
-  //     })
-  //       .setLngLat([-0.5608289, 51.2426316])
-  //       .addTo(map)
-  //   })
-  // }
   mounted() {
+    // mapboxgl.accessToken = 'process.env.VITE_MAP_API_KEY'
     mapboxgl.accessToken =
       'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-0.5608289, 51.2426316], // University of Surrey
-      zoom: 16
+      zoom: 12
     })
 
     // Add the missing image to the map
@@ -69,19 +46,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#map {
-  height: 100vh;
-  width: 100%;
-}
-
-.marker {
-  background-image: url('https://i.imgur.com/MK4NUzI.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-</style>
