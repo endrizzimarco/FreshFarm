@@ -11,7 +11,18 @@ export const useFunctionsStore = defineStore('functions', {
 
   actions: {
     async test() {
-      const response = await axios.get('/test', {
+      const response = await axios.get('/farmers/python-test', {
+        headers: {
+          Authorization: `Bearer ${await useAuthStore().getToken()}`
+        },
+        params: {
+          name: 'TESTING'
+        }
+      })
+      console.log(response.data)
+    },
+    async test2() {
+      const response = await axios.get('/farmers/python-test-2', {
         headers: {
           Authorization: `Bearer ${await useAuthStore().getToken()}`
         },
