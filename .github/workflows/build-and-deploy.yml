@@ -1,6 +1,9 @@
 name: Deploy Python project to function app
 
-on: [push]
+on:
+  push:
+    paths:
+      - backend/python/**
 
 env:
   AZURE_FUNCTIONAPP_NAME: freshfarmfunctions
