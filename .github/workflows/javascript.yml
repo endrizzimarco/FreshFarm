@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: javascript-functions
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "backend/javascript"
   NODE_VERSION: "14.x"
 
 jobs:
