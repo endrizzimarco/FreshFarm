@@ -15,7 +15,7 @@ namespace FreshFarm
         [FunctionName("push_orders")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ICollector<string> outputQueueOrder, ILogger log)
+            [Queue("orders")]IAsyncCollector<string> outputQueueOrder, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -29,7 +29,7 @@ namespace FreshFarm
 
             if(!string.IsNullOrEmpty(name)){
                 responseMessage = $"HELLO, {name}. Should have added you to the queue!";
-                outputQueueOrder.Add("Name passed in the function: " + name);
+                await outputQueueOrder.AddAsync("Name passed in the function: " + name);
             }
 
             return new OkObjectResult(responseMessage);
