@@ -3,11 +3,11 @@ name: Deploy DotNet project to function app with a Windows environment
 on:
   push:
     paths:
-      - backend/c#/**
+      - backend/c-sharp/**
 env:
   AZURE_FUNCTIONAPP_NAME: c-sharp-functions
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "backend/c#"
-  DOTNET_VERSION: "7.0"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "backend/c-sharp"
+  DOTNET_VERSION: "6.0"
 
 jobs:
   build-and-deploy:
