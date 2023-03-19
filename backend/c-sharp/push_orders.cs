@@ -29,7 +29,7 @@ namespace FreshFarm
 
             if(!string.IsNullOrEmpty(name)){
                 responseMessage = $"HELLO, {name}. Should have added you to the queue!";
-                outputQueueOrder.Add("Name passed in the function." , name);
+                outputQueueOrder.Add("Name passed in the function: " + name);
             }
 
             return new OkObjectResult(responseMessage);
