@@ -1,14 +1,8 @@
 {
-	"editor.bracketPairColorization.enabled": true,
-	"editor.guides.bracketPairs": true,
-	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.codeActionsOnSave": ["source.fixAll.eslint"],
-	"eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-	"azureFunctions.projectSubpath": "backend\\c#",
-	"azureFunctions.deploySubpath": "backend\\c#/bin/Release/net6.0/publish",
-	"azureFunctions.projectLanguage": "C#",
-	"azureFunctions.projectRuntime": "~4",
-	"debug.internalConsoleOptions": "neverOpen",
-	"azureFunctions.preDeployTask": "publish (functions)"
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": ["source.fixAll.eslint"],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"]
 }
