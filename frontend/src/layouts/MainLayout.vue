@@ -1,6 +1,7 @@
 <script setup>
 import EssentialLink from 'components/EssentialLink.vue'
 import { useAuthStore } from 'stores/auth.js'
+import { useFunctionsStore } from 'src/stores/functions';
 import { ref } from 'vue'
 
 const essentialLinks = [
@@ -49,6 +50,7 @@ const essentialLinks = [
 ]
 
 const store = useAuthStore()
+const functionsStore = useFunctionsStore()
 const leftDrawerOpen = ref(false)
 </script>
 
@@ -61,6 +63,8 @@ const leftDrawerOpen = ref(false)
         <q-toolbar-title> FreshFarm </q-toolbar-title>
         <q-btn v-if="!store.isAuthenticated" color="primary" label="Sign in" @click="store.signIn" />
         <q-btn v-else color="primary" label="Sign out" @click="store.signOut" />
+        <q-btn color="secondary" label="Test Function" @click="functionsStore.test" />
+        <q-btn color="secondary" label="Test Function 2" @click="functionsStore.test2" />
       </q-toolbar>
     </q-header>
 
