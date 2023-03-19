@@ -15,7 +15,7 @@ namespace FreshFarm
         [FunctionName("push_orders")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ICollector<string> outputQueueOrder, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -25,9 +25,12 @@ namespace FreshFarm
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"HELLO, {name}. This HTTP triggered function executed successfully. (c#)";
+            string responseMessage = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
+
+            if(!string.IsNullOrEmpty(name)){
+                responseMessage = $"HELLO, {name}. Should have added you to the queue!";
+                outputQueueOrder.Add("Name passed in the function." , name);
+            }
 
             return new OkObjectResult(responseMessage);
         }
