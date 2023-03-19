@@ -8,7 +8,7 @@ namespace FreshFarm
     public class pull_orders
     {
         [FunctionName("pull_orders")]
-        public void Run([QueueTrigger("orders", Connection = "freshfarmstorage_STORAGE")]string myQueueItem, ILogger log)
+        public void Run([QueueTrigger("orders", Connection = "AzureWebJobsStorage")]string myQueueItem, ILogger log)
         {
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
         }
