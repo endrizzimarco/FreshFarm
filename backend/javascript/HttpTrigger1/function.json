@@ -5,7 +5,10 @@
 			"type": "httpTrigger",
 			"direction": "in",
 			"name": "req",
-			"methods": ["get", "post"]
+			"methods": [
+				"get",
+				"post"
+			]
 		},
 		{
 			"type": "http",
@@ -19,7 +22,9 @@
 			"databaseName": "FreshFarmDB",
 			"collectionName": "Sales",
 			"createIfNotExists": "false",
-			"connectionStringSetting": "CosmosDbConnectionString"
+			"connectionStringSetting": "CosmosDbConnectionString",
+			"leaseCollectionName": "leases",
+			"createLeaseCollectionIfNotExists": "true"
 		}
 	]
 }
