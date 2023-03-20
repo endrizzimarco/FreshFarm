@@ -2,19 +2,18 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "authLevel": "anonymous",
-      "type": "httpTrigger",
-      "direction": "in",
+      "type": "cosmosDBTrigger",
       "name": "req",
-      "methods": [
-        "get",
-        "post"
-      ]
+      "direction": "in",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "feedPollDelay": 1000
     },
     {
-      "type": "http",
-      "direction": "out",
-      "name": "$return"
+      "type": "signalR",
+      "name": "signalRMessage",
+      "hubName": "freshfarm",
+      "direction": "out"
     }
   ]
 }
