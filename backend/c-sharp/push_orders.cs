@@ -19,20 +19,20 @@ namespace FreshFarm
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            string name = data?.name;
+            string cost = data?.cost;
 
-            string responseMessage = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
-
-            if(!string.IsNullOrEmpty(name)){
-                responseMessage = $"HELLO, {name}. Should have added you to the queue!";
-                await outputQueueOrder.AddAsync("Name passed in the function: " + name);
+            if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(cost)) {
+                return new BadRequestObjectResult("Invalid order data");
+            } else {
+                await outputQueueOrder.AddAsync(@"{""name"":"""+name+@""",""cost"":"""+cost+@"""}");
+                return new OkObjectResult("Order accepted");
             }
 
-            return new OkObjectResult(responseMessage);
+
         }
     }
 }
