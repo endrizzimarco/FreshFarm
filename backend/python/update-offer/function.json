@@ -11,6 +11,13 @@
       "databaseName": "FreshFarmDB",
       "collectionName": "Offers",
       "createLeaseCollectionIfNotExists": true
+    },
+    {
+      "type": "signalR",
+      "name": "signalRMessage",
+      "hubName": "freshfarm",
+      "direction": "out",
+      "connectionStringSetting": "AzureSignalRConnectionString"
     }
   ]
 }
