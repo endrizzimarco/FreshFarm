@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { useAuthStore } from './auth.js'
 import axios from 'axios'
+import { HubConnectionBuilder } from '@microsoft/signalr'
 
 // Set config defaults for every axios call
 axios.defaults.baseURL = import.meta.env.VITE_API_ENDPOINT
@@ -31,6 +32,16 @@ export const useFunctionsStore = defineStore('functions', {
         }
       })
       console.log(response.data)
+    },
+
+    liveUpdates() {
+      console.log('LIVE UPDATES')
+      let connection = new HubConnectionBuilder().withUrl('/freshfarm').build()
+      connection.on('newOffer', this.updateOffers)
+    },
+
+    updateOffers(newOffer) {
+      console.log(newOffer)
     }
   }
 })
