@@ -7,13 +7,15 @@
       "direction": "in",
       "databaseName": "FreshFarmDB",
       "collectionName": "Offers",
-      "feedPollDelay": 1000
+      "feedPollDelay": 1000,
+      "connectionStringSetting": "CosmosDbConnectionString"
     },
     {
       "type": "signalR",
       "name": "signalRMessage",
       "hubName": "freshfarm",
-      "direction": "out"
+      "direction": "out",
+      "connectionStringSetting": "AzureSignalRConnectionString"
     }
   ]
 }
