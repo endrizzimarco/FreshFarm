@@ -8,7 +8,9 @@
       "databaseName": "FreshFarmDB",
       "collectionName": "Offers",
       "feedPollDelay": 1000,
-      "connectionStringSetting": "CosmosDbConnectionString"
+      "connectionStringSetting": "CosmosDbConnectionString",
+      "leaseCollectionName": "leases",
+      "createLeaseCollectionIfNotExists": "true"
     },
     {
       "type": "signalR",

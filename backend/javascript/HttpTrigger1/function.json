@@ -22,9 +22,7 @@
 			"databaseName": "FreshFarmDB",
 			"collectionName": "Sales",
 			"createIfNotExists": "false",
-			"connectionStringSetting": "CosmosDbConnectionString",
-			"leaseCollectionName": "leases",
-			"createLeaseCollectionIfNotExists": "true"
+			"connectionStringSetting": "CosmosDbConnectionString"
 		}
 	]
 }
