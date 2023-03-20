@@ -3,7 +3,7 @@
   "bindings": [
     {
       "type": "cosmosDBTrigger",
-      "name": "req",
+      "name": "new_offers",
       "direction": "in",
       "databaseName": "FreshFarmDB",
       "collectionName": "Offers",
