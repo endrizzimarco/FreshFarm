@@ -1,0 +1,16 @@
+{
+  "scriptFile": "__init__.py",
+  "disabled": false,
+  "bindings": [
+    {
+      "type": "cosmosDBTrigger",
+      "name": "documents",
+      "direction": "in",
+      "leaseCollectionName": "leases",
+      "connectionStringSetting": "CosmosDbConnectionString",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "createLeaseCollectionIfNotExists": true
+    }
+  ]
+}
