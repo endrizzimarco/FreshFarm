@@ -25,13 +25,6 @@
       "type": "http",
       "direction": "out",
       "name": "$return"
-    },
-    {
-      "type": "webPubSubConnection",
-      "name": "connection",
-      "hub": "offers",
-      "direction": "in",
-      "connectionStringSetting": "AzureWebPubSubConnectionString"
     }
   ]
 }
