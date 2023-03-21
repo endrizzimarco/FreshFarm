@@ -23,12 +23,12 @@ namespace FreshFarm
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string name = data?.name;
-            string cost = data?.cost;
+            string offerId = data?.offerId;
 
-            if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(cost)) {
+            if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(offerId)) {
                 return new BadRequestObjectResult("Invalid order data");
             } else {
-                await outputQueueOrder.AddAsync(@"{""name"":"""+name+@""",""cost"":"""+cost+@"""}");
+                await outputQueueOrder.AddAsync(@"{""name"":"""+name+@""",""offerId"":"""+offerId+@"""}");
                 return new OkObjectResult("Order accepted");
             }
 
