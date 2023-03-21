@@ -23,7 +23,7 @@ namespace FreshFarm
         [WebPubSub(Hub = "deletedOffers")] IAsyncCollector<WebPubSubAction> actions,
         ILogger log)
         {
-            try{
+            try {
                 log.LogInformation("Order pulled from queue...");
                 // create a random ID
                 string id = System.Guid.NewGuid().ToString();
@@ -35,15 +35,17 @@ namespace FreshFarm
                     farmerId = myQueueItem.farmerId
                 });
                 log.LogInformation($"Order: {id} added to CosmosDB/Sales.");
+
                 await client.GetContainer("FreshFarmDB", "Offers").DeleteItemAsync<dynamic>(myQueueItem.offerId, new PartitionKey(myQueueItem.farmerId));
                 log.LogInformation($"Offer: {myQueueItem.offerId} deleted from CosmosDB/Offers.");
+
                 await actions.AddAsync(new SendToAllAction
                 {
                     Data = BinaryData.FromString($"Offer {myQueueItem.offerId} deleted."),
                     DataType = WebPubSubDataType.Text
                 });
                 log.LogInformation($"Offer: {myQueueItem.offerId} deletion message sent to WebPubSub.");
-            } catch(Exception e){
+            } catch(Exception e) {
                 log.LogError(e.Message);
             }
         }
