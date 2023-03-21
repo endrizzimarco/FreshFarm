@@ -38,11 +38,7 @@
     {
       "label": "clean (functions)",
       "command": "dotnet",
-      "args": [
-        "clean",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
+      "args": ["clean", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary"],
       "type": "process",
       "problemMatcher": "$msCompile",
       "options": {
@@ -52,11 +48,7 @@
     {
       "label": "build (functions)",
       "command": "dotnet",
-      "args": [
-        "build",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
+      "args": ["build", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary"],
       "type": "process",
       "dependsOn": "clean (functions)",
       "group": {
