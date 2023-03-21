@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { useAuthStore } from './auth.js'
+import { api } from 'boot/axios'
 
 export const useFunctionsStore = defineStore('functions', {
   state: () => ({}),
@@ -7,7 +8,7 @@ export const useFunctionsStore = defineStore('functions', {
 
   actions: {
     async test() {
-      const response = await $api.get('/farmers/python-test', {
+      const response = await api.get('/farmers/python-test', {
         headers: {
           Authorization: `Bearer ${await useAuthStore().getToken()}`
         },
@@ -19,7 +20,7 @@ export const useFunctionsStore = defineStore('functions', {
     },
 
     async test2() {
-      const response = await $api.get('/farmers/python-test-2', {
+      const response = await api.get('/farmers/python-test-2', {
         headers: {
           Authorization: `Bearer ${await useAuthStore().getToken()}`
         },
@@ -44,5 +45,5 @@ export const useFunctionsStore = defineStore('functions', {
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAuthStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useFunctionsStore, import.meta.hot))
 }
