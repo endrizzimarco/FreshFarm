@@ -12,6 +12,6 @@ def main(req: func.HttpRequest, doc:func.DocumentList, connection) -> func.HttpR
         })
 
     return func.HttpResponse(
-            json.dumps({"conn": connection, "offers": offers_json}),
+            json.dumps({"conn": json.loads(connection), "offers": offers_json}),
             status_code=200,
             mimetype="application/json")
