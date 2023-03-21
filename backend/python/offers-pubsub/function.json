@@ -1,0 +1,34 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "type": "webPubSubConnection",
+      "name": "conn_1",
+      "hub": "offers",
+      "direction": "in",
+      "connectionStringSetting": "AzureWebPubSubConnectionString"
+    },
+    {
+      "type": "webPubSubConnection",
+      "name": "conn_2",
+      "hub": "deletedOffers",
+      "direction": "in",
+      "connectionStringSetting": "AzureWebPubSubConnectionString"
+    }
+  ]
+}
