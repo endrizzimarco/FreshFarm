@@ -15,10 +15,10 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions
             name = req_body.get('name')
 
      if name:
-        outputDocument.set(func.Document.from_dict({"id": name, "farmerId": name}))
+        outputDocument.set(func.Document.from_dict({"farmerId": name}))
         actions.set(json.dumps({
         'actionName': 'sendToAll',
-        'data': 'Hello',
+        'data': name,
         'dataType': 'text'
     }))
         return func.HttpResponse(f"Hello {name}!")
