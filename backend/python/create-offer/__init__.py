@@ -2,7 +2,7 @@ import azure.functions as func
 import logging
 import json
 
-def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], newOffers: func.Out[str]) -> func.HttpResponse:
+def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions: func.Out[str]) -> func.HttpResponse:
      logging.info('Python HTTP trigger function processed a request.')
 
      name = req.params.get('name')
@@ -16,8 +16,8 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], newOffe
 
      if name:
         outputDocument.set(func.Document.from_dict({"id": name, "farmerId": name}))
-        newOffers.set(json.dumps({
-        'actionName': 'newOffer',
+        actions.set(json.dumps({
+        'actionName': 'sendToAll',
         'data': 'Hello',
         'dataType': 'text'
     }))
