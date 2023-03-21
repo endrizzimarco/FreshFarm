@@ -8,6 +8,7 @@ namespace FreshFarm
 {
     public class QueueItem{
         public string name { get; set; }
+        public string farmerId { get; set;}
         public string offerId { get; set; }
     }
 
@@ -27,10 +28,11 @@ namespace FreshFarm
                 {
                     id = id,
                     name = myQueueItem.name,
-                    offerId = myQueueItem.offerId
+                    offerId = myQueueItem.offerId,
+                    farmerId = myQueueItem.farmerId
                 });
                 log.LogInformation($"Order: {id} added to CosmosDB/Sales.");
-                await client.GetContainer("FreshFarmDB", "Offers").DeleteItemAsync<dynamic>(myQueueItem.offerId, new PartitionKey(myQueueItem.offerId));
+                await client.GetContainer("FreshFarmDB", "Offers").DeleteItemAsync<dynamic>(myQueueItem.offerId, new PartitionKey(myQueueItem.farmerId));
                 log.LogInformation($"Offer: {myQueueItem.offerId} deleted from CosmosDB/Offers.");
             } catch(Exception e){
                 log.LogError(e.Message);
