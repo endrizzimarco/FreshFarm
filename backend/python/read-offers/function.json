@@ -12,6 +12,16 @@
       ]
     },
     {
+      "type": "cosmosDB",
+      "direction": "in",
+      "name": "doc",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "createIfNotExists": "true",
+      "connectionStringSetting": "AzureCosmosDBConnectionString",
+      "sqlQuery": "SELECT * from c"
+    },
+    {
       "type": "http",
       "direction": "out",
       "name": "$return"
