@@ -1,12 +1,10 @@
 import azure.functions as func
 import logging
+import json
 
-app = func.FunctionApp()
-
-@app.cosmos_db_output(arg_name="outputDocument", database_name="FreshFarmDB", collection_name="Offers" connection_string_setting="CosmosDbConnectionString")
-def main(req: func.HttpRequest, outputDocument: func.Out[func.Document]) -> func.HttpResponse:
+def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], newOffers: func.Out[str]) -> func.HttpResponse:
      logging.info('Python HTTP trigger function processed a request.')
-     logging.info('Python Cosmos DB trigger function processed a request.')
+
      name = req.params.get('name')
      if not name:
         try:
@@ -17,7 +15,12 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document]) -> func
             name = req_body.get('name')
 
      if name:
-        outputDocument.set(func.Document.from_dict({"id": name}))
+        outputDocument.set(func.Document.from_dict({"id": name, "farmerId": name}))
+        newOffers.set(json.dumps({
+        'actionName': 'newOffer',
+        'data': 'Hello',
+        'dataType': 'text'
+    }))
         return func.HttpResponse(f"Hello {name}!")
      else:
         return func.HttpResponse(
