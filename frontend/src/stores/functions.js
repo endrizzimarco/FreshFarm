@@ -31,9 +31,9 @@ export const useFunctionsStore = defineStore('functions', {
     },
 
     async liveUpdates() {
-      let res = await fetch(`https://python3-functions.azurewebsites.net/api/read-offers`)
-      let url = await res.json()
-      let ws = new WebSocket(url.url)
+      let res = await (await fetch(`https://python3-functions.azurewebsites.net/api/read-offers`)).json()
+      let ws = new WebSocket(res.conn.url)
+      console.log(res.offers)
       ws.onopen = () => console.log('connected', ws)
 
       ws.onmessage = event => {
