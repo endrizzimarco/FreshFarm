@@ -18,8 +18,6 @@ namespace FreshFarm
             [Queue("orders")]IAsyncCollector<string> outputQueueOrder, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string name = data?.name;
@@ -32,8 +30,6 @@ namespace FreshFarm
                 await outputQueueOrder.AddAsync(@"{""name"":"""+name+@""",""offerId"":"""+offerId+@""",""farmerId"":"""+farmerId + @"""}");
                 return new OkObjectResult("Order accepted");
             }
-
-
         }
     }
 }
