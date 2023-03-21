@@ -1,10 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { useAuthStore } from './auth.js'
-import axios from 'axios'
-import { HubConnectionBuilder } from '@microsoft/signalr'
-
-// Set config defaults for every axios call
-axios.defaults.baseURL = import.meta.env.VITE_API_ENDPOINT
 
 export const useFunctionsStore = defineStore('functions', {
   state: () => ({}),
@@ -12,7 +7,7 @@ export const useFunctionsStore = defineStore('functions', {
 
   actions: {
     async test() {
-      const response = await axios.get('/farmers/python-test', {
+      const response = await $api.get('/farmers/python-test', {
         headers: {
           Authorization: `Bearer ${await useAuthStore().getToken()}`
         },
@@ -22,8 +17,9 @@ export const useFunctionsStore = defineStore('functions', {
       })
       console.log(response.data)
     },
+
     async test2() {
-      const response = await axios.get('/farmers/python-test-2', {
+      const response = await $api.get('/farmers/python-test-2', {
         headers: {
           Authorization: `Bearer ${await useAuthStore().getToken()}`
         },
@@ -34,14 +30,15 @@ export const useFunctionsStore = defineStore('functions', {
       console.log(response.data)
     },
 
-    liveUpdates() {
-      console.log('LIVE UPDATES')
-      let connection = new HubConnectionBuilder().withUrl('/freshfarm').build()
-      connection.on('newOffer', this.updateOffers)
-    },
+    async liveUpdates() {
+      let res = await fetch(`https://python3-functions.azurewebsites.net/api/read-offers`)
+      let url = await res.json()
+      let ws = new WebSocket(url.url)
+      ws.onopen = () => console.log('connected', ws)
 
-    updateOffers(newOffer) {
-      console.log(newOffer)
+      ws.onmessage = event => {
+        console.log(event.data)
+      }
     }
   }
 })
