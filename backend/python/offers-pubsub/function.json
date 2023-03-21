@@ -18,17 +18,17 @@
     },
     {
       "type": "webPubSubConnection",
-      "name": "conn_1",
+      "name": "connection",
       "hub": "offers",
       "direction": "in",
       "connectionStringSetting": "AzureWebPubSubConnectionString"
-    },
-    {
-      "type": "webPubSubConnection",
-      "name": "conn_2",
-      "hub": "deletedOffers",
-      "direction": "in",
-      "connectionStringSetting": "AzureWebPubSubConnectionString"
     }
+    // {
+    //   "type": "webPubSubConnection",
+    //   "name": "conn_2",
+    //   "hub": "deletedOffers",
+    //   "direction": "in",
+    //   "connectionStringSetting": "AzureWebPubSubConnectionString"
+    // }
   ]
 }
