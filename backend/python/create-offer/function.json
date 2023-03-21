@@ -1,28 +1,33 @@
 {
+	"scriptFile": "__init__.py",
 	"bindings": [
 		{
-			"authLevel": "anonymous",
+			"authLevel": "function",
 			"type": "httpTrigger",
 			"direction": "in",
 			"name": "req",
-			"methods": [
-				"get",
-				"post"
-			]
+			"methods": ["get", "post"]
 		},
 		{
 			"type": "http",
 			"direction": "out",
-			"name": "res"
+			"name": "$return"
 		},
 		{
 			"type": "cosmosDB",
 			"direction": "out",
 			"name": "outputDocument",
 			"databaseName": "FreshFarmDB",
-			"collectionName": "Sales",
+			"collectionName": "Offers",
 			"createIfNotExists": "false",
 			"connectionStringSetting": "CosmosDbConnectionString"
+		},
+		{
+			"type": "webPubSub",
+			"name": "actions",
+			"hub": "offers",
+			"direction": "out",
+			"connectionStringSetting": "WebPubSubConnectionString"
 		}
 	]
 }

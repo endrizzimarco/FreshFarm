@@ -1,0 +1,37 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "cosmosDB",
+      "direction": "in",
+      "name": "doc",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "createIfNotExists": "true",
+      "connectionStringSetting": "CosmosDBConnectionString",
+      "sqlQuery": "SELECT * from c"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "type": "webPubSubConnection",
+      "name": "connection",
+      "hub": "offers",
+      "direction": "in",
+      "connectionStringSetting": "AzureWebPubSubConnectionString"
+    }
+  ]
+}
