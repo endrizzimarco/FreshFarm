@@ -46,7 +46,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/backend\\c-sharp"
+				"cwd": "${workspaceFolder}/backend\\c#"
 			}
 		},
 		{
@@ -65,7 +65,7 @@
 			},
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/backend\\c-sharp"
+				"cwd": "${workspaceFolder}/backend\\c#"
 			}
 		},
 		{
@@ -81,7 +81,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/backend\\c-sharp"
+				"cwd": "${workspaceFolder}/backend\\c#"
 			}
 		},
 		{
@@ -98,18 +98,19 @@
 			"dependsOn": "clean release (functions)",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/backend\\c-sharp"
+				"cwd": "${workspaceFolder}/backend\\c#"
 			}
 		},
 		{
 			"type": "func",
-			"dependsOn": "build (functions)",
-			"options": {
-				"cwd": "${workspaceFolder}/backend\\c-sharp/bin/Debug/net6.0"
-			},
+			"label": "func: host start",
 			"command": "host start",
+			"problemMatcher": "$func-python-watch",
 			"isBackground": true,
-			"problemMatcher": "$func-dotnet-watch"
+			"dependsOn": "pip install (functions)",
+			"options": {
+				"cwd": "${workspaceFolder}/backend/python"
+			}
 		}
 	]
 }
