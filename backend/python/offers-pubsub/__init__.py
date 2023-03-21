@@ -3,8 +3,8 @@ import logging
 import json
 
 
-def main(req: func.HttpRequest, conn1, conn2) -> func.HttpResponse:
+def main(req: func.HttpRequest, conn_1, conn_2) -> func.HttpResponse:
     return func.HttpResponse(
-        json.dumps({"added": json.loads(conn1), "deleted" : json.loads(conn2)}),
+        json.dumps({"added": json.loads(conn_1), "deleted" : json.loads(conn_2)}),
         status_code=200,
         mimetype="application/json")
