@@ -1,7 +1,7 @@
 <script setup>
 import EssentialLink from 'components/EssentialLink.vue'
 import { useAuthStore } from 'stores/auth.js'
-import { useFunctionsStore } from 'src/stores/functions';
+import { useFunctionsStore } from 'src/stores/functions'
 import { ref } from 'vue'
 
 const essentialLinks = [
@@ -46,6 +46,12 @@ const essentialLinks = [
     caption: 'Community Quasar projects',
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
+  },
+  {
+    title: 'Farmers Dashboard',
+    caption: 'View your farm dashboard',
+    icon: 'dashboard',
+    link: '/farmers-dashboard'
   }
 ]
 
