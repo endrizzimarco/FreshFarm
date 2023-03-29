@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding style="background-color: #d0e8d9">
     <div class="q-pa-md">
       <h1>Welcome to your Farmer's Dashboard!</h1>
       <p>Here you can view and manage your farm's data and settings.</p>
