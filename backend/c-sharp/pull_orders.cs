@@ -57,6 +57,7 @@ namespace FreshFarm
                     type = offer.type,
                     collectionTime = myQueueItem.collectionTime,
                     price = offer.price,
+                    collected = false,
                 });
                 log.LogInformation($"Order: {id} added to CosmosDB/Sales.");
 
