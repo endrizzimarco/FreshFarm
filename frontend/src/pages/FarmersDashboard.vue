@@ -1,97 +1,129 @@
 <template>
-  <q-page padding style="background-color: #d0e8d9">
-    <div class="q-pa-md">
-      <h1>Welcome to your Farmer's Dashboard!</h1>
-      <p>Here you can view and manage your farm's data and settings.</p>
-      <q-card>
-        <q-card-section>
-          <h2>Recent Activity</h2>
-          <p>No recent activity to display.</p>
-        </q-card-section>
-      </q-card>
-      <q-card>
-        <q-card-section>
-          <h2>Crop Yield</h2>
-          <q-img
-            src="https://cdn.pixabay.com/photo/2018/08/14/16/06/vegetables-3603008_960_720.jpg"
-            class="q-pa-md"
-            alt="Crop Yield"
-          />
-          <q-chart :options="chartOptions" :data="chartData" type="line" />
-        </q-card-section>
-      </q-card>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center mb-4">
+          <h1>Dashboard</h1>
+        </div>
+      </div>
     </div>
-  </q-page>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h3>Weather Info</h3>
+          </div>
+          <div class="card-body">
+            <!-- Content for the weather info card -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <h3 class="mb-0">Leases</h3>
+                  <div class="d-flex">
+                    <div class="bg-danger" style="width: 70%; height: 5px"></div>
+                    <div class="bg-secondary" style="width: 30%; height: 5px"></div>
+                  </div>
+                </div>
+                <div class="display-4 font-weight-bold text-primary">22°C</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <h3 class="mb-0">Offers</h3>
+                  <div class="d-flex">
+                    <div class="bg-primary" style="width: 40%; height: 5px"></div>
+                    <div class="bg-secondary" style="width: 60%; height: 5px"></div>
+                  </div>
+                </div>
+                <div class="display-4 font-weight-bold text-primary">54%</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h3 class="mb-0">Sales</h3>
+                <div class="d-flex align-items-center justify-content-center h-100">
+                  <canvas id="rainfall-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h3 class="mb-0">Another Container</h3>
+                <div class="d-flex align-items-center justify-content-center h-100">
+                  <canvas id="crop-yield-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { Line } from 'vue-chartjs'
 export default {
-  name: 'FarmersDashboard',
-  extends: Line,
-  data() {
-    return {
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'Crop Yield by Month'
-        },
-        scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                unit: 'month'
-              },
-              display: true,
-              scaleLabel: {
-                display: true,
-                labelString: 'Month'
-              }
-            }
-          ],
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-                min: 0,
-                max: 1000
-              },
-              display: true,
-              scaleLabel: {
-                display: true,
-                labelString: 'Yield (kg)'
-              }
-            }
-          ]
-        }
-      },
-      chartData: {
-        datasets: [
-          {
-            label: 'Carrots',
-            borderColor: '#2196f3',
-            fill: false,
-            data: [
-              { x: '2022-01-01', y: 500 },
-              { x: '2022-02-01', y: 550 },
-              { x: '2022-03-01', y: 600 },
-              { x: '2022-04-01', y: 700 },
-              { x: '2022-05-01', y: 800 },
-              { x: '2022-06-01', y: 900 },
-              { x: '2022-07-01', y: 1000 },
-              { x: '2022-08-01', y: 950 },
-              { x: '2022-09-01', y: 800 },
-              { x: '2022-10-01', y: 600 },
-              { x: '2022-11-01', y: 550 },
-              { x: '2022-12-01', y: 500 }
-            ]
-          }
-        ]
-      }
-    }
-  }
+  name: 'FarmersDashboard'
 }
 </script>
+
+<style scoped>
+.card-header {
+  background-color: #f2f2f2;
+}
+
+.bg-primary {
+  background-color: #007bff !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.card-body {
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-flex.flex-column {
+  flex-direction: column !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
+}
+
+.font-weight-bold {
+  font-weight: bold !important;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+</style>
