@@ -15,10 +15,11 @@
             <h3>Weather Info</h3>
           </div>
           <div class="card-body">
-            <!-- Content for the weather info card -->
+            <div id="map"></div>
           </div>
         </div>
       </div>
+
       <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
         <div class="row">
           <div class="col-md-6">
@@ -76,12 +77,28 @@
 </template>
 
 <script>
+import mapboxgl from 'mapbox-gl'
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+
 export default {
-  name: 'FarmersDashboard'
+  name: 'FarmersDashboard',
+  mounted() {
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-0.118092, 51.509865],
+      zoom: 12
+    })
+  }
 }
 </script>
 
 <style scoped>
+.container-fluid {
+  background-color: #f0ead6;
+}
+
 .card-header {
   background-color: #f2f2f2;
 }
