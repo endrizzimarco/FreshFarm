@@ -1,13 +1,12 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="background-color: #fce9d9">
     <div class="row">
-      <!-- Map and Weather Widgets -->
       <div class="col-md-3 bg-light h-100">
-        <div class="h-25">
-          <div id="map" style="height: 100%"></div>
+        <div class="card-body mt-0">
+          <div id="map" style="height: 200px"></div>
         </div>
         <div class="h-50">
-          <div class="card h-100 mb-3">
+          <div class="card h-100">
             <div class="card-header bg-secondary text-white">
               <h3 class="h5 mb-0">Weather Today</h3>
             </div>
@@ -58,9 +57,10 @@
       </div>
       <!-- Widgets -->
       <div class="col-md-9">
+        <h2 class="mb-4">Dashboard</h2>
         <div class="row">
           <div class="col-md-6">
-            <div class="card mb-3">
+            <div class="card mb-3 border">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column">
                   <h3 class="h5 mb-0">Leases</h3>
@@ -75,12 +75,14 @@
                     ></div>
                   </div>
                 </div>
-                <div class="display-4 font-weight-bold text-primary">22°C</div>
+                <div class="display-4 font-weight-bold text-primary">
+                  <span class="badge badge-primary p-2">22°C</span>
+                </div>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card mb-3">
+            <div class="card mb-3 border">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column">
                   <h3 class="h5 mb-0">Offers</h3>
@@ -95,12 +97,14 @@
                     ></div>
                   </div>
                 </div>
-                <div class="display-4 font-weight-bold text-primary">54%</div>
+                <div class="display-4 font-weight-bold text-primary">
+                  <span class="badge badge-primary p-2">54%</span>
+                </div>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card mb-3">
+            <div class="card mb-3 border">
               <div class="card-body">
                 <h3 class="h5 mb-0">Sales</h3>
                 <div class="d-flex align-items-center justify-content-center h-100">
@@ -110,7 +114,7 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card mb-3">
+            <div class="card mb-3 border">
               <div class="card-body">
                 <h3 class="h5 mb-0">Another Container</h3>
                 <div class="d-flex align-items-center justify-content-center h-100">
@@ -124,18 +128,18 @@
     </div>
   </div>
 </template>
+
 <script>
 import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
-
 export default {
   name: 'FarmersDashboard',
   mounted() {
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-0.118092, 51.509865],
+      center: [-0.5608289, 51.2426316],
       zoom: 12
     })
   }
