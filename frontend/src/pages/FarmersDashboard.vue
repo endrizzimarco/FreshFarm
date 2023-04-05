@@ -7,6 +7,7 @@
         </div>
         <div class="h-50">
           <div class="card h-100">
+            <br />
             <p class="mt-3 my-styles">&nbsp;☀️ Weather Forecast</p>
             <div class="card-body d-flex justify-content-center align-items-center">
               <div style="display: flex; justify-content: center; align-items: center">
@@ -20,6 +21,8 @@
             </div>
           </div>
         </div>
+        <br />
+        <br />
         <div class="h-25">
           <div class="card h-100 mb-3">
             <p class="mt-3 my-styles">&nbsp;🛰️ Weather This Week</p>
@@ -60,7 +63,7 @@
       <!-- Widgets -->
       <div class="col-md-9">
         <h2 class="mb-4" style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px">
-          &nbsp;&nbsp;📊 Dashboard
+          &nbsp;&nbsp;📊 Farmers Dashboard
         </h2>
 
         <div class="row">
