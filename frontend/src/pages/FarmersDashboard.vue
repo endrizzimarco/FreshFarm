@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" style="background-color: #fce9d9">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-3 bg-light h-100">
         <div class="card-body mt-0">
@@ -7,11 +7,16 @@
         </div>
         <div class="h-50">
           <div class="card h-100">
-            <!-- <h3 class="h5 mb-0">Weather Today</h3> -->
-            <p class="mt-3 my-styles">&nbsp;☀️ Weather Today</p>
-            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-              <div class="display-4 font-weight-bold text-primary">22°C</div>
-              <p class="mt-3">Partly Cloudy</p>
+            <p class="mt-3 my-styles">&nbsp;☀️ Weather Forecast</p>
+            <div class="card-body d-flex justify-content-center align-items-center">
+              <div style="display: flex; justify-content: center; align-items: center">
+                <div style="display: flex; justify-content: center; align-items: center">
+                  <div v-for="day in weatherForecast" :key="day.date" class="weather-card">
+                    <div class="weather-card__date">{{ day.day }}</div>
+                    <div class="weather-card__temp">{{ day.temp }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -57,6 +62,7 @@
         <h2 class="mb-4" style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px">
           &nbsp;&nbsp;📊 Dashboard
         </h2>
+
         <div class="row">
           <div class="col-md-6">
             <div class="card mb-3 border">
@@ -118,15 +124,38 @@
 
 <script>
 import mapboxgl from 'mapbox-gl'
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+
 export default {
   name: 'FarmersDashboard',
+  data() {
+    return {
+      weatherForecast: []
+    }
+  },
   mounted() {
+    const apiKey = '9a4d1285248745b1b38134758230504'
+    const city = 'New York'
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=5`
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        this.weatherForecast = data.forecast.forecastday.map(day => {
+          return {
+            day: day.date,
+            temp: `${day.day.avgtemp_c}°C`,
+            description: day.day.condition.text
+          }
+        })
+      })
+      .catch(error => console.error(error))
+
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-0.5608289, 51.2426316],
+      center: [-73.985664, 40.748817],
       zoom: 12
     })
   }
