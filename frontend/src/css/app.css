@@ -2,3 +2,8 @@
 .card {
   border: 1px solid #ccc;
 }
+.my-styles {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Helvetica Neue', sans-serif;
+}

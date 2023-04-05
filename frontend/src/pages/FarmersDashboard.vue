@@ -7,9 +7,8 @@
         </div>
         <div class="h-50">
           <div class="card h-100">
-            <div class="card-header bg-secondary text-white">
-              <h3 class="h5 mb-0">Weather Today</h3>
-            </div>
+            <!-- <h3 class="h5 mb-0">Weather Today</h3> -->
+            <p class="mt-3 my-styles">&nbsp;☀️ Weather Today</p>
             <div class="card-body d-flex flex-column justify-content-center align-items-center">
               <div class="display-4 font-weight-bold text-primary">22°C</div>
               <p class="mt-3">Partly Cloudy</p>
@@ -18,9 +17,7 @@
         </div>
         <div class="h-25">
           <div class="card h-100 mb-3">
-            <div class="card-header bg-secondary text-white">
-              <h3 class="h5 mb-0">Weather This Week</h3>
-            </div>
+            <p class="mt-3 my-styles">&nbsp;🛰️ Weather This Week</p>
             <div class="card-body p-0">
               <table class="table table-striped table-borderless m-0">
                 <tbody>
@@ -57,26 +54,20 @@
       </div>
       <!-- Widgets -->
       <div class="col-md-9">
-        <h2 class="mb-4">Dashboard</h2>
+        <h2 class="mb-4" style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px">
+          &nbsp;&nbsp;📊 Dashboard
+        </h2>
         <div class="row">
           <div class="col-md-6">
             <div class="card mb-3 border">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column">
-                  <h3 class="h5 mb-0">Leases</h3>
-                  <div class="progress my-2">
-                    <div
-                      class="progress-bar bg-danger"
-                      role="progressbar"
-                      style="width: 70%"
-                      aria-valuenow="70"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                </div>
-                <div class="display-4 font-weight-bold text-primary">
-                  <span class="badge badge-primary p-2">22°C</span>
+                  <h3
+                    class="h5 mb-0"
+                    style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                  >
+                    &nbsp;Leases
+                  </h3>
                 </div>
               </div>
             </div>
@@ -85,20 +76,12 @@
             <div class="card mb-3 border">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column">
-                  <h3 class="h5 mb-0">Offers</h3>
-                  <div class="progress my-2">
-                    <div
-                      class="progress-bar bg-primary"
-                      role="progressbar"
-                      style="width: 54%"
-                      aria-valuenow="54"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                </div>
-                <div class="display-4 font-weight-bold text-primary">
-                  <span class="badge badge-primary p-2">54%</span>
+                  <h3
+                    class="h5 mb-0"
+                    style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                  >
+                    &nbsp;Offers
+                  </h3>
                 </div>
               </div>
             </div>
@@ -106,20 +89,24 @@
           <div class="col-md-6">
             <div class="card mb-3 border">
               <div class="card-body">
-                <h3 class="h5 mb-0">Sales</h3>
-                <div class="d-flex align-items-center justify-content-center h-100">
-                  <canvas id="rainfall-chart" style="height: 150px"></canvas>
-                </div>
+                <h3
+                  class="h5 mb-0"
+                  style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                >
+                  &nbsp;Sales
+                </h3>
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="card mb-3 border">
               <div class="card-body">
-                <h3 class="h5 mb-0">Another Container</h3>
-                <div class="d-flex align-items-center justify-content-center h-100">
-                  <canvas id="crop-yield-chart" style="height: 150px"></canvas>
-                </div>
+                <h3
+                  class="h5 mb-0"
+                  style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                >
+                  &nbsp;Another Container
+                </h3>
               </div>
             </div>
           </div>
