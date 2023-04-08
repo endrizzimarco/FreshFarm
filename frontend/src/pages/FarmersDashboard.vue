@@ -11,8 +11,8 @@
           <q-card-section class="mt-3 my-styles">☀️ Weather Forecast</q-card-section>
           <q-card-section>
             <div class="d-flex justify-content-center align-items-center">
-              <div class="weather-cards">
-                <div v-for="day in weatherForecast" :key="day.date" class="weather-card">
+              <div class="weather-cards row">
+                <div v-for="day in weatherForecast" :key="day.date" class="weather-card col">
                   <div class="weather-card__date">{{ day.day }}</div>
                   <div class="weather-card__temp">{{ day.temp }}</div>
                 </div>
@@ -20,6 +20,7 @@
             </div>
           </q-card-section>
         </q-card>
+
         <br />
         <q-card class="h-25">
           <q-card-section class="mt-3 my-styles">🛰️ Weather This Week</q-card-section>
@@ -65,13 +66,6 @@
           <div class="col-md-6">
             <q-card class="mb-3 border">
               <q-card-section>
-                <div class="text-h4">&nbsp;Top 10 Competitors</div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
                 <div class="text-h4">&nbsp;Average Time of Sales</div>
               </q-card-section>
             </q-card>
@@ -79,7 +73,7 @@
           <div class="col-md-6">
             <q-card class="mb-3 border">
               <q-card-section>
-                <div class="text-h4">&nbsp;Top 4 Competitors</div>
+                <div class="text-h4">&nbsp;Top 4 Items Sold In The Area</div>
               </q-card-section>
             </q-card>
           </div>
