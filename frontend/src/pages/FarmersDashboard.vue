@@ -119,6 +119,30 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="card mb-3 border">
+              <div class="card-body">
+                <h3
+                  class="h5 mb-0"
+                  style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                >
+                  &nbsp;Sales
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3 border">
+              <div class="card-body">
+                <h3
+                  class="h5 mb-0"
+                  style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 36px"
+                >
+                  &nbsp;Another Container
+                </h3>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
