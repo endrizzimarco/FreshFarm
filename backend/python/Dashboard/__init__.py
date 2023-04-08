@@ -1,35 +1,33 @@
-# import logging
-
-# import azure.functions as func
-
-
-# def main(documents: func.DocumentList) -> str:
-#     if documents:
-#         logging.info('Document id: %s', documents[0]['id'])
 import logging
-import pyodbc
 import azure.functions as func
+from azure.cosmos import CosmosClient
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    # Connect to the SQL database
-    conn = pyodbc.connect('DRIVER={SQL Server};SERVER=servername;DATABASE=databasename;UID=username;PWD=password')
-    cursor = conn.cursor()
+    # Initialize the Cosmos DB client
+    endpoint = 'https://myaccount.documents.azure.com:443/'
+    key = 'mykey'
+    client = CosmosClient(endpoint, key)
+
+    # Get a reference to the sales container
+    database_name = 'mydatabase'
+    container_name = 'mycontainer'
+    database = client.get_database_client(database_name)
+    container = database.get_container_client(container_name)
 
     # Execute a query to retrieve sales data
     query = 'SELECT * FROM Sales'
-    cursor.execute(query)
-    sales_data = cursor.fetchall()
+    items = container.query_items(query, enable_cross_partition_query=True)
 
     # Format the sales data as needed
     sales_data_formatted = []
-    for row in sales_data:
+    for item in items:
         sale = {
-            'id': row[0],
-            'date': row[1],
-            'product': row[2],
-            'quantity': row[3],
-            'price': row[4],
-            'total': row[5]
+            'id': item['id'],
+            'date': item['date'],
+            'product': item['product'],
+            'quantity': item['quantity'],
+            'price': item['price'],
+            'total': item['total']
         }
         sales_data_formatted.append(sale)
 
