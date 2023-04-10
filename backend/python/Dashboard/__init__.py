@@ -5,7 +5,8 @@ import json
 def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
     items = []
     for doc in doc:
-        items.append(doc.to_dict())
+        # items.append(doc.to_dict())
+        item.get("customerName", "")
 
     # Format the sales data as needed
     sales_data_formatted = []
