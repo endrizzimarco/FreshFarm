@@ -1,6 +1,6 @@
 <template>
   <q-table
-    :data="salesData"
+    :data="sales_data_formatted"
     :columns="columns"
     v-model:pagination="pagination"
     :rows-per-page-options="[10, 25, 50, 100]"
@@ -12,7 +12,7 @@ export default {
   name: 'SalesTable',
   data() {
     return {
-      salesData: [],
+      sales_data_formatted: [],
       pagination: {
         rowsPerPage: 10
       },
@@ -46,6 +46,12 @@ export default {
           label: 'Price',
           align: 'left',
           field: 'price'
+        },
+        {
+          name: 'id',
+          label: 'ID',
+          align: 'left',
+          field: 'id'
         }
       ]
     }
@@ -58,7 +64,7 @@ export default {
       try {
         const response = await fetch('/api/get-sales-data')
         const data = await response.json()
-        this.salesData = data
+        this.sales_data_formatted = data
       } catch (error) {
         console.error(error)
       }
