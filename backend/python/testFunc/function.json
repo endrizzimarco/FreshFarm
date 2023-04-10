@@ -9,16 +9,19 @@
       "methods": ["get", "post"]
     },
     {
+      "type": "cosmosDB",
+      "direction": "in",
+      "name": "doc",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "createIfNotExists": "true",
+      "connectionStringSetting": "CosmosDBConnectionString",
+      "sqlQuery": "SELECT * from c"
+    },
+    {
       "type": "http",
       "direction": "out",
       "name": "$return"
-    },
-    {
-      "type": "webPubSubConnection",
-      "name": "conn1",
-      "hub": "sales",
-      "direction": "in",
-      "connectionStringSetting": "AzureWebPubSubConnectionString"
     }
   ]
 }
