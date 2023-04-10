@@ -13,7 +13,7 @@
       "direction": "in",
       "name": "doc",
       "databaseName": "FreshFarmDB",
-      "collectionName": "Offers",
+      "collectionName": "Sales",
       "createIfNotExists": "true",
       "connectionStringSetting": "CosmosDBConnectionString",
       "sqlQuery": "SELECT * from c"

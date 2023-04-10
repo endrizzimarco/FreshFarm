@@ -4,14 +4,14 @@ import json
 
 
 def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
-    offers_json = []
+    sales_json = []
     for offer in doc:
-        offers_json.append({
+        sales_json.append({
             "id": offer['id'],
         #    "name": offer['name']
         })
 
     return func.HttpResponse(
-            json.dumps(offers_json),
+            json.dumps(sales_json),
             status_code=200,
             mimetype="application/json")
