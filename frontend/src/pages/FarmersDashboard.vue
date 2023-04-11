@@ -3,7 +3,7 @@
     :data="sales_data_formatted"
     :columns="columns"
     v-model:pagination="pagination"
-    :rows-per-page-options="[10, 25, 50, 100]"
+    :rows-per-page-options="[10, 25, 50, 101]"
   />
 </template>
 
