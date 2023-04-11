@@ -16,7 +16,7 @@
       "collectionName": "Sales",
       "createIfNotExists": "true",
       "connectionStringSetting": "CosmosDBConnectionString",
-      "sqlQuery": "SELECT TOP 10 * FROM c ORDER BY c.price DESC"
+      "sqlQuery": "SELECT SUM(c.price) AS total FROM c"
     },
     {
       "type": "http",
