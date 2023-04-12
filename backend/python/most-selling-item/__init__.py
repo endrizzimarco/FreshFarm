@@ -3,15 +3,16 @@ import logging
 import json
 
 
-def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
+def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
     sales_json = []
-    for offer in doc:
+
+    for item in doc:
         sales_json.append({
-            "type": offer['type'],
-            "total_price": offer['total_price'],
+            "type": item["type"],
+            "total_price": item["total_price"]
         })
 
     return func.HttpResponse(
-            json.dumps(sales_json),
-            status_code=200,
-            mimetype="application/json")
+        json.dumps(sales_json),
+        mimetype="application/json"
+    )
