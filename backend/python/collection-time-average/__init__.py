@@ -7,7 +7,7 @@ def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
     sales_json = []
     for offer in doc:
         sales_json.append({
-            "customerName": offer['total'],
+            "customerName": offer['average'],
         })
 
     return func.HttpResponse(
