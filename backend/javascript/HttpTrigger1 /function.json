@@ -17,9 +17,9 @@
 			"databaseName": "FreshFarmDB",
 			"collectionName": "Offers",
 			"createIfNotExists": "true",
-			"connectionStringSetting": "CosmosDbConnectionString"	
+			"connectionStringSetting": "CosmosDbConnectionString",	
+			"sqlQuery": "SELECT * from c"
 				
-
 		},
 		{
 			"type": "http",
