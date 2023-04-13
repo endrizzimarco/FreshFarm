@@ -1,5 +1,6 @@
 <script setup>
 import EssentialLink from 'components/EssentialLink.vue'
+import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
 import { useUserStore } from 'src/stores/user-functions.js'
 import { useFunctionsStore } from 'src/stores/functions.js'
@@ -52,6 +53,23 @@ const essentialLinks = [
 
 const store = useAuthStore()
 const leftDrawerOpen = ref(false)
+
+const offerForm = ref(false)
+const newOffer = ref(false)
+
+const submit = () => {
+  newOffer.value = false
+  this.$q.notify({
+    message: 'Offer Submitted',
+    color: 'orange',
+    actions: [
+      {
+        label: '✕',
+        color: 'white'
+      }
+    ]
+  })
+}
 </script>
 
 <template>
@@ -71,13 +89,20 @@ const leftDrawerOpen = ref(false)
     <q-drawer v-model="leftDrawerOpen" bordered>
       <q-list>
         <q-item-label header> Essential Links </q-item-label>
-
         <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
       </q-list>
     </q-drawer>
-
+    <q-dialog v-model="offerForm" position="bottom">
+      <OfferForm @submitted="submit" />
+    </q-dialog>
     <q-page-container>
       <router-view />
+      <q-page-sticky position="bottom" :offset="[18, 36]">
+        <q-fab vertical-actions-align="center" color="teal-14" icon="add" direction="up" data-cy="centerBtn">
+          <q-fab-action @click="offerForm = true" color="accent" icon="search" label="Filter offers" />
+          <q-fab-action @click="newEvent = true" color="orange" icon="soup_kitchen" label="New Offer" />
+        </q-fab>
+      </q-page-sticky>
     </q-page-container>
   </q-layout>
 </template>
