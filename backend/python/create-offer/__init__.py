@@ -14,7 +14,7 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions
         outputDocument.set(func.Document.from_dict(new_offer))
         actions.set(json.dumps({
         'actionName': 'sendToAll',
-        'data': new_offer,
+        'data': json.dumps(new_offer),
         'dataType': 'text'
     }))
         return func.HttpResponse(f"Offer {new_offer} successfully created!")
