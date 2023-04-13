@@ -14,21 +14,26 @@ namespace FreshFarm
     {
         [FunctionName("push_orders")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("orders")]IAsyncCollector<string> outputQueueOrder, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string name = data?.name;
+            string customerName = data?.customerName;
             string offerId = data?.offerId;
             string farmerId = data?.farmerId;
+            string collectionTime = data?.collectionTime;
 
-            if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(offerId) || string.IsNullOrEmpty(farmerId)) {
+            if(string.IsNullOrEmpty(customerName) ||
+                string.IsNullOrEmpty(offerId) ||
+                string.IsNullOrEmpty(farmerId) ||
+                string.IsNullOrEmpty(collectionTime)) {
                 return new BadRequestObjectResult("Invalid order data");
             } else {
-                await outputQueueOrder.AddAsync(@"{""name"":"""+name+@""",""offerId"":"""+offerId+@""",""farmerId"":"""+farmerId + @"""}");
+                // add collection time
+                await outputQueueOrder.AddAsync(@"{""customerName"":""" + customerName + @""",""offerId"":""" + offerId + @""",""farmerId"":""" + farmerId + @""",""collectionTime"":"""+ collectionTime  + @"""}");
                 return new OkObjectResult("Order accepted");
             }
         }
