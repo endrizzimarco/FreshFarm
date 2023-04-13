@@ -18,7 +18,7 @@
 			"collectionName": "Offers",
 			"createIfNotExists": "true",
 			"connectionStringSetting": "CosmosDbConnectionString",	
-			"sqlQuery": "SELECT * from c"
+			"sqlQuery": "SELECT c.farmerId, c.Type, c.Items, c.Price, c.Lat, c.Lng, c.DESCR FROM Offers c"
 				
 		},
 		{
