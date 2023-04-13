@@ -1,7 +1,8 @@
 class Function {
     static async filterSearch(Offers, filter) {
       const querySpec = {
-        query: `SELECT c.farmerId, c.Lat, c.Lng, c.Price, c.Type, c.Items FROM c WHERE ${filter}`
+        query: `SELECT c.farmerId, c.Type, c.Items, c.Price, c.Lat, c.Lng
+        FROM Offers WHERE ${filter}`
       };
       const { resources: results } = await client
         .database("FreshFarmDB")
