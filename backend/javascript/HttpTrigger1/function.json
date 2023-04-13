@@ -1,28 +1,26 @@
 {
-	"bindings": [
-		{
-			"authLevel": "anonymous",
-			"type": "httpTrigger",
-			"direction": "in",
-			"name": "req",
-			"methods": [
-				"get",
-				"post"
-			]
-		},
-		{
-			"type": "http",
-			"direction": "out",
-			"name": "res"
-		},
-		{
-			"type": "cosmosDB",
-			"direction": "out",
-			"name": "outputDocument",
-			"databaseName": "FreshFarmDB",
-			"collectionName": "Sales",
-			"createIfNotExists": "false",
-			"connectionStringSetting": "CosmosDbConnectionString"
-		}
-	]
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["get", "post"]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "cosmosDB",
+      "direction": "in",
+      "name": "OffersQuery",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Offers",
+      "MaxPrice": "req.query.MaxPrice",
+      "sqlQuery": "SELECT * FROM Offers o WHERE ToString(o.Price) <= {MaxPrice}",
+      "connectionStringSetting": "CosmosDbConnectionString"
+    }
+  ]
 }
