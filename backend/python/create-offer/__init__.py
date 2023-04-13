@@ -3,27 +3,23 @@ import logging
 import json
 
 def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions: func.Out[str]) -> func.HttpResponse:
-     logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Python HTTP trigger function processed a create-offer request.')
 
-     name = req.params.get('name')
-     if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+    allowed_keys = ["id", "farmerId", "lat", "lng", "price", "type", "items", "description", "pictureUrl"]
+    req_body = req.get_json()
+    new_offer = {k: req_body[k] for k in allowed_keys if k in req_body}
+    logging.info(f"New offer: {new_offer}")
 
-     if name:
-        outputDocument.set(func.Document.from_dict({"farmerId": name}))
+    if req:
+        outputDocument.set(func.Document.from_dict(new_offer))
         actions.set(json.dumps({
         'actionName': 'sendToAll',
-        'data': name,
+        'data': json.dumps(new_offer),
         'dataType': 'text'
     }))
-        return func.HttpResponse(f"Hello {name}!")
-     else:
+        return func.HttpResponse(f"Offer {new_offer} successfully created!")
+    else:
         return func.HttpResponse(
-                    "Please pass a name on the query string or in the request body",
+                    "Please pass a JSON with the new offer in the request body",
                     status_code=400
                 )
