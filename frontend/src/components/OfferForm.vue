@@ -18,7 +18,7 @@ const offerData = reactive({
   location: ''
 })
 
-const validateEvent = () => {
+const validateOffer = () => {
   OfferForm.value.validate().then(async success => {
     if (success) {
       let coords = await geocodeLocation()
@@ -72,7 +72,7 @@ let geocodeLocation = async () => {
   return response.data.features[0].center
 }
 
-const getEventIcon = offerType => {
+const getOfferIcon = offerType => {
   switch (offerType) {
     case 'Dairy':
       return 'https://img.icons8.com/plasticine/100/null/milk-bottle.png'
@@ -113,7 +113,7 @@ q-card.full-width
   q-card-section.bg-blue-grey-1(style='padding: 8px')
     span.text-subtitle1.text-weight-light.text-blue-grey-10.q-ml-sm Create your produce offer
     q-chip.float-right(
-      @click='validateEvent()',
+      @click='validateOffer()',
       clickable,
       color='primary',
       text-color='white',
@@ -176,9 +176,8 @@ q-card.full-width
     .row.q-pb-md.justify-around
       div.text-center(v-for='offerType in ["Dairy", "Eggs", "Meat", "Grain", "Fruit", "Veggies", "Other"]')
         img.cursor-pointer.q-pa-xs.w-16(
-          ,
-          @click='offerData.type = offerType',
-          :src='getEventIcon(offerType)',
+          :src='getOfferIcon(offerType)',
+          @click='offerData.type = offerType' 
           :style='offerData.type == offerType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
         )
         span.text-xs.text-blue-grey-10.text-center {{offerType}}
