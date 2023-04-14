@@ -1,18 +1,14 @@
 import azure.functions as func
 import logging
-import json
 
 
 def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
-    sales_json = []
-    for offer in doc:
-        sales_json.append({
-            "customerName": offer['customerName'],
-            "type": offer['type'],
-            "price": offer['price'],
-        })
-
+    output = ""
+    for item in doc:
+        output += str(item) + "\n"
+    
     return func.HttpResponse(
-            json.dumps(sales_json),
-            status_code=200,
-            mimetype="application/json")
+        output,
+        status_code=200,
+        mimetype="text/plain"
+    )
