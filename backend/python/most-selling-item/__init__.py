@@ -3,21 +3,16 @@ import logging
 import json
 
 
-def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-    logging.info(json.dumps(doc))
-
+def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
     sales_json = []
-
-    for doc_item in doc:
-        for item in doc_item:
-            sales_json.append({
+    for offer in doc:
+        sales_json.append({
             "customerName": offer['customerName'],
             "type": offer['type'],
             "price": offer['price'],
-            })
+        })
 
     return func.HttpResponse(
-        json.dumps(sales_json),
-        mimetype="application/json"
-    )
+            json.dumps(sales_json),
+            status_code=200,
+            mimetype="application/json")
