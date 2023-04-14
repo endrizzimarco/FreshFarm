@@ -13,3 +13,4 @@ def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
         status_code=200,
         mimetype="text/plain"
     )
+# 
