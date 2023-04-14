@@ -1,18 +1,21 @@
 <script setup>
-import { onMounted, h, ref } from 'vue'
+import { createApp, ref, onMounted } from 'vue'
 import mapboxgl from 'mapbox-gl'
-import OfferForm from 'components/OfferForm.vue'
+import OfferPopup from 'components/OfferPopup.vue'
+import OfferFilterForm from 'components/OfferFilterForm.vue'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
+
+const map = ref(null)
 onMounted(() => {
-  const map = new mapboxgl.Map({
+  map.value = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [-0.5608289, 51.2426316], // University of Surrey
     zoom: 12
   })
-  createMarker('spongebob', 'HELLO').setLngLat([-0.5608289, 51.2426316]).addTo(map)
-  createMarker('patrick', 'HELLO').setLngLat([-0.5499989, 51.2536315]).addTo(map)
+  createMarker('veggies', 'MY DAWG').setLngLat([-0.5608289, 51.2426316]).addTo(map.value)
+  createMarker('other', 'MY G').setLngLat([-0.5499989, 51.2536315]).addTo(map.value)
 })
 
 const filtering = ref(false)
@@ -24,31 +27,23 @@ const filterOffers = maxPrice => {
   maxPriceFilter.value = null
 }
 
+var popup_component = null
 const createMarker = (type, text) => {
   const el = document.createElement('div')
   el.style = 'background-size: cover; width: 50px; height: 50px; cursor: pointer;'
+  el.className = type
 
-  switch (type) {
-    case 'spongebob':
-      el.className = 'spongebob'
-      break
-    case 'patrick':
-      el.className = 'patrick'
-      break
-    default:
-      el.className = 'spongebob'
-  }
   const marker = new mapboxgl.Marker(el)
-  const OfferFormInstance = h(OfferForm)
 
   // Create a popup and add it to the marker.
-  marker.setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<div id="popup-content"></div>`))
-  marker.on('click', () => {
-    this.togglePopup
-    OfferFormInstance.mount('#popup-content')
+  let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`<div id="popup"></div>`)
+  popup.on('open', () => {
+    popup_component = createApp(OfferPopup, { text })
+    popup_component.mount(`#popup`)
   })
+  popup.on('close', () => popup_component && popup_component.unmount())
 
-  return marker
+  return marker.setPopup(popup)
 }
 
 const getLocation = () => {
@@ -60,60 +55,66 @@ const getLocation = () => {
 }
 
 const showPosition = position => {
-  console.log('Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude)
+  map.value.flyTo({ center: new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude) })
 }
 </script>
 
 <template lang="pug">
-q-page.flex.flex-column.h-max
-  #map.window-height.window-width.z-0
+q-page.flex.flex-column.h-max.scroll
+  #map.window-width
+
+  img(
+    width= "150",
+    height="150",
+    src='~/assets/logo.png',
+    style="position: absolute; left: 0em; top: 1em; z-index: 100"
+  )
+
   q-btn(
-    @click='filtering=true',
+    @click='filtering = true',
     fab,
-    color='grey-10',
-    icon='filter_list',
-    style='position: absolute; right: 2em; bottom: 12em; z-index: 1'
+    color='teal-14',
+    icon='filter_alt',
+    style='position: absolute; right: 2em; bottom: 9em; z-index: 1'
   )
   q-dialog(v-model="filtering")
-    q-card
-      q-card-section
-        q-input(
-          v-model.number="maxPriceFilter",
-          label="Maximum Price",
-          outlined,
-          type="number"
-        )
-          template(v-slot:prepend)
-            q-icon(name="attach_money")
-      q-card-actions
-        q-btn(
-          label="Cancel",
-          color="primary",
-          flat,
-          @click="filtering = false"
-        )
-        q-btn(
-          label="Apply",
-          color="primary",
-          flat,
-          @click="filterOffers(maxPriceFilter)"
-        )
+    OfferFilterForm    
 
   q-btn(
     @click='getLocation()',
     fab,
     color='grey-10',
     icon='my_location',
-    style='position: absolute; right: 2em; bottom: 6em; z-index: 1'
+    style='position: absolute; right: 2em; bottom: 4em; z-index: 1'
   )
 </template>
 
 <style>
-.spongebob {
-  background-image: url('https://img.icons8.com/3d-fluency/94/null/tomato.png');
+.dairy {
+  background-image: url('https://img.icons8.com/plasticine/100/null/milk-bottle.png');
 }
 
-.patrick {
-  background-image: url('https://img.icons8.com/plasticine/100/null/tomato.png');
+.eggs {
+  background-image: url('https://img.icons8.com/plasticine/100/null/eggs.png');
+}
+
+.meat {
+  background-image: url('https://img.icons8.com/plasticine/100/null/steak-rare.png');
+}
+
+.grain {
+  background-image: url('https://img.icons8.com/plasticine/100/null/wheat.png');
+}
+
+.fruit {
+  background-image: url('https://img.icons8.com/plasticine/100/null/strawberry.png');
+}
+
+.veggies {
+  background-image: url('https://img.icons8.com/plasticine/100/null/carrot.png');
+}
+
+.other {
+  background-image: url('https://img.icons8.com/plasticine/100/null/paper-bag-with-seeds.png');
 }
 </style>
