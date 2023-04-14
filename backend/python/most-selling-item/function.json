@@ -11,8 +11,8 @@
     {
       "type": "cosmosDB",
       "name": "doc",
-      "databaseName": "your-database-name",
-      "collectionName": "your-collection-name",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Sales",
       "connectionStringSetting": "CosmosDBConnectionString",
       "direction": "in",
       "sqlQuery": "SELECT c.type, SUM(c.price) AS total_price FROM c GROUP BY c.type"
