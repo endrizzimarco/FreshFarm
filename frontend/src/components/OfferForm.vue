@@ -3,12 +3,12 @@ import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth';
-
+import { userAPI } from 'boot/axios'
 const offerData = reactive({
   name: '',
-  cost: 0.0,
+  price: 0.0,
   type: 'Dairy',
-  details: '',
+  description: '',
   location: ''
 })
 
@@ -20,18 +20,28 @@ const validateEvent = () => {
   OfferForm.value.validate().then(async success => {
     if (success) {
       let coords = await geocodeLocation()
-      let request = {
+      let requestBody = {
         name: offerData.name,
-        cost: offerData.cost,
+        price: offerData.price,
         type: offerData.type,
         lng: coords[0],
         lat: coords[1],
-        details: offerData.details,
+        description: offerData.description,
         farmerId: useAuthStore().userID
       }
-      $q.notify({ progress: true, position: 'top', type: 'positive', message: 'Offer created' })
-      console.log(request)
-      // FIXME: call the api here!!!!
+      // FIXME: call the FARMERS api here!!!!
+      const response = await userAPI.post('create-offer', requestBody);
+      if(response.status === 200) {
+        offerData.name = ''
+        offerData.price = 0.0
+        offerData.type = 'Dairy'
+        offerData.description = ''
+        offerData.location = ''
+        $q.notify({ progress: true, position: 'top', type: 'positive', message: 'Offer created' })
+      } else {
+        $q.notify({ progress: true, position: 'top', type: 'negative', message: 'Offer creation failed' })
+      }
+      console.log(response.data)
     }
   })
 }
@@ -116,7 +126,7 @@ q-card.full-width
     //- Offer Price field
     .row
       q-input(
-        v-model.number="offerData.cost",
+        v-model.number="offerData.price",
         :dense='true'
         lazy-rules,
         :rules='[val => (val !== null && val !== "" && val != 0) || "Please insert a price for the offer."]',
@@ -169,7 +179,7 @@ q-card.full-width
         :rules='[val => (val !== null && val !== "") || "Please enter a description for the offer."]',
         lazy-rules,
         type='textarea',
-        v-model='offerData.details',
+        v-model='offerData.description',
         placeholder='Selling 6 eggs and 1 pint of milk...',
         :dense='true'
       )
