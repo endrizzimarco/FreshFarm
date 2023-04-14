@@ -11,16 +11,6 @@
       "type": "http",
       "direction": "out",
       "name": "res"
-    },
-    {
-      "type": "cosmosDB",
-      "direction": "in",
-      "name": "OffersQuery",
-      "databaseName": "FreshFarmDB",
-      "collectionName": "Offers",
-      "MaxPrice": "req.query.MaxPrice",
-      "sqlQuery": "SELECT * FROM Offers o WHERE ToString(o.Price) <= {MaxPrice}",
-      "connectionStringSetting": "CosmosDbConnectionString"
     }
   ]
 }
