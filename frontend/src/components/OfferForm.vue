@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
+import { useAuthStore } from 'src/stores/auth';
 
 const offerData = reactive({
   name: '',
@@ -25,7 +26,8 @@ const validateEvent = () => {
         type: offerData.type,
         lng: coords[0],
         lat: coords[1],
-        details: offerData.details
+        details: offerData.details,
+        farmerId: useAuthStore().userID
       }
       $q.notify({ progress: true, position: 'top', type: 'positive', message: 'Offer created' })
       console.log(request)
