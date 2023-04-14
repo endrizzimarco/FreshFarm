@@ -50,6 +50,18 @@ const createMarker = (type, text) => {
 
   return marker
 }
+
+const getLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition)
+  } else {
+    console.log('Geolocation is not supported by this browser.')
+  }
+}
+
+const showPosition = position => {
+  console.log('Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude)
+}
 </script>
 
 <template lang="pug">
@@ -88,7 +100,7 @@ q-page.flex.flex-column.h-max
         )
 
   q-btn(
-    @click='centerMap()',
+    @click='getLocation()',
     fab,
     color='grey-10',
     icon='my_location',
