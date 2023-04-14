@@ -98,7 +98,14 @@ const submit = () => {
     <q-page-container>
       <router-view />
       <q-page-sticky position="bottom" :offset="[18, 36]">
-        <q-fab vertical-actions-align="center" color="teal-14" icon="add" direction="up" data-cy="centerBtn">
+        <q-fab
+          v-if="store.isAuthenticated"
+          vertical-actions-align="center"
+          color="teal-14"
+          icon="add"
+          direction="up"
+          data-cy="centerBtn"
+        >
           <!-- <q-fab-action @click="offerForm = true" color="accent" icon="search" label="Filter offers" /> -->
           <q-fab-action @click="offerForm = true" color="orange" icon="soup_kitchen" label="New Offer" />
         </q-fab>

@@ -1,3 +1,86 @@
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
+
+const offerData = reactive({
+  name: '',
+  cost: 0.0,
+  type: 'Dairy',
+  details: '',
+  location: ''
+})
+
+const OfferForm = ref()
+
+const $q = useQuasar()
+
+const validateEvent = () => {
+  OfferForm.value.validate().then(async success => {
+    if (success) {
+      let coords = await geocodeLocation()
+      let request = {
+        name: offerData.name,
+        cost: offerData.cost,
+        type: offerData.type,
+        lng: coords[0],
+        lat: coords[1],
+        details: offerData.details
+      }
+      $q.notify({ progress: true, position: 'top', type: 'positive', message: 'Offer created' })
+      console.log(request)
+      // FIXME: call the api here!!!!
+    }
+  })
+}
+
+let geocodeLocation = async () => {
+  let response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${offerData.location}.json`, {
+    params: {
+      access_token: import.meta.env.VITE_MAP_API_KEY,
+      country: 'gb',
+      types: 'address',
+      limit: 1
+    }
+  })
+  return response.data.features[0].center
+}
+
+const getEventIcon = offerType => {
+  switch (offerType) {
+    case 'Dairy':
+      return 'https://img.icons8.com/plasticine/100/null/milk-bottle.png'
+    case 'Eggs':
+      return 'https://img.icons8.com/plasticine/100/null/eggs.png'
+    case 'Meat':
+      return 'https://img.icons8.com/plasticine/100/null/steak-rare.png'
+    case 'Grain':
+      return 'https://img.icons8.com/plasticine/100/null/wheat.png'
+    case 'Fruit':
+      return 'https://img.icons8.com/plasticine/100/null/strawberry.png'
+    case 'Veggies':
+      return 'https://img.icons8.com/plasticine/100/null/carrot.png'
+    case 'Other':
+      return 'https://img.icons8.com/plasticine/100/null/paper-bag-with-seeds.png'
+  }
+}
+
+onMounted(() => {
+  mapboxsearch.autofill({
+    accessToken: import.meta.env.VITE_MAP_API_KEY,
+    options: {
+      country: 'gb',
+      limit: 5,
+      types: 'address',
+      proximity: 'ip',
+      autocomplete: true,
+      fuzzyMatch: true,
+      language: 'en'
+    }
+  })
+})
+</script>
+
 <template lang="pug">
 q-card.full-width
   //- 'Create Offer' Header
@@ -11,10 +94,8 @@ q-card.full-width
       icon='done',
       style='margin-top: -1px'
     ) Submit Offer
-  form
-    input(name='address', placeholder='Address', type='text', autocomplete='address-line1')
   //- 'Create Offer' Form
-  q-form.q-pa-md(ref='eventForm', data-cy='eventForm')
+  q-form.q-pa-md(ref='OfferForm', data-cy='OfferForm' greedy autofocus)
     //- Offer name field
     .row
       q-input.full-width(
@@ -31,56 +112,50 @@ q-card.full-width
           span.text-subtitle1.text-blue-grey-10 Offer name:&nbsp&nbsp
 
     //- Offer Price field
-    .row.pb-2
+    .row
       q-input(
-            v-model.number="offerData.cost",
-            :dense='true'
-            lazy-rules,
-            :rules='[val => (val !== null && val !== "" && val != 0) || "Please insert a price for the offer."]',
-            outlined,
-            rounded,
-            type="number"
+        v-model.number="offerData.cost",
+        :dense='true'
+        lazy-rules,
+        :rules='[val => (val !== null && val !== "" && val != 0) || "Please insert a price for the offer."]',
+        outlined,
+        rounded,
+        type="number"
           )
             template(v-slot:prepend)
               q-icon(name="attach_money")
             template(v-slot:before)
               span.text-subtitle1.text-blue-grey-10 Offer price:&nbsp&nbsp
 
-    //- Offer Type field
-    .text-subtitle1.text-blue-grey-10.py-2 Choose a type of Offer:
-    .row.q-pb-md.justify-around
-      div.text-center(v-for='eventType in ["Dairy", "Eggs", "Meat", "Grain", "Veggies", "Other"]')
-        img.cursor-pointer.q-pa-xs.w-16(
-          ,
-          @click='offerData.type = eventType',
-          :src='getEventIcon(eventType)',
-          :style='offerData.type == eventType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
-        )
-        span.text-xs.text-blue-grey-10.text-center {{eventType}}
-
     //- Pickup location field
     span.text-subtitle1.text-blue-grey-10 Pickup location:
-    q-select.full-width(
-      v-model='location',
-      @input-value='setUserInput',
-      :options='placesOptions',
+    q-input.full-width(
+      v-model='offerData.location',
       :dense='true',
       :rules='[val => (val !== null && val !== "") || "Please select a location for pickup."]',
       lazy-rules,
       label='Search addresses',
       rounded,
-      autocomplete = 'address-line1',
+      autocomplete='address-line1',
       outlined,
-      use-input,
-      input-debounce='0',
-      emit-value,
-      map-options
     )
       template(v-slot:prepend)
         q-icon(name='place')
       template(v-slot:no-option)
         q-item
           q-item-section.text-grey No results
+
+    //- Offer Type field
+    .text-subtitle1.text-blue-grey-10.py-2 Choose a type of Offer:
+    .row.q-pb-md.justify-around
+      div.text-center(v-for='offerType in ["Dairy", "Eggs", "Meat", "Grain", "Fruit", "Veggies", "Other"]')
+        img.cursor-pointer.q-pa-xs.w-16(
+          ,
+          @click='offerData.type = offerType',
+          :src='getEventIcon(offerType)',
+          :style='offerData.type == offerType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
+        )
+        span.text-xs.text-blue-grey-10.text-center {{offerType}}
 
     //- Offer details field
     .row
@@ -93,100 +168,7 @@ q-card.full-width
         lazy-rules,
         type='textarea',
         v-model='offerData.details',
-        placeholder='Selling 6 eggs and 1 gallon of milk...',
+        placeholder='Selling 6 eggs and 1 pint of milk...',
         :dense='true'
       )
 </template>
-
-<script>
-export default {
-  emits: ['submitted'],
-  data() {
-    return {
-      offerData: {
-        name: '',
-        cost: 0.0,
-        type: 'Dairy',
-        details: ''
-      },
-      location: '',
-      userInput: 'a',
-      service: null,
-      searchResults: []
-    }
-  },
-  methods: {
-    validateEvent() {
-      this.$refs.eventForm.validate().then(success => {
-        if (success) {
-          console.log('Form is valid')
-
-          // Turn place name into coordinates to save in db
-          // this.geocodeLocation() TODO:
-        }
-      })
-    },
-    submitEvent(results, status) {
-      if (status == 'OK') {
-        // TODO: should call function new-offers function
-        this.offerData['lat'] = results[0].geometry.location.lat()
-        this.offerData['lng'] = results[0].geometry.location.lng()
-        this.offerData['friends'] = this.friendsObject // turn array into object
-        this.offerData['timestamp'] = Date.now() // add timestamp
-        // Save offerData object under events node in db
-        this.firebaseSubmitEvent(this.offerData)
-        this.$emit('submitted')
-      } else {
-        console.log('Geocode was not successful for the following reason: ' + status)
-      }
-    },
-    placesGetPredictions() {
-      this.service.getPlacePredictions(
-        {
-          input: this.userInput,
-          location: new google.maps.LatLng(this.center),
-          radius: 5000
-        },
-        this.savePredictions
-      )
-    },
-    savePredictions(predictions, status) {
-      if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
-        this.searchResults = []
-        return
-      }
-      this.searchResults = predictions
-    },
-    geocodeLocation() {
-      // TODO: can't use maps?
-      var geocoder = new google.maps.Geocoder()
-      geocoder.geocode({ placeId: this.location }, this.submitEvent)
-    },
-    getEventIcon(eventType) {
-      switch (eventType) {
-        case 'Dairy':
-          return 'https://img.icons8.com/3d-fluency/94/null/milk-bottle.png'
-        case 'Eggs':
-          return 'https://img.icons8.com/3d-fluency/94/null/sunny-side-up-eggs.png'
-        case 'Meat':
-          return 'https://img.icons8.com/3d-fluency/94/null/steak.png'
-        case 'Grain':
-          return 'https://img.icons8.com/3d-fluency/94/null/corn.png'
-        case 'Veggies':
-          return 'https://img.icons8.com/3d-fluency/94/null/tomato.png'
-        case 'Other':
-          return 'https://img.icons8.com/3d-fluency/94/null/farmer-female.png'
-      }
-    },
-    setUserInput(val) {
-      this.userInput = val
-    },
-
-    mounted() {
-      this.service = document
-        .getElementById('search-js')
-        .onload(() => mapboxsearch.autofill({ accessToken: import.meta.env.VITE_MAP_API_KEY }))
-    }
-  }
-}
-</script>

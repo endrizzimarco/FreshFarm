@@ -4,7 +4,6 @@ import mapboxgl from 'mapbox-gl'
 import OfferForm from 'components/OfferForm.vue'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
-
 onMounted(() => {
   const map = new mapboxgl.Map({
     container: 'map',
@@ -13,6 +12,7 @@ onMounted(() => {
     zoom: 12
   })
   createMarker('spongebob', 'HELLO').setLngLat([-0.5608289, 51.2426316]).addTo(map)
+  createMarker('patrick', 'HELLO').setLngLat([-0.5499989, 51.2536315]).addTo(map)
 })
 
 const filtering = ref(false)
@@ -110,10 +110,10 @@ q-page.flex.flex-column.h-max
 
 <style>
 .spongebob {
-  background-image: url('https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/1200px-SpongeBob_SquarePants_character.svg.png');
+  background-image: url('https://img.icons8.com/3d-fluency/94/null/tomato.png');
 }
 
 .patrick {
-  background-image: url('https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/800px-Patrick_Star.svg.png');
+  background-image: url('https://img.icons8.com/plasticine/100/null/tomato.png');
 }
 </style>
