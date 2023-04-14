@@ -64,27 +64,23 @@ module.exports = async function (context, req) {
     }
   } else {
     if (maxPrice && !maxRadius && !type) {
-      filterQuery += ` WHERE c.Price <= ${maxPrice} `
+      filterQuery += ` WHERE c.price <= ${maxPrice} `
     } else if (!maxPrice && maxRadius && lat && lng && !type) {
-      //TODO: implement radius
       const bb = boundingBox(lat, lng, maxRadius)
-      filterQuery += ` WHERE c.Lat <= ${bb.maxLat} AND c.Lat >= ${bb.minLat} AND c.Lng <= ${bb.maxLng} AND c.Lng >= ${bb.minLng}`
+      filterQuery += ` WHERE c.lat <= ${bb.maxLat} AND c.lat >= ${bb.minLat} AND c.lng <= ${bb.maxLng} AND c.lng >= ${bb.minLng}`
     } else if (!maxPrice && !maxRadius && type) {
-      filterQuery += ` WHERE c.Type = '${type}' `
+      filterQuery += ` WHERE c.type = '${type}' `
     } else if (maxPrice && !maxRadius && type) {
-      filterQuery += ` WHERE c.Price <= ${maxPrice} AND c.Type = '${type}' `
+      filterQuery += ` WHERE c.price <= ${maxPrice} AND c.type = '${type}' `
     } else if (maxPrice && maxRadius && lat && lng && !type) {
-      //TODO: implement radius
       const bb = boundingBox(lat, lng, maxRadius)
-      filterQuery += ` WHERE c.Price <= ${maxPrice} AND c.Lat <= ${bb.maxLat} AND c.Lat >= ${bb.minLat} AND c.Lng <= ${bb.maxLng} AND c.Lng >= ${bb.minLng}`
+      filterQuery += ` WHERE c.price <= ${maxPrice} AND c.lat <= ${bb.maxLat} AND c.lat >= ${bb.minLat} AND c.lng <= ${bb.maxLng} AND c.lng >= ${bb.minLng}`
     } else if (!maxPrice && maxRadius && lat && lng && type) {
-      //TODO: implement radius
       const bb = boundingBox(lat, lng, maxRadius)
-      filterQuery += ` WHERE c.Type = '${type}' AND c.Lat <= ${bb.maxLat} AND c.Lat >= ${bb.minLat} AND c.Lng <= ${bb.maxLng} AND c.Lng >= ${bb.minLng}`
+      filterQuery += ` WHERE c.type = '${type}' AND c.lat <= ${bb.maxLat} AND c.lat >= ${bb.minLat} AND c.lng <= ${bb.maxLng} AND c.lng >= ${bb.minLng}`
     } else if (maxPrice && maxRadius && lat && lng && type) {
-      //TODO: implement radius
       const bb = boundingBox(lat, lng, maxRadius)
-      filterQuery += ` WHERE c.Price <= ${maxPrice} AND c.Type = '${type}' AND c.Lat <= ${bb.maxLat} AND c.Lat >= ${bb.minLat} AND c.Lng <= ${bb.maxLng} AND c.Lng >= ${bb.minLng}`
+      filterQuery += ` WHERE c.price <= ${maxPrice} AND c.type = '${type}' AND c.lat <= ${bb.maxLat} AND c.lat >= ${bb.minLat} AND c.lng <= ${bb.maxLng} AND c.lng >= ${bb.minLng}`
     }
     console.log(filterQuery)
     const dbstuff = await offersContainer.items.query(filterQuery).fetchAll()
