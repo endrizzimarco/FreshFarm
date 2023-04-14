@@ -5,11 +5,11 @@ import json
 
 def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
     sales_json = []
-
-    for sale in doc:
+    for offer in doc:
         sales_json.append({
-            "type": sale['c.type'],
+            "total_price": offer['total_price'],
         })
+
 
     return func.HttpResponse(
             json.dumps(sales_json),
