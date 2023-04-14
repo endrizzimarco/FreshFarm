@@ -56,20 +56,6 @@ const leftDrawerOpen = ref(false)
 
 const offerForm = ref(false)
 const newOffer = ref(false)
-
-const submit = () => {
-  newOffer.value = false
-  this.$q.notify({
-    message: 'Offer Submitted',
-    color: 'orange',
-    actions: [
-      {
-        label: '✕',
-        color: 'white'
-      }
-    ]
-  })
-}
 </script>
 
 <template>
@@ -93,7 +79,7 @@ const submit = () => {
       </q-list>
     </q-drawer>
     <q-dialog v-model="offerForm" position="bottom">
-      <OfferForm @submitted="submit" />
+      <OfferForm @submitted="offerForm = false" />
     </q-dialog>
     <q-page-container>
       <router-view />

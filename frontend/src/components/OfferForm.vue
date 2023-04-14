@@ -2,8 +2,14 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
-import { useAuthStore } from 'src/stores/auth';
+import { useAuthStore } from 'src/stores/auth'
 import { userAPI } from 'boot/axios'
+
+const emit = defineEmits(['submitted'])
+
+const OfferForm = ref()
+const $q = useQuasar()
+
 const offerData = reactive({
   name: '',
   price: 0.0,
@@ -11,10 +17,6 @@ const offerData = reactive({
   description: '',
   location: ''
 })
-
-const OfferForm = ref()
-
-const $q = useQuasar()
 
 const validateEvent = () => {
   OfferForm.value.validate().then(async success => {
@@ -30,14 +32,26 @@ const validateEvent = () => {
         farmerId: useAuthStore().userID
       }
       // FIXME: call the FARMERS api here!!!!
-      const response = await userAPI.post('create-offer', requestBody);
-      if(response.status === 200) {
+      const response = await userAPI.post('create-offer', requestBody)
+      if (response.status === 200) {
+        $q.notify({
+          progress: true,
+          position: 'top',
+          type: 'positive',
+          message: `Offer ${offerData.name} created`,
+          actions: [
+            {
+              label: '✕',
+              color: 'white'
+            }
+          ]
+        })
         offerData.name = ''
         offerData.price = 0.0
         offerData.type = 'Dairy'
         offerData.description = ''
         offerData.location = ''
-        $q.notify({ progress: true, position: 'top', type: 'positive', message: 'Offer created' })
+        emit('submitted')
       } else {
         $q.notify({ progress: true, position: 'top', type: 'negative', message: 'Offer creation failed' })
       }
