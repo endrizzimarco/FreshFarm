@@ -6,22 +6,16 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get", "post"]
+      "methods": ["get"]
     },
     {
       "type": "cosmosDB",
-      "direction": "in",
       "name": "doc",
-      "databaseName": "FreshFarmDB",
-      "collectionName": "Sales",
-      "createIfNotExists": "true",
+      "databaseName": "your-database-name",
+      "collectionName": "your-collection-name",
       "connectionStringSetting": "CosmosDBConnectionString",
-      "sqlQuery": "SELECT TOP 10 * FROM c ORDER BY c.price DESC"
-    },
-    {
-      "type": "http",
-      "direction": "out",
-      "name": "$return"
+      "direction": "in",
+      "sqlQuery": "SELECT c.type, SUM(c.price) AS total_price FROM c GROUP BY c.type"
     }
   ]
 }
