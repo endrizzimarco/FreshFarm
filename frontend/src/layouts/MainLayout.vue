@@ -1,101 +1,72 @@
 <script setup>
-import EssentialLink from 'components/EssentialLink.vue'
 import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
 import { useUserStore } from 'src/stores/user-functions.js'
 import { useFunctionsStore } from 'src/stores/functions.js'
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 
-const essentialLinks = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+const $q = useQuasar()
 
 const store = useAuthStore()
 const leftDrawerOpen = ref(false)
 
+const confirmLogout = ref(false)
 const offerForm = ref(false)
 const newOffer = ref(false)
+
+const showMenu = grid => {
+  $q.bottomSheet({
+    message: 'Hello, Dipshit',
+    grid,
+    dark: true,
+    style: 'width: 30000px;',
+
+    actions: [
+      {
+        label: 'Drive',
+        img: 'https://cdn.quasar.dev/img/logo_drive_128px.png',
+        id: 'drive'
+      },
+      {
+        label: 'Keep',
+        img: 'https://cdn.quasar.dev/img/logo_keep_128px.png',
+        id: 'keep'
+      },
+      {
+        label: 'Google Hangouts',
+        img: 'https://cdn.quasar.dev/img/logo_hangouts_128px.png',
+        id: 'calendar'
+      },
+      {
+        label: 'Calendar',
+        img: 'https://cdn.quasar.dev/img/logo_calendar_128px.png',
+        id: 'calendar'
+      }
+    ]
+  })
+    .onOk(action => {
+      console.log('Action chosen:', action.id)
+    })
+    .onCancel(() => {
+      console.log('Dismissed')
+    })
+    .onDismiss(() => {
+      console.log('I am triggered on both OK and Cancel')
+    })
+}
 </script>
 
-<template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-
-        <q-toolbar-title> FreshFarm </q-toolbar-title>
-        <q-btn v-if="!store.isAuthenticated" color="primary" label="Sign in" @click="store.signIn" />
-        <q-btn v-else color="primary" label="Sign out" @click="store.signOut" />
-        <q-btn color="secondary" label="Test Function" @click="useUserStore().test" />
-        <q-btn color="secondary" label="Test Function 2" @click="useFunctionsStore().test2" />
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
-      </q-list>
-    </q-drawer>
-    <q-dialog v-model="offerForm" position="bottom">
-      <OfferForm @submitted="offerForm = false" />
-    </q-dialog>
-    <q-page-container>
-      <router-view />
-      <q-page-sticky position="bottom" :offset="[18, 36]">
-        <q-fab
-          v-if="store.isAuthenticated"
-          vertical-actions-align="center"
-          color="teal-14"
-          icon="add"
-          direction="up"
-          data-cy="centerBtn"
-        >
-          <!-- <q-fab-action @click="offerForm = true" color="accent" icon="search" label="Filter offers" /> -->
-          <q-fab-action @click="offerForm = true" color="orange" icon="soup_kitchen" label="New Offer" />
-        </q-fab>
-      </q-page-sticky>
-    </q-page-container>
-  </q-layout>
+<template lang="pug">
+q-layout(view='lHh Lpr lFf')
+  q-dialog(v-model='offerForm')
+    OfferForm(@submitted='offerForm = false') 
+  q-page-container
+    router-view
+    q-page-sticky(position='bottom' :offset='[18, 36]')
+      div(v-if='store.isAuthenticated')
+        q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1em;')
+        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 0em;')
+          q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
+      q-btn(v-else @click="store.signIn" fab color='blue' icon='login' style='position: absolute; left: 1em; bottom: 0em;')
 </template>
