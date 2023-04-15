@@ -4,10 +4,11 @@ import { useAuthStore } from 'stores/auth.js'
 import { useUserStore } from 'src/stores/user-functions.js'
 import { useFunctionsStore } from 'src/stores/functions.js'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
-
+const router = useRouter()
 const store = useAuthStore()
 const leftDrawerOpen = ref(false)
 
@@ -15,38 +16,54 @@ const confirmLogout = ref(false)
 const offerForm = ref(false)
 const newOffer = ref(false)
 
-const showMenu = grid => {
+const showMenu = (grid) => {
+    let actions = [{
+        label: 'Github',
+        img: 'https://img.icons8.com/plasticine/100/null/github-squared.png',
+        id: 'github'
+      },
+      {
+        label: 'About us',
+        img: 'https://img.icons8.com/plasticine/100/null/info.png',
+        id: 'about'
+      }]
+
+    if (store.isAuthenticated) {
+      actions.unshift({
+        label: 'Dashboard',
+        img: 'https://img.icons8.com/plasticine/100/null/bar-chart.png',
+        id: 'dashboard'
+      },
+      {
+        label: 'Create Offer',
+        img: 'https://img.icons8.com/plasticine/100/null/plus-2-math.png',
+        id: 'createOffer'
+      })
+      console.log(actions)
+    }
+
   $q.bottomSheet({
     message: 'Hello, Dipshit',
     grid,
     dark: true,
     style: 'width: 30000px;',
-
-    actions: [
-      {
-        label: 'Drive',
-        img: 'https://cdn.quasar.dev/img/logo_drive_128px.png',
-        id: 'drive'
-      },
-      {
-        label: 'Keep',
-        img: 'https://cdn.quasar.dev/img/logo_keep_128px.png',
-        id: 'keep'
-      },
-      {
-        label: 'Google Hangouts',
-        img: 'https://cdn.quasar.dev/img/logo_hangouts_128px.png',
-        id: 'calendar'
-      },
-      {
-        label: 'Calendar',
-        img: 'https://cdn.quasar.dev/img/logo_calendar_128px.png',
-        id: 'calendar'
-      }
-    ]
+    actions: actions
   })
     .onOk(action => {
-      console.log('Action chosen:', action.id)
+      switch (action.id) {
+        case 'github':
+          window.open('https://github.com/endrizzimarco/FreshFarm', '_blank')
+          break
+        case 'about':
+          router.push({ path: '/about'})
+          break
+        case 'dashboard':
+          console.log('dashboard')
+          break
+        case 'createOffer':
+          offerForm.value = true
+          break
+    }
     })
     .onCancel(() => {
       console.log('Dismissed')
@@ -60,13 +77,13 @@ const showMenu = grid => {
 <template lang="pug">
 q-layout(view='lHh Lpr lFf')
   q-dialog(v-model='offerForm')
-    OfferForm(@submitted='offerForm = false') 
+    OfferForm(@submitted='offerForm = false')
   q-page-container
     router-view
     q-page-sticky(position='bottom' :offset='[18, 36]')
+      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1em;')
       div(v-if='store.isAuthenticated')
-        q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1em;')
         q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 0em;')
           q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
-      q-btn(v-else @click="store.signIn" fab color='blue' icon='login' style='position: absolute; left: 1em; bottom: 0em;')
+      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 0em;')
 </template>
