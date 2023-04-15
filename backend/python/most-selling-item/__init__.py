@@ -16,3 +16,4 @@ def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
             json.dumps(sales_json),
             status_code=200,
             mimetype="application/json")
+# 
