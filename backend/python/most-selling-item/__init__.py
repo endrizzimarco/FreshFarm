@@ -18,10 +18,12 @@ def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
     # Convert the dictionary to a list of dictionaries with 'type' and 'total_price' keys
     sales_json = [sales_by_type[k] for k in sales_by_type.keys()]
 
+    # Sort the sales by descending order of total_price
+    sales_json = sorted(sales_json, key=lambda k: k['total_price'], reverse=True)
+
     # Return the results as a JSON response
     return func.HttpResponse(
         json.dumps(sales_json),
         status_code=200,
         mimetype="application/json"
     )
-# 
