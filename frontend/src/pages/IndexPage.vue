@@ -64,10 +64,9 @@ q-page.flex.flex-column.h-max.scroll
   #map.window-width
 
   img(
-    width= "150",
-    height="150",
+    width= "200",
     src='~/assets/logo.png',
-    style="position: absolute; left: 0em; top: 1em; z-index: 100"
+    style="position: absolute; left: 1em; top: 0em"
   )
 
   q-btn(
@@ -75,7 +74,7 @@ q-page.flex.flex-column.h-max.scroll
     fab,
     color='teal-14',
     icon='filter_alt',
-    style='position: absolute; right: 2em; bottom: 9em; z-index: 1'
+    style='position: absolute; right: 2.6em; bottom: 9em'
   )
   q-dialog(v-model="filtering")
     OfferFilterForm    
@@ -85,7 +84,7 @@ q-page.flex.flex-column.h-max.scroll
     fab,
     color='grey-10',
     icon='my_location',
-    style='position: absolute; right: 2em; bottom: 4em; z-index: 1'
+    style='position: absolute; right: 2.6em; bottom: 4em'
   )
 </template>
 
