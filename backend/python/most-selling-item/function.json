@@ -6,16 +6,22 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get"]
+      "methods": ["get", "post"]
     },
     {
       "type": "cosmosDB",
+      "direction": "in",
       "name": "doc",
       "databaseName": "FreshFarmDB",
       "collectionName": "Sales",
+      "createIfNotExists": "true",
       "connectionStringSetting": "CosmosDBConnectionString",
-      "direction": "in",
-      "sqlQuery": "SELECT TOP * FROM c ORDER BY c.price DESC"
+      "sqlQuery": "SELECT TOP 10 * FROM c ORDER BY c.price DESC"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
     }
   ]
 }
