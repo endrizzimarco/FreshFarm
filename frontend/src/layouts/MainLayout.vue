@@ -16,31 +16,36 @@ const confirmLogout = ref(false)
 const offerForm = ref(false)
 const newOffer = ref(false)
 
-const showMenu = (grid) => {
-    let actions = [{
-        label: 'Github',
-        img: 'https://img.icons8.com/plasticine/100/null/github-squared.png',
-        id: 'github'
-      },
-      {
-        label: 'About us',
-        img: 'https://img.icons8.com/plasticine/100/null/info.png',
-        id: 'about'
-      }]
+const showMenu = grid => {
+  let actions = [
+    {
+      label: 'Github',
+      img: 'https://img.icons8.com/plasticine/100/null/github-squared.png',
+      id: 'github'
+    },
+    {
+      label: 'About us',
+      img: 'https://img.icons8.com/plasticine/100/null/info.png',
+      id: 'about'
+    }
+  ]
 
-    if (store.isAuthenticated) {
-      actions.unshift({
+  if (store.isAuthenticated) {
+    actions.unshift(
+      {
         label: 'Dashboard',
         img: 'https://img.icons8.com/plasticine/100/null/bar-chart.png',
+        width: '100px',
         id: 'dashboard'
       },
       {
         label: 'Create Offer',
         img: 'https://img.icons8.com/plasticine/100/null/plus-2-math.png',
         id: 'createOffer'
-      })
-      console.log(actions)
-    }
+      }
+    )
+    console.log(actions)
+  }
 
   $q.bottomSheet({
     message: 'Hello, Dipshit',
@@ -55,7 +60,7 @@ const showMenu = (grid) => {
           window.open('https://github.com/endrizzimarco/FreshFarm', '_blank')
           break
         case 'about':
-          router.push({ path: '/about'})
+          router.push({ path: '/about' })
           break
         case 'dashboard':
           console.log('dashboard')
@@ -63,7 +68,7 @@ const showMenu = (grid) => {
         case 'createOffer':
           offerForm.value = true
           break
-    }
+      }
     })
     .onCancel(() => {
       console.log('Dismissed')
@@ -81,9 +86,9 @@ q-layout(view='lHh Lpr lFf')
   q-page-container
     router-view
     q-page-sticky(position='bottom' :offset='[18, 36]')
-      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1em;')
+      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
       div(v-if='store.isAuthenticated')
-        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 0em;')
+        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1.3em;')
           q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
       q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 0em;')
 </template>

@@ -16,3 +16,11 @@ input[type='number'] {
 mapbox-search-listbox > * > * {
   z-index: 99999 !important;
 }
+
+.q-bottom-sheet__item > img {
+  font-size: 100px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0px;
+  display: inline;
+}
