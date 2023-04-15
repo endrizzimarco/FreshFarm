@@ -2,20 +2,16 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "authLevel": "anonymous",
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get"]
+      "methods": ["get"],
+      "authLevel": "anonymous"
     },
     {
-      "type": "cosmosDB",
-      "name": "doc",
-      "databaseName": "FreshFarmDB",
-      "collectionName": "Sales",
-      "connectionStringSetting": "CosmosDBConnectionString",
-      "direction": "in",
-      "sqlQuery": "SELECT c.type, SUM(c.price) AS total_price FROM c GROUP BY c.type"
+      "type": "http",
+      "direction": "out",
+      "name": "res"
     }
   ]
 }
