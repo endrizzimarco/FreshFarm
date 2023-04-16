@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <q-table
     :data="sales_data_formatted"
     :columns="columns"
@@ -71,4 +71,4 @@ export default {
     }
   }
 }
-</script>
+</script> -->
