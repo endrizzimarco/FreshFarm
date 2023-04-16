@@ -8,7 +8,6 @@ const store = useAuthStore()
 onMounted(async () => {
   await store.handleRedirectPromise()
   store.initAuth()
-  useUserStore().initLiveUpdates()
 })
 </script>
 

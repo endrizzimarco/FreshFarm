@@ -47,8 +47,10 @@ const showMenu = grid => {
     console.log(actions)
   }
 
+  const username = store.username ? `, ${store.username}` : ''
+
   $q.bottomSheet({
-    message: 'Hello, Dipshit',
+    message: `Hello${username}!`,
     grid,
     dark: true,
     style: 'width: 30000px;',
@@ -84,11 +86,30 @@ q-layout(view='lHh Lpr lFf')
   q-dialog(v-model='offerForm')
     OfferForm(@submitted='offerForm = false')
   q-page-container
-    router-view
+    router-view(v-slot='{ Component, route }')
+        transition(name='slide-fade', mode='out-in')
+          keep-alive
+            component(:is='Component', :key='route.path')
     q-page-sticky(position='bottom' :offset='[18, 36]')
       q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
       div(v-if='store.isAuthenticated')
-        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1.3em;')
+        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1em;')
           q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
-      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 0em;')
+      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1em;')
 </template>
+
+<style>
+.slide-fade-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>
