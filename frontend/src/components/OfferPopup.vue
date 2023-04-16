@@ -5,7 +5,10 @@ import { onBeforeMount, ref } from 'vue'
 const emit = defineEmits(['closed'])
 const emitClosed = () => emit('closed')
 
-const props = defineProps(['text'])
+const props = defineProps({
+  title: String,
+  price: Number
+})
 
 const image = ref('')
 
@@ -19,8 +22,9 @@ const getImage = async () => {
 </script>
 
 <template lang="pug"> 
-span.font-semibold {{ text }} - £ 20
+span.font-semibold {{ props.title }} 
+span.float-right £{{ price.toFixed(2) }}
 img(width="100", height="100" :src="image")
 .text-center
-  button.bg-blue-500.p-1.text-white.mt-1.rounded.w-full.shadow-xl.cursor-pointer#popupbtn(@click='emitClosed') GO TO OFFER
+  button.bg-blue-500.p-1.text-white.mt-1.rounded.w-full.shadow-xl.cursor-pointer#popupbtn(@click='emitClosed') VIEW DETAILS
 </template>
