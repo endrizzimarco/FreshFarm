@@ -11,6 +11,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@azure/msal-browser": "^2.34.0",
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
@@ -18,7 +19,6 @@
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
-    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {

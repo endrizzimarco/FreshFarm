@@ -1,7 +1,8 @@
 <script setup>
 import EssentialLink from 'components/EssentialLink.vue'
 import { useAuthStore } from 'stores/auth.js'
-import { useFunctionsStore } from 'src/stores/functions'
+import { useUserStore } from 'src/stores/user-functions.js'
+import { useFunctionsStore } from 'src/stores/functions.js'
 import { ref } from 'vue'
 
 const essentialLinks = [
@@ -46,17 +47,10 @@ const essentialLinks = [
     caption: 'Community Quasar projects',
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
-  },
-  {
-    title: 'Farmers Dashboard',
-    caption: 'View your farm dashboard',
-    icon: 'dashboard',
-    link: '/farmers-dashboard'
   }
 ]
 
 const store = useAuthStore()
-const functionsStore = useFunctionsStore()
 const leftDrawerOpen = ref(false)
 </script>
 
@@ -69,8 +63,8 @@ const leftDrawerOpen = ref(false)
         <q-toolbar-title> FreshFarm </q-toolbar-title>
         <q-btn v-if="!store.isAuthenticated" color="primary" label="Sign in" @click="store.signIn" />
         <q-btn v-else color="primary" label="Sign out" @click="store.signOut" />
-        <q-btn color="secondary" label="Test Function" @click="functionsStore.test" />
-        <q-btn color="secondary" label="Test Function 2" @click="functionsStore.test2" />
+        <q-btn color="secondary" label="Test Function" @click="useUserStore().test" />
+        <q-btn color="secondary" label="Test Function 2" @click="useFunctionsStore().test2" />
       </q-toolbar>
     </q-header>
 
