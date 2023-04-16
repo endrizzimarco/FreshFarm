@@ -1,87 +1,51 @@
-<template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3 bg-light h-100">
-        <q-card class="map-card">
-          <q-card-section>
-            <div id="map" style="height: 200px"></div>
-          </q-card-section>
-        </q-card>
-        <q-card class="h-50">
-          <q-card-section class="mt-3 my-styles">☀️ Weather Forecast</q-card-section>
-          <q-card-section>
-            <div class="d-flex justify-content-center align-items-center">
-              <div class="weather-cards row">
-                <div v-for="day in weatherForecast" :key="day.date" class="weather-card col">
-                  <div class="weather-card__date">{{ day.day }}</div>
-                  <div class="weather-card__temp">{{ day.temp }}</div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-        <!--  -->
-        <br />
-        <!-- <q-card class="h-25">
-          <q-card-section class="mt-3 my-styles">🛰️ Weather This Week</q-card-section>
-          <q-card-section>
-            <q-table
-              :data="weatherForecast"
-              :columns="weatherColumns"
-              row-key="date"
-              :hide-bottom="true"
-              :grid="$q.screen.gt.xs"
-            ></q-table>
-          </q-card-section>
-        </q-card> -->
-      </div>
-      <!-- Widgets -->
-      <div class="col-md-9">
-        <h2 class="mb-4" style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px">
-          &nbsp;&nbsp;📊 Farmers Dashboard
-        </h2>
-        <div class="row">
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
-                <div class="text-h4">&nbsp;Top 10 Orders</div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
-                <div class="text-h4">&nbsp;Top 10 Selling Items</div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
-                <div class="text-h4">&nbsp;Total Revenue</div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
-                <div class="text-h4">&nbsp;Average Time of Sales</div>
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+.container-fluid
+  q-btn(@click="router.push('/')" rounded='' label='Back to map' color='grey-10' icon='arrow_back' style='position: absolute; left: 2em; top: 3em; z-index: 1')
+  .row
+    .col-md-3.bg-light.h-100
+      q-card.map-card
+        q-card-section
+          #map(style='height: 200px')
+      q-card.h-50
+        q-card-section.mt-3.my-styles &#x2600;&#xFE0F; Weather Forecast
+        q-card-section
+          .d-flex.justify-content-center.align-items-center
+            .weather-cards.row
+              .weather-card.col(v-for='day in weatherForecast' :key='day.date')
+                .weather-card__date {{ day.day }}
+                .weather-card__temp {{ day.temp }}
+
+    //- Widgets
+    .col-md-9
+      h2.mb-4(style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px")
+        | &#x1F4CA; Farmers Dashboard
+      .row
+        .col-md-6
+          q-card.mb-3.border
+            q-card-section
+              .text-h4 &nbsp;Top 10 Orders
+        .col-md-6
+          q-card.mb-3.border
+            q-card-section
+              .text-h4 &nbsp;Top 10 Selling Items
+        .col-md-6
+          q-card.mb-3.border
+            q-card-section
+              .text-h4 &nbsp;Total Revenue
+        .col-md-6
+          q-card.mb-3.border
+            q-card-section
+              .text-h4 &nbsp;Average Time of Sales
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl'
-
+import { useRouter } from 'vue-router'
 export default {
   name: 'FarmersDashboard',
   data() {
     return {
+      router: useRouter(),
       weatherForecast: [],
       weatherColumns: [
         {
@@ -165,7 +129,6 @@ export default {
 .weather-card__date {
   font-size: 10px;
   font-weight: bold;
-  text-transform: uppercase;
 }
 
 .weather-card__temp {

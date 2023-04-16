@@ -55,29 +55,22 @@ const showMenu = grid => {
     dark: true,
     style: 'width: 30000px;',
     actions: actions
+  }).onOk(action => {
+    switch (action.id) {
+      case 'github':
+        window.open('https://github.com/endrizzimarco/FreshFarm', '_blank')
+        break
+      case 'about':
+        router.push({ path: '/about' })
+        break
+      case 'dashboard':
+        router.push({ path: '/dashboard' })
+        break
+      case 'createOffer':
+        offerForm.value = true
+        break
+    }
   })
-    .onOk(action => {
-      switch (action.id) {
-        case 'github':
-          window.open('https://github.com/endrizzimarco/FreshFarm', '_blank')
-          break
-        case 'about':
-          router.push({ path: '/about' })
-          break
-        case 'dashboard':
-          console.log('dashboard')
-          break
-        case 'createOffer':
-          offerForm.value = true
-          break
-      }
-    })
-    .onCancel(() => {
-      console.log('Dismissed')
-    })
-    .onDismiss(() => {
-      console.log('I am triggered on both OK and Cancel')
-    })
 }
 </script>
 
