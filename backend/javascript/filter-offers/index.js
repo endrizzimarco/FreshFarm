@@ -85,7 +85,7 @@ module.exports = async function (context, req) {
     console.log(filterQuery)
     const dbstuff = await offersContainer.items.query(filterQuery).fetchAll()
     context.res = {
-      // status: 200, /* Defaults to 200 */
+      // status: 200,  /* Defaults to 200 */
       body: dbstuff.resources
     }
   }
