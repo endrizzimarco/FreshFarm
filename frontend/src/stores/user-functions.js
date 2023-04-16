@@ -7,6 +7,7 @@ export const useUserStore = defineStore('userFunctions', {
     offers: [],
     filteredOffers: [],
     filtered: false,
+    waiting: false,
     activeFilters: { maxPrice: null, type: null, maxRadius: null, lat: null, lng: null }
   }),
 
@@ -28,11 +29,12 @@ export const useUserStore = defineStore('userFunctions', {
       }
 
       ws2.onmessage = event => {
+        console.log(event.data)
+        this.waiting = false
         this.offers.find((offer, index) => {
-          if (offer.id === JSON.parse(event.data)) {
+          if (offer.id === event.data) {
             this.offers.splice(index, 1)
           }
-          console.log('deleted' + event.data)
         })
       }
     },
@@ -42,14 +44,13 @@ export const useUserStore = defineStore('userFunctions', {
       this.activeFilters = params
     },
 
-    async createOrder() {
-      let order = (await userAPI.post('push-orders')).data
-      console.log(order)
+    async clearFilters() {
+      this.activeFilters = {}
     },
 
-    async clearFilters() {
-      // this.filtered = false
-      this.activeFilters = {}
+    async purchaseOffer(params) {
+      let result = (await userAPI.post('push_orders', params)).data
+      console.log(result)
     }
   }
 })

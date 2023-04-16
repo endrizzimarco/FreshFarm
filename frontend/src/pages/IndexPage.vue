@@ -16,7 +16,7 @@ const map = ref(null)
 onMounted(async () => {
   map.value = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/streets-v12',
     center: [-0.5608289, 51.2426316], // University of Surrey
     zoom: 12
   })
@@ -24,7 +24,7 @@ onMounted(async () => {
   getLocation()
 })
 
-const offer = ref(null)
+const detailsOffer = ref(null)
 const showOffer = ref(false)
 const filtering = ref(false)
 const maxPriceFilter = ref(null)
@@ -36,20 +36,19 @@ const filterOffers = maxPrice => {
 }
 
 var popup_component = null
-const createMarker = (type, text) => {
+const createMarker = offer => {
   const el = document.createElement('div')
   el.style = 'background-size: cover; width: 50px; height: 50px; cursor: pointer;'
-  el.className = type
-
+  el.className = offer.type
   const marker = new mapboxgl.Marker(el)
 
   // Create a popup and add it to the marker.
   let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`<div id="popup"></div>`)
   popup.on('open', () => {
-    popup_component = createApp(OfferPopup, { text })
+    popup_component = createApp(OfferPopup, { title: offer.title, price: offer.price })
     popup_component.mount(`#popup`)
     document.getElementById('popupbtn').addEventListener('click', () => {
-      offer.value = store.offers[0]
+      detailsOffer.value = offer
       showOffer.value = true
       document.getElementsByClassName('mapboxgl-popup-close-button')[0].click()
     })
@@ -69,7 +68,7 @@ const getLocation = () => {
 }
 
 const flyToUser = () => {
-  map.value.flyTo({ center: new mapboxgl.LngLat(store.user_coords.lng, store.user_coords.lat) })
+  map.value.flyTo({ center: new mapboxgl.LngLat(store.user_coords.lng, store.user_coords.lat), zoom: 12 })
 }
 
 watch(
@@ -87,7 +86,7 @@ watch(
       // added
       let newOffers = store.offers.filter(x => !markers.includes(x))
       newOffers.forEach(offer => {
-        markers.push(createMarker(offer.type, offer.description).setLngLat([offer.lng, offer.lat]).addTo(map.value))
+        markers.push(createMarker(offer).setLngLat([offer.lng, offer.lat]).addTo(map.value))
       })
     }
   },
@@ -102,8 +101,8 @@ watchEffect(() => {
 
   if (store.activeFilters.maxPrice || store.activeFilters.type || store.activeFilters.maxRadius) {
     markers.forEach(marker => marker.remove())
-    store.filteredOffers.forEach(marker => {
-      const m = createMarker(marker.type, marker.description).setLngLat([marker.lng, marker.lat])
+    store.filteredOffers.forEach(o => {
+      const m = createMarker(offer).setLngLat([offer.lng, offer.lat])
       filteredMarkers.push(m)
       m.addTo(map.value)
     }) ?? []
@@ -134,7 +133,7 @@ q-page.flex.flex-column.h-max.scroll
     OfferFilterForm    
 
   q-dialog(v-model="showOffer")
-    OfferDetails(:offer="offer")
+    OfferDetails(:offer="detailsOffer")
   q-btn(
     @click='flyToUser()',
     fab,
