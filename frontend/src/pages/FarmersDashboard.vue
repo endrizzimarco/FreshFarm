@@ -22,7 +22,7 @@
         </q-card>
 
         <br />
-        <q-card class="h-25">
+        <!-- <q-card class="h-25">
           <q-card-section class="mt-3 my-styles">🛰️ Weather This Week</q-card-section>
           <q-card-section>
             <q-table
@@ -33,14 +33,13 @@
               :grid="$q.screen.gt.xs"
             ></q-table>
           </q-card-section>
-        </q-card>
+        </q-card> -->
       </div>
       <!-- Widgets -->
       <div class="col-md-9">
         <h2 class="mb-4" style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px">
           &nbsp;&nbsp;📊 Farmers Dashboard
         </h2>
-
         <div class="row">
           <div class="col-md-6">
             <q-card class="mb-3 border">
@@ -67,13 +66,6 @@
             <q-card class="mb-3 border">
               <q-card-section>
                 <div class="text-h4">&nbsp;Average Time of Sales</div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-md-6">
-            <q-card class="mb-3 border">
-              <q-card-section>
-                <div class="text-h4">&nbsp;Top 4 Items Sold In The Area</div>
               </q-card-section>
             </q-card>
           </div>
