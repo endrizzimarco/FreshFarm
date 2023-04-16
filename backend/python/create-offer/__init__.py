@@ -5,7 +5,7 @@ import json
 def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions: func.Out[str]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a create-offer request.')
 
-    allowed_keys = ["id", "farmerId", "lat", "lng", "price", "type", "items", "description", "pictureUrl"]
+    allowed_keys = ["id", "farmerId", "lat", "lng", "price", "type", "items", "description", "pictureUrl", "title"]
     req_body = req.get_json()
     new_offer = {k: req_body[k] for k in allowed_keys if k in req_body}
     logging.info(f"New offer: {new_offer}")
