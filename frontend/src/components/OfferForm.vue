@@ -3,7 +3,8 @@ import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth'
-import { userAPI } from 'boot/axios'
+import { useFarmerStore } from 'src/stores/farmer-functions'
+import { getOfferIcon } from 'boot/utils'
 
 const emit = defineEmits(['submitted'])
 
@@ -11,7 +12,7 @@ const OfferForm = ref()
 const $q = useQuasar()
 
 const offerData = reactive({
-  name: '',
+  title: '',
   price: 0.0,
   type: 'Dairy',
   description: '',
@@ -23,7 +24,7 @@ const validateOffer = () => {
     if (success) {
       let coords = await geocodeLocation()
       let requestBody = {
-        name: offerData.name,
+        title: offerData.title,
         price: offerData.price,
         type: offerData.type,
         lng: coords[0],
@@ -31,14 +32,13 @@ const validateOffer = () => {
         description: offerData.description,
         farmerId: useAuthStore().userID
       }
-      // FIXME: call the FARMERS api here!!!!
-      const response = await userAPI.post('create-offer', requestBody)
+      const response = await useFarmerStore().createOffer(requestBody)
       if (response.status === 200) {
         $q.notify({
           progress: true,
           position: 'top',
           type: 'positive',
-          message: `Offer ${offerData.name} created`,
+          message: `Offer ${offerData.title} created`,
           actions: [
             {
               label: '✕',
@@ -46,7 +46,7 @@ const validateOffer = () => {
             }
           ]
         })
-        offerData.name = ''
+        offerData.title = ''
         offerData.price = 0.0
         offerData.type = 'Dairy'
         offerData.description = ''
@@ -70,25 +70,6 @@ let geocodeLocation = async () => {
     }
   })
   return response.data.features[0].center
-}
-
-const getOfferIcon = offerType => {
-  switch (offerType) {
-    case 'Dairy':
-      return 'https://img.icons8.com/plasticine/100/null/milk-bottle.png'
-    case 'Eggs':
-      return 'https://img.icons8.com/plasticine/100/null/eggs.png'
-    case 'Meat':
-      return 'https://img.icons8.com/plasticine/100/null/steak-rare.png'
-    case 'Grain':
-      return 'https://img.icons8.com/plasticine/100/null/wheat.png'
-    case 'Fruit':
-      return 'https://img.icons8.com/plasticine/100/null/strawberry.png'
-    case 'Veggies':
-      return 'https://img.icons8.com/plasticine/100/null/carrot.png'
-    case 'Other':
-      return 'https://img.icons8.com/plasticine/100/null/paper-bag-with-seeds.png'
-  }
 }
 
 onMounted(() => {
@@ -122,10 +103,10 @@ q-card.full-width
     ) Submit Offer
   //- 'Create Offer' Form
   q-form.q-pa-md(ref='OfferForm', data-cy='OfferForm' greedy autofocus)
-    //- Offer name field
+    //- Offer title field
     .row
       q-input.full-width(
-        v-model='offerData.name',
+        v-model='offerData.title',
         :dense='true',
         :rules='[val => (val !== null && val !== "") || "Please insert a name for the offer."]',
         lazy-rules,
@@ -135,7 +116,7 @@ q-card.full-width
         placeholder='Milk and eggs'
       )
         template(v-slot:before)
-          span.text-subtitle1.text-blue-grey-10 Offer name:&nbsp&nbsp
+          span.text-subtitle1.text-blue-grey-10 Offer title:&nbsp&nbsp
 
     //- Offer Price field
     .row

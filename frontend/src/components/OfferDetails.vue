@@ -32,6 +32,7 @@ q-card.my-card(flat)
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+
 const props = defineProps(['offer', 'pictureUrl'])
 
 const address = ref('')
@@ -55,28 +56,6 @@ const getChipColor = type => {
       return 'grey'
     default:
       return 'grey'
-  }
-}
-
-const getUserCoords = async () => {
-  if (navigator.geolocation) {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          resolve({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          })
-        },
-        error => {
-          reject(error)
-        }
-      )
-    })
-  } else {
-    return new Promise((resolve, reject) => {
-      reject('Geolocation is not supported by this browser.')
-    })
   }
 }
 

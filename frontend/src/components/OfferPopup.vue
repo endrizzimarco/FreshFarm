@@ -2,6 +2,9 @@
 import axios from 'axios'
 import { onBeforeMount, ref } from 'vue'
 
+const emit = defineEmits(['closed'])
+const emitClosed = () => emit('closed')
+
 const props = defineProps(['text'])
 
 const image = ref('')
@@ -19,5 +22,5 @@ const getImage = async () => {
 span.font-semibold {{ text }} - £ 20
 img(width="100", height="100" :src="image")
 .text-center
-  button.bg-blue-500.p-1.text-white.mt-1.rounded.w-full.shadow-xl.cursor-pointer GO TO OFFER
+  button.bg-blue-500.p-1.text-white.mt-1.rounded.w-full.shadow-xl.cursor-pointer#popupbtn(@click='emitClosed') GO TO OFFER
 </template>
