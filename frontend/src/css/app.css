@@ -24,3 +24,8 @@ mapbox-search-listbox > * > * {
   margin-bottom: 0px;
   display: inline;
 }
+
+/* hack to stop flickering during css animations */
+body {
+  overflow-x: hidden;
+}
