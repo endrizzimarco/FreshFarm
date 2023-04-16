@@ -1,49 +1,29 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useQuasar } from 'quasar'
-import axios from 'axios'
-import { useAuthStore } from 'src/stores/auth'
-import { userAPI } from 'boot/axios'
+import { reactive, computed } from 'vue'
+import { useUserStore } from 'src/stores/user-functions'
+import { getOfferIcon } from 'boot/utils'
 
-const emit = defineEmits(['submitted'])
-
-const OfferForm = ref()
-const $q = useQuasar()
-
-const filterRequest = reactive({
-  maxPrice: null,
-  type: '',
-  radius: 10
-})
+const store = useUserStore()
+const filterData = reactive(JSON.parse(JSON.stringify(store.activeFilters)))
 
 const radiusText = computed(() => {
-  if (filterRequest.radius == null || filterRequest.radius == 0) {
+  if (filterData.maxRadius == null || filterData.maxRadius == 0) {
     return ''
   } else {
-    return filterRequest.radius == 1 ? `${filterRequest.radius} mile` : `${filterRequest.radius} miles`
+    return filterData.maxRadius == 1 ? `${filterData.maxRadius} mile` : `${filterData.maxRadius} miles`
   }
 })
 
 const submitFilter = () => {
-  console.log(`Filtering with: `, filterRequest)
-}
+  // If maxRadius is set but lat or lng is missing, add user coordinates
+  if (filterData.maxRadius && (!filterData.lat || !filterData.lng)) {
+    filterData.lat = store.user_coords.lat
+    filterData.lng = store.user_coords.lng
+  }
 
-const getOfferIcon = offerType => {
-  switch (offerType) {
-    case 'Dairy':
-      return 'https://img.icons8.com/plasticine/100/null/milk-bottle.png'
-    case 'Eggs':
-      return 'https://img.icons8.com/plasticine/100/null/eggs.png'
-    case 'Meat':
-      return 'https://img.icons8.com/plasticine/100/null/steak-rare.png'
-    case 'Grain':
-      return 'https://img.icons8.com/plasticine/100/null/wheat.png'
-    case 'Fruit':
-      return 'https://img.icons8.com/plasticine/100/null/strawberry.png'
-    case 'Veggies':
-      return 'https://img.icons8.com/plasticine/100/null/carrot.png'
-    case 'Other':
-      return 'https://img.icons8.com/plasticine/100/null/paper-bag-with-seeds.png'
+  // If any of the filters are set, apply them to the store
+  if (filterData.maxRadius || filterData.maxPrice || filterData.type) {
+    store.filterOn(filterData)
   }
 }
 </script>
@@ -58,14 +38,14 @@ q-card.full-width
     //- Offer MaxPrice field
     .row
       q-input(
-        v-model.number="filterRequest.maxPrice",
-        :dense='true'
+        v-model.number="filterData.maxPrice",
+        dense
         outlined,
         rounded,
         type="number"
           )
             template(v-slot:prepend)
-              q-icon(name="attach_money")
+              q-icon(name="currency_pound")
             template(v-slot:before)
               span.text-subtitle1.text-blue-grey-10 Max Price:&nbsp&nbsp 
 
@@ -73,9 +53,9 @@ q-card.full-width
     //- Offer Radius field
     .grid.grid-cols-12.pt-1
       .col-span-3.flex.items-center
-        span.text-subtitle1.text-blue-grey-10 Radius:&nbsp {{ radiusText }}
+        span.text-subtitle1.text-blue-grey-10 Radius:&nbsp; {{ radiusText ? radiusText : 'Infinite' }}
       .col-span-9
-        q-slider.mt-2.px-5(v-model.number="filterRequest.radius" :min="0.5" :max="10" :step="0.5"  )
+        q-slider.mt-2.px-5(v-model.number="filterData.maxRadius" :min="0.5" :max="10" :step="0.5"  )
 
     q-separator.my-5
     //- Offer Type field
@@ -85,14 +65,15 @@ q-card.full-width
         v-for='offerType in ["Dairy", "Eggs", "Meat", "Grain", "Fruit", "Veggies", "Other"]'
       )
         img.cursor-pointer.q-pa-xs.w-16(
-          @click='filterRequest.type = offerType' 
+          @click='filterData.type = offerType' 
           :src='getOfferIcon(offerType)',
-          :style='filterRequest.type == offerType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
+          :style='filterData.type == offerType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
         )
         span.text-xs.text-blue-grey-10.text-center {{offerType}}
 
     //- Submit Filter action
     q-card-actions(align="right").pt3
-      q-btn(v-close-popup flat color="primary" label="Apply" @click="submitFilter(filterRequest)")
+      q-btn(v-close-popup flat color="red-6" label="Clear" @click="store.clearFilters()")
+      q-btn(v-close-popup flat color="primary" label="Apply" @click="submitFilter()")
       
 </template>

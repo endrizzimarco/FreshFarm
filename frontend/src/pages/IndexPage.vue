@@ -1,23 +1,31 @@
 <script setup>
-import { createApp, ref, onMounted } from 'vue'
+import { createApp, ref, onMounted, watch, watchEffect } from 'vue'
 import mapboxgl from 'mapbox-gl'
 import OfferPopup from 'components/OfferPopup.vue'
 import OfferFilterForm from 'components/OfferFilterForm.vue'
+import OfferDetails from 'components/OfferDetails.vue'
+import { useUserStore } from 'src/stores/user-functions'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
+const store = useUserStore()
+
+var markers = []
+var filteredMarkers = []
 
 const map = ref(null)
-onMounted(() => {
+onMounted(async () => {
   map.value = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [-0.5608289, 51.2426316], // University of Surrey
     zoom: 12
   })
-  createMarker('veggies', 'MY DAWG').setLngLat([-0.5608289, 51.2426316]).addTo(map.value)
-  createMarker('other', 'MY G').setLngLat([-0.5499989, 51.2536315]).addTo(map.value)
+  useUserStore().initLiveUpdates()
+  getLocation()
 })
 
+const offer = ref(null)
+const showOffer = ref(false)
 const filtering = ref(false)
 const maxPriceFilter = ref(null)
 
@@ -40,23 +48,69 @@ const createMarker = (type, text) => {
   popup.on('open', () => {
     popup_component = createApp(OfferPopup, { text })
     popup_component.mount(`#popup`)
+    document.getElementById('popupbtn').addEventListener('click', () => {
+      offer.value = store.offers[0]
+      showOffer.value = true
+      document.getElementsByClassName('mapboxgl-popup-close-button')[0].click()
+    })
   })
   popup.on('close', () => popup_component && popup_component.unmount())
-
   return marker.setPopup(popup)
 }
 
 const getLocation = () => {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition)
+    navigator.geolocation.getCurrentPosition(
+      position => (store.user_coords = { lat: position.coords.latitude, lng: position.coords.longitude })
+    )
   } else {
     console.log('Geolocation is not supported by this browser.')
   }
 }
 
-const showPosition = position => {
-  map.value.flyTo({ center: new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude) })
+const flyToUser = () => {
+  map.value.flyTo({ center: new mapboxgl.LngLat(store.user_coords.lng, store.user_coords.lat) })
 }
+
+watch(
+  store.offers,
+  () => {
+    let oldValues = markers.length
+    let newValues = store.offers.length
+
+    if (oldValues > newValues) {
+      // removed
+      let diff = markers.filter(x => !store.offers.includes(x))[0]
+      // TODO:
+      console.log('removed', diff)
+    } else if (newValues > oldValues) {
+      // added
+      let newOffers = store.offers.filter(x => !markers.includes(x))
+      newOffers.forEach(offer => {
+        markers.push(createMarker(offer.type, offer.description).setLngLat([offer.lng, offer.lat]).addTo(map.value))
+      })
+    }
+  },
+  { immediate: true }
+)
+
+watchEffect(() => {
+  if (filteredMarkers) {
+    filteredMarkers.forEach(marker => marker.remove())
+    filteredMarkers = []
+  }
+
+  if (store.activeFilters.maxPrice || store.activeFilters.type || store.activeFilters.maxRadius) {
+    markers.forEach(marker => marker.remove())
+    store.filteredOffers.forEach(marker => {
+      const m = createMarker(marker.type, marker.description).setLngLat([marker.lng, marker.lat])
+      filteredMarkers.push(m)
+      m.addTo(map.value)
+    }) ?? []
+  } else {
+    markers.forEach(marker => marker.addTo(map.value))
+  }
+})
 </script>
 
 <template lang="pug">
@@ -74,46 +128,48 @@ q-page.flex.flex-column.h-max.scroll
     fab,
     color='teal-14',
     icon='filter_alt',
-    style='position: absolute; right: 2.6em; bottom: 9em'
+    style='position: absolute; right: 2.7em; bottom: 9em'
   )
   q-dialog(v-model="filtering")
     OfferFilterForm    
 
+  q-dialog(v-model="showOffer")
+    OfferDetails(:offer="offer")
   q-btn(
-    @click='getLocation()',
+    @click='flyToUser()',
     fab,
     color='grey-10',
     icon='my_location',
-    style='position: absolute; right: 2.6em; bottom: 4em'
+    style='position: absolute; right: 2.7em; bottom: 4em'
   )
 </template>
 
 <style>
-.dairy {
+.Dairy {
   background-image: url('https://img.icons8.com/plasticine/100/null/milk-bottle.png');
 }
 
-.eggs {
+.Eggs {
   background-image: url('https://img.icons8.com/plasticine/100/null/eggs.png');
 }
 
-.meat {
+.Meat {
   background-image: url('https://img.icons8.com/plasticine/100/null/steak-rare.png');
 }
 
-.grain {
+.Grain {
   background-image: url('https://img.icons8.com/plasticine/100/null/wheat.png');
 }
 
-.fruit {
+.Fruit {
   background-image: url('https://img.icons8.com/plasticine/100/null/strawberry.png');
 }
 
-.veggies {
+.Veggies {
   background-image: url('https://img.icons8.com/plasticine/100/null/carrot.png');
 }
 
-.other {
+.Other {
   background-image: url('https://img.icons8.com/plasticine/100/null/paper-bag-with-seeds.png');
 }
 </style>
