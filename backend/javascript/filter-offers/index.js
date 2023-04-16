@@ -43,7 +43,7 @@ module.exports = async function (context, req) {
   const lng = req.query.lng || (req.body && req.body.lng)
 
   function typeValid() {
-    return type.match(/^(Dairy|Eggs|Meat|Grain|Vegetables|Fruit|Other)$/)
+    return type.match(/^(Dairy|Eggs|Meat|Grain|Veggies|Fruit|Other)$/)
   }
 
   let filterQuery = `SELECT * FROM c `
