@@ -35,7 +35,7 @@ function boundingBox(lat, lng, radius) {
 
 module.exports = async function (context, req) {
   context.log('JavaScript HTTP trigger function processed a request.')
-
+  console.log('Request body: ', req.body)
   const maxPrice = req.query.maxPrice || (req.body && req.body.maxPrice)
   const maxRadius = req.query.maxRadius || (req.body && req.body.maxRadius)
   const type = req.query.type || (req.body && req.body.type)
