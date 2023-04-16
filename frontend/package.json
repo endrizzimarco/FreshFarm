@@ -18,6 +18,8 @@
     "mapbox-gl": "^2.13.0",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
+    "three": "0.127.0",
+    "troisjs": "0.2.3",
     "vue": "^3.0.0",
     "vue-pug-plugin": "^2.0.3",
     "vue-router": "^4.0.0"
