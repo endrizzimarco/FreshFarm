@@ -109,7 +109,7 @@ export default {
     }
   },
   mounted() {
-    const apiKey = '9a4d1285248745b1b38134758230504'
+    const apiKey = import.meta.env.VITE_WEATHER_API_KEY
     const city = 'New York'
     const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=5`
 
@@ -126,8 +126,7 @@ export default {
       })
       .catch(error => console.error(error))
 
-    mapboxgl.accessToken =
-      'pk.eyJ1IjoiYWJkdWxsYWh6YWhpZDEwIiwiYSI6ImNsZjJ5M3UybzBuYWczc256MXdpMGZkMGsifQ.sUQa5jZuO5tn1Nnbjw6CLw'
+    mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -137,3 +136,41 @@ export default {
   }
 }
 </script>
+
+<style>
+/* .card {
+  border: 1px solid #ccc;
+} */
+.my-styles {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+.weather-card {
+  width: 60px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-right: 10px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: black;
+  background-color: #f6ff00;
+  border: 2px solid #f6ff00;
+}
+
+.weather-card__date {
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.weather-card__temp {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+</style>
