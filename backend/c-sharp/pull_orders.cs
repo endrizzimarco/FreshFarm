@@ -13,7 +13,6 @@ namespace FreshFarm
         public string offerId { get; set; }
         public string customerName { get; set; }
         public string collectionTime { get; set; }
-        public string title { get; set; }
     }
 
     public class Item{
@@ -33,7 +32,7 @@ namespace FreshFarm
         public Decimal price { get; set; }
         public string type { get; set; }
         public List<Item> items { get; set; }
-
+        public string title { get; set; }
     }
 
     public class pull_orders

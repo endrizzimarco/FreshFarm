@@ -83,8 +83,7 @@ const validateOrder = async () => {
         customerName: salesData.name,
         collectionTime: salesData.date,
         offerId: props.offer.id,
-        farmerId: props.offer.farmerId,
-        title: props.offer.title
+        farmerId: props.offer.farmerId
       })
       spin.value = false
       emit('submitted')
