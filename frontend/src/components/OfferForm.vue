@@ -4,6 +4,7 @@ import { useQuasar } from 'quasar'
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth'
 import { useFarmerStore } from 'src/stores/farmer-functions'
+import { useUserStore } from 'src/stores/user-functions'
 import { getOfferIcon } from 'boot/utils'
 
 const emit = defineEmits(['submitted'])
@@ -65,9 +66,11 @@ const validateOffer = () => {
 }
 
 let geocodeLocation = async () => {
+  let coords = useUserStore().user_coords
   let response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${offerData.location}.json`, {
     params: {
       access_token: import.meta.env.VITE_MAP_API_KEY,
+      proximity: `${coords.lng},${coords.lat}`,
       country: 'gb',
       types: 'address',
       limit: 1
