@@ -57,7 +57,7 @@ namespace FreshFarm
                     farmerId = offer.farmerId,
                     customerName = myQueueItem.customerName,
                     type = offer.type,
-                    timeOfSale = DateTime.Now,
+                    timeOfSale = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     collectionTime = myQueueItem.collectionTime,
                     price = offer.price,
                     collected = false,
