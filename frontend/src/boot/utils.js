@@ -17,4 +17,25 @@ const getOfferIcon = offerType => {
   }
 }
 
-export { getOfferIcon }
+const getChipColor = type => {
+  switch (type) {
+    case 'Dairy':
+      return 'blue-4'
+    case 'Eggs':
+      return 'orange-4'
+    case 'Meat':
+      return 'red-9'
+    case 'Grain':
+      return 'amber'
+    case 'Fruit':
+      return 'red-5'
+    case 'Veggies':
+      return 'green'
+    case 'other':
+      return 'grey'
+    default:
+      return 'grey'
+  }
+}
+
+export { getOfferIcon, getChipColor }
