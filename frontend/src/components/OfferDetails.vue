@@ -56,6 +56,7 @@ q-card.my-card(flat)
 import { ref, reactive, onMounted, defineEmits } from 'vue'
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user-functions'
+import { getChipColor } from 'boot/utils'
 
 const emit = defineEmits(['submitted'])
 const store = useUserStore()
@@ -82,7 +83,8 @@ const validateOrder = async () => {
         customerName: salesData.name,
         collectionTime: salesData.date,
         offerId: props.offer.id,
-        farmerId: props.offer.farmerId
+        farmerId: props.offer.farmerId,
+        title: props.offer.title
       })
       spin.value = false
       emit('submitted')
@@ -93,27 +95,6 @@ const salesData = reactive({
   name: '',
   date: getDate()
 })
-
-const getChipColor = type => {
-  switch (type) {
-    case 'Dairy':
-      return 'blue-4'
-    case 'Eggs':
-      return 'orange-3'
-    case 'Meat':
-      return 'red-9'
-    case 'Grain':
-      return 'amber'
-    case 'Fruit':
-      return 'red-6'
-    case 'Veggies':
-      return 'green'
-    case 'other':
-      return 'grey'
-    default:
-      return 'grey'
-  }
-}
 
 const address = ref('')
 let geocodeOfferAddress = async () => {
