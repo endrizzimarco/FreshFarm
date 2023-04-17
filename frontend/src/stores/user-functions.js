@@ -58,7 +58,6 @@ export const useUserStore = defineStore('userFunctions', {
 
     async purchaseOffer(params) {
       let result = (await userAPI.post('push_orders', params)).data
-      console.log(result)
     }
   }
 })

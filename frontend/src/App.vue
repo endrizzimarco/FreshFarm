@@ -12,7 +12,6 @@ const getLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(position => {
       userStore.user_coords = { lat: position.coords.latitude, lng: position.coords.longitude }
-      console.log(position)
     })
   } else {
     console.log('Geolocation is not supported by this browser.')

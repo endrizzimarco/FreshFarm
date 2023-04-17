@@ -18,8 +18,6 @@ const newOffer = ref(false)
 
 const currentRoute = computed(() => router.currentRoute.value.path)
 
-console.log(currentRoute.value)
-
 const showMenu = grid => {
   let actions = [
     {

@@ -96,7 +96,6 @@ const flyToUser = () => {
 }
 
 watch(store.latestChange, () => {
-  console.log('latest change: ', store.latestChange)
   if (store.latestChange.type === 'add') {
     const marker = createMarker(store.latestChange.offer)
     markers.push(marker)

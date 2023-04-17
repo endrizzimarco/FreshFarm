@@ -63,14 +63,12 @@ const nextFiveDaysFcast = computed(() => {
 })
 
 onMounted(async () => {
-  console.log('mounted')
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY
   const userStore = useUserStore()
   const city = 'New York'
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${userStore.user_coords.lat},${userStore.user_coords.lng}&days=6`
 
   const response = await axios.get(url)
-  console.log(response.data)
   fullWeatherForecast.value = response.data
   currentWeatherIcon.value = response.data.current.condition.icon
 })

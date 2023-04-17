@@ -60,7 +60,6 @@ const validateOffer = () => {
       } else {
         $q.notify({ progress: true, position: 'top', type: 'negative', message: 'Offer creation failed' })
       }
-      console.log(response.data)
     }
   })
 }
