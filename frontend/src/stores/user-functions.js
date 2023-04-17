@@ -32,7 +32,7 @@ export const useUserStore = defineStore('userFunctions', {
         console.log(event.data)
         this.waiting = false
         this.offers.find((offer, index) => {
-          if (offer.id === event.data) {
+          if (offer.id === event.data.split(' ')[1]) {
             this.offers.splice(index, 1)
           }
         })

@@ -5,6 +5,7 @@ import OfferPopup from 'components/OfferPopup.vue'
 import OfferFilterForm from 'components/OfferFilterForm.vue'
 import OfferDetails from 'components/OfferDetails.vue'
 import { useUserStore } from 'src/stores/user-functions'
+import { useQuasar } from 'quasar'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
 const store = useUserStore()
@@ -28,6 +29,7 @@ const detailsOffer = ref(null)
 const showOffer = ref(false)
 const filtering = ref(false)
 const maxPriceFilter = ref(null)
+const $q = useQuasar()
 
 const filterOffers = maxPrice => {
   console.log('Filtering with max Price: ' + maxPrice)
@@ -35,11 +37,30 @@ const filterOffers = maxPrice => {
   maxPriceFilter.value = null
 }
 
+const offerAccepted = () => {
+  showOffer.value = false
+  $q.notify({
+    message: 'Order placed!',
+    progress: true,
+    color: 'green-4',
+    textColor: 'white',
+    icon: 'check_circle',
+    position: 'top',
+    actions: [
+            {
+              label: '✕',
+              color: 'white'
+            }
+          ]
+  })
+}
+
 var popup_component = null
 const createMarker = offer => {
   const el = document.createElement('div')
   el.style = 'background-size: cover; width: 50px; height: 50px; cursor: pointer;'
   el.className = offer.type
+  el.id = offer.id
   const marker = new mapboxgl.Marker(el)
 
   // Create a popup and add it to the marker.
@@ -79,9 +100,9 @@ watch(
 
     if (oldValues > newValues) {
       // removed
-      let diff = markers.filter(x => !store.offers.includes(x))[0]
-      // TODO:
-      console.log('removed', diff)
+
+      let diff = markers.filter(x => !store.offers.map(o => o.id).includes(x._element.id))
+      diff[0].remove()
     } else if (newValues > oldValues) {
       // added
       let newOffers = store.offers.filter(x => !markers.includes(x))
@@ -90,7 +111,7 @@ watch(
       })
     }
   },
-  { immediate: true }
+  // { immediate: true }
 )
 
 watchEffect(() => {
@@ -101,7 +122,7 @@ watchEffect(() => {
 
   if (store.activeFilters.maxPrice || store.activeFilters.type || store.activeFilters.maxRadius) {
     markers.forEach(marker => marker.remove())
-    store.filteredOffers.forEach(o => {
+    store.filteredOffers.forEach(offer => {
       const m = createMarker(offer).setLngLat([offer.lng, offer.lat])
       filteredMarkers.push(m)
       m.addTo(map.value)
@@ -130,10 +151,10 @@ q-page.flex.flex-column.h-max.scroll
     style='position: absolute; right: 2.7em; bottom: 9em'
   )
   q-dialog(v-model="filtering")
-    OfferFilterForm    
+    OfferFilterForm(@submitted='filtering=false')
 
   q-dialog(v-model="showOffer")
-    OfferDetails(:offer="detailsOffer")
+    OfferDetails(:offer="detailsOffer" @submitted='offerAccepted')
   q-btn(
     @click='flyToUser()',
     fab,
