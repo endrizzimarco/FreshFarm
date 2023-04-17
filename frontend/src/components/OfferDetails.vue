@@ -7,7 +7,7 @@ q-card.my-card(flat)
     .row.items-center
       .col.text-h6.ellipsis {{ offer.title }}
     .row.items-center
-      .col.text-caption.text-grey.ellipsis {{address}} 
+      .col.text-caption.text-grey.ellipsis {{address}}
     .row.items-center
       .col.text-subtitle2.text-grey.ellipsis £{{offer.price.toFixed(2)}}
         q-chip.ms-2.mb-2(size="sm" :color="getChipColor(offer.type)" text-color="white" :label="offer.type")
@@ -18,7 +18,7 @@ q-card.my-card(flat)
             .row.items-center.q-pt-none
               .col.text-subtitle1 Details:
             .row.items-center.q-pt-none
-              .description(v-if='seeMoreActive || offer.description.length <= 100') 
+              .description(v-if='seeMoreActive || offer.description.length <= 100')
                 .col.text-subtitle1.text-grey {{offer.description}}
                 .col.text-right.text-grey.cursor-pointer(v-if="offer.description.length > 100" @click="seeMoreActive = false") See less
               .description(v-else)
@@ -53,10 +53,11 @@ q-card.my-card(flat)
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, defineEmits } from 'vue'
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user-functions'
 
+const emit = defineEmits(['submitted'])
 const store = useUserStore()
 const props = defineProps(['offer'])
 const slide = ref(1)
@@ -74,6 +75,7 @@ const submitOrder = async () => {
     farmerId: props.offer.farmerId
   })
   spin.value = false
+  emit('submitted')
 }
 
 const getDate = () => {
