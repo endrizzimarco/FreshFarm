@@ -8,10 +8,22 @@ const userStore = useUserStore()
 const store = useAuthStore()
 const offersFetched = ref(false)
 
+const getLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      userStore.user_coords = { lat: position.coords.latitude, lng: position.coords.longitude }
+      console.log(position)
+    })
+  } else {
+    console.log('Geolocation is not supported by this browser.')
+  }
+}
+
 onBeforeMount(async () => {
   store.initAuth()
   await userStore.getOffers()
   offersFetched.value = true
+  getLocation()
   await store.handleRedirectPromise()
   websockets = await userStore.initLiveUpdates()
 })

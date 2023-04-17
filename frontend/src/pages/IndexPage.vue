@@ -27,7 +27,6 @@ onMounted(async () => {
     markers.push(marker)
     marker.addTo(map.value)
   })
-  getLocation()
 })
 
 const detailsOffer = ref(null)
