@@ -11,13 +11,13 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions
     logging.info(f"New offer: {new_offer}")
 
     if req:
-        outputDocument.set(func.Document.from_dict(new_offer))
+        offer = outputDocument.set(func.Document.from_dict(new_offer))
         actions.set(json.dumps({
         'actionName': 'sendToAll',
-        'data': json.dumps(new_offer),
+        'data': json.dumps(offer),
         'dataType': 'text'
     }))
-        return func.HttpResponse(f"Offer {new_offer} successfully created!")
+        return func.HttpResponse(f"Offer {offer} successfully created!")
     else:
         return func.HttpResponse(
                     "Please pass a JSON with the new offer in the request body",
