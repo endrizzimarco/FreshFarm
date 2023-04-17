@@ -1,52 +1,170 @@
 <template lang="pug">
-.container-fluid
-  q-btn(@click="router.push('/')" rounded='' label='Back to map' color='grey-10' icon='arrow_back' style='position: absolute; left: 2em; top: 3em; z-index: 1')
-  .row
-    .col-md-3.bg-light.h-100
-      q-card.map-card
-        q-card-section
-          #map(style='height: 200px')
-      q-card.h-50
-        q-card-section.mt-3.my-styles &#x2600;&#xFE0F; Weather Forecast
-        q-card-section
-          .d-flex.justify-content-center.align-items-center
-            .weather-cards.row
-              .weather-card.col(v-for='day in weatherForecast' :key='day.date')
-                .weather-card__date {{ day.day }}
-                .weather-card__temp {{ day.temp }}
+.dashboard.h-full(v-if="!this.loading")
+  q-btn.backbutton-gradient(@click="router.push('/')" rounded='' label='Back to map' icon='arrow_back' style='position: absolute; left: 2em; top: 1.7em; z-index: 1')
+  h1.text-2xl.font-semibold.pb-5.text-center {{ this.username }}'s {{  this.month }} Dashboard
+  .grid.grid-cols-12.grid-rows-2.gap-3
+    //- ===================
+    //- ---- TOP SIDE ----
+    //- ===================
 
-    //- Widgets
-    .col-md-9
-      h2.mb-4(style="font-weight: bold; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 48px")
-        | &#x1F4CA; Farmers Dashboard
-      .row
-        .col-md-6
-          q-card.mb-3.border
-            q-card-section
-              .text-h4 &nbsp;Top 10 Orders
-        .col-md-6
-          q-card.mb-3.border
-            q-card-section
-              .text-h4 &nbsp;Top 10 Selling Items
-        .col-md-6
-          q-card.mb-3.border
-            q-card-section
-              .text-h4 &nbsp;Total Revenue
-        .col-md-6
-          q-card.mb-3.border
-            q-card-section
-              .text-h4 &nbsp;Average Time of Sales
+    //- Weather
+    .col-span-3.row-span-2
+      WeatherWidget
+
+    //- Total Payments
+    .col-span-3.row-span-1
+      TotalCard(
+        color='orange',
+        icon='payments',
+        :value='"£"+farmerStore.dashboardData.total_month_revenue.toFixed(2)',
+        text='Total Payouts'
+      )
+    
+    //- Total Sales
+    .col-span-3.row-span-1
+      TotalCard(
+        color='green',
+        icon='store',
+        :value='farmerStore.dashboardData.total_sales',
+        text='Total Sales'
+      )
+
+    //- Total Customers
+    .col-span-3.row-span-1.col-start-4.row-start-2
+      TotalCard(
+        color='blue',
+        icon='face',
+        :value='farmerStore.dashboardData.total_customers',
+        text='Total Customers'
+      )
+
+    //- Total Customers
+    .col-span-3.row-span-1.col-start-7.row-start-2
+      TotalCard(
+        color='purple',
+        icon='currency_pound',
+        :value='"£"+farmerStore.dashboardData.average_sale_value.toFixed(2)',
+        text='Avg Sale Value'
+      )
+
+    //- Top 4 Customers
+    .col-span-3.row-span-2.flex
+      q-card.p-4.flex-grow
+        .title TOP CUSTOMERS
+        .subtext.pb-5 Your top {{ Object.entries(farmerStore.dashboardData.revenue_by_customerName).slice(0,4).length }} customers in {{  this.month }}
+        q-list(bordered class="rounded-borders" style="max-width: 1000px")
+          q-item.mb-1(clickable v-ripple v-for="obj in Object.entries(farmerStore.dashboardData.revenue_by_customerName).slice(0,4)" :key="obj")
+            q-item-section(avatar)
+              q-avatar
+                img(:src="`https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${obj[0]}`")
+            q-item-section
+              q-item-label(lines="1") {{  obj[0] }}
+              p(caption lines="2").subtext £{{ obj[1].toFixed(2) }}
+
+    //- =====================
+    //- ---- BOTTOM SIDE ----
+    //- =====================
+
+    //- Line Chart
+    .col-span-6
+      q-card.p-4
+        .title Monthly sales
+        .subtext Some cool subtext 
+        Line(:options="chartOptions" :data="lineData")
+
+    //- Table
+    .col-span-4
+      q-card.h-full
+        q-table(title="Orders", :rows='this.farmerStore.dashboardData.this_month_sales' :columns='columns')
+          template(v-slot:body-cell-status="props")
+            q-td(:props="props")
+              q-badge(v-if="props.row.collected == true" color="purple") Yes
+              q-badge(v-else color="red-5") No
+          template(v-slot:body-cell-type="props")
+            q-td(:props="props")
+              q-badge(:color="getChipColor(props.row.type)" ) {{ props.row.type }}
+
+    //- Pie Chart
+    .col-span-2
+      q-card.p-4.h-full
+        .title Sales by Type
+        .subtext.pb-3 For the month of {{ this.month }}
+        Doughnut.mt-10(:options="chartOptions" :data="pieData")
 </template>
 
 <script>
-import mapboxgl from 'mapbox-gl'
+import { Doughnut, Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Filler
+} from 'chart.js'
 import { useRouter } from 'vue-router'
+import WeatherWidget from 'src/components/WeatherWidget.vue'
+import TotalCard from 'src/components/TotalCard.vue'
+import axios from 'axios'
+import { useFarmerStore } from 'src/stores/farmer-functions'
+import { useAuthStore } from 'src/stores/auth'
+import { useUserStore } from 'src/stores/user-functions'
+import { getChipColor } from 'boot/utils'
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Filler
+)
+
 export default {
   name: 'FarmersDashboard',
+  components: { Doughnut, Line, WeatherWidget, TotalCard }, // eslint-disable-line
   data() {
     return {
+      username: useAuthStore().username,
+      farmerStore: useFarmerStore(),
+      userStore: useUserStore(),
+      month: new Date().toLocaleString('default', { month: 'long' }),
+      loading: true,
+      dashboardData: {
+        total_month_revenue: 0,
+        total_sales: 0,
+        total_customers: 0,
+        average_sale_value: 0,
+        this_month_sales: [],
+        uncollected_sales: [],
+        total_revenue_by_type: {},
+        revenue_by_customerName: {}
+      },
       router: useRouter(),
       weatherForecast: [],
+      lineData: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+            label: 'Sales',
+            backgroundColor: '#f87979',
+            borderColor: '#f87979',
+            data: [40, 39, 10, 40, 39, 80, 40]
+          }
+        ]
+      },
+      chartOptions: {
+        responsive: true
+      },
       weatherColumns: [
         {
           name: 'day',
@@ -69,18 +187,80 @@ export default {
           align: 'left',
           field: row => row.description
         }
+      ],
+      columns: [
+        {
+          name: 'title',
+          required: true,
+          label: 'Title',
+          align: 'left',
+          field: 'title'
+        },
+        {
+          name: 'price',
+          label: 'Price',
+          required: true,
+          sortable: true,
+          field: 'price',
+          format: val => `£${val.toFixed(2)}`
+        },
+        {
+          name: 'type',
+          label: 'Type',
+          required: true,
+          sortable: true,
+          field: 'type'
+        },
+
+        {
+          name: 'customer',
+          label: 'Customer',
+          required: true,
+          field: 'customerName'
+        },
+        {
+          name: 'status',
+          label: 'Collected',
+          required: true,
+          field: 'collected'
+        },
+        {
+          name: 'date',
+          label: 'Date of sale',
+          required: true,
+          field: 'timeOfSale',
+          format: val => `${val.split(' ')[0]}`
+        }
       ]
     }
   },
-  mounted() {
+  methods: {
+    getChipColor
+  },
+  computed: {
+    pieData() {
+      return {
+        labels: Object.keys(this.farmerStore.dashboardData.revenue_by_type),
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
+            data: Object.values(this.farmerStore.dashboardData.revenue_by_type)
+          }
+        ],
+        hoverOffset: 4
+      }
+    }
+  },
+  async mounted() {
     const apiKey = import.meta.env.VITE_WEATHER_API_KEY
     const city = 'New York'
     const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=5`
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        this.weatherForecast = data.forecast.forecastday.map(day => {
+    axios
+      .get(url)
+      .then(response => {
+        this.weatherForecast = response.data.forecast.forecastday.map(day => {
           return {
             day: day.date,
             temp: `${day.day.avgtemp_c}°C`,
@@ -90,50 +270,54 @@ export default {
       })
       .catch(error => console.error(error))
 
-    mapboxgl.accessToken = import.meta.env.VITE_MAP_API_KEY
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-73.985664, 40.748817],
-      zoom: 12
-    })
+    await this.farmerStore.getDashboardData()
+    this.loading = false
   }
 }
 </script>
 
-<style>
-/* .card {
-  border: 1px solid #ccc;
-} */
-.my-styles {
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: 'Helvetica Neue', sans-serif;
-}
-.weather-card {
-  width: 60px;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  margin-right: 10px;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: black;
-  background-color: #f6ff00;
-  border: 2px solid #f6ff00;
+<style scoped>
+q-icon {
+  font-size: 3em;
 }
 
-.weather-card__date {
-  font-size: 10px;
-  font-weight: bold;
+.q-layout {
+  background-color: #111827;
+}
+.dashboard {
+  font-family: Lexend, sans-serif;
+  background-color: #111827;
+  color: #e5e7eb;
+  padding: 2em;
 }
 
-.weather-card__temp {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 5px;
+.q-table__container {
+  font-family: Lexend, sans-serif;
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+.q-table__title {
+  @apply text-xl font-semibold text-gray-200 !important;
+}
+
+.q-card {
+  background-color: #1f2937;
+  border-color: #38414e;
+  @apply rounded-lg shadow-2xl border;
+}
+
+.q-item {
+  padding: 0px;
+}
+.q-card__section--vert {
+  padding: 13px;
+}
+
+.title {
+  @apply text-xl font-semibold text-gray-200;
+}
+.subtext {
+  @apply text-gray-400 font-normal;
 }
 </style>

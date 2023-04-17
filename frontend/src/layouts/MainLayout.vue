@@ -3,7 +3,7 @@ import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
 import { useUserStore } from 'src/stores/user-functions.js'
 import { useFunctionsStore } from 'src/stores/functions.js'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
@@ -15,6 +15,10 @@ const leftDrawerOpen = ref(false)
 const confirmLogout = ref(false)
 const offerForm = ref(false)
 const newOffer = ref(false)
+
+const currentRoute = computed(() => router.currentRoute.value.path)
+
+console.log(currentRoute.value)
 
 const showMenu = grid => {
   let actions = [
@@ -74,15 +78,15 @@ const showMenu = grid => {
 </script>
 
 <template lang="pug">
-q-layout(view='lHh Lpr lFf')
+q-layout
   q-dialog(v-model='offerForm')
     OfferForm(@submitted='offerForm = false')
-  q-page-container
+  q-page-container.h-screen
     router-view(v-slot='{ Component, route }')
         transition(name='slide-fade', mode='out-in')
           keep-alive
             component(:is='Component', :key='route.path')
-    q-page-sticky(position='bottom' :offset='[18, 36]')
+    q-page-sticky(v-if='currentRoute != "/dashboard"' position='bottom' :offset='[18, 36]')
       q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
       div(v-if='store.isAuthenticated')
         q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1em;')

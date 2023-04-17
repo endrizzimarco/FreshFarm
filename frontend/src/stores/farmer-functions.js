@@ -3,7 +3,18 @@ import { useAuthStore } from './auth.js'
 import { farmerAPI } from 'boot/axios'
 
 export const useFarmerStore = defineStore('farmerFunctions', {
-  state: () => ({}),
+  state: () => ({
+    dashboardData: {
+      total_month_revenue: 0,
+      total_sales: 0,
+      total_customers: 0,
+      average_sale_value: 0,
+      this_month_sales: [],
+      uncollected_sales: [],
+      total_revenue_by_type: {},
+      revenue_by_customerName: {}
+    }
+  }),
   getters: {},
 
   actions: {
@@ -15,6 +26,18 @@ export const useFarmerStore = defineStore('farmerFunctions', {
         headers: headers
       })
       return response
+    },
+
+    async getDashboardData() {
+      const headers = {
+        Authorization: `Bearer ${await useAuthStore().getToken()}`
+      }
+      const response = await farmerAPI.get('Dashboard', {
+        params: { farmerId: useAuthStore().userID },
+        headers: headers
+      })
+      this.dashboardData = response.data
+      return response.data
     }
   }
 })
