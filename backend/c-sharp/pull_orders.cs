@@ -26,11 +26,13 @@ namespace FreshFarm
         public string farmerId { get; set; }
         public string description { get; set; }
         public string pictureUrl { get; set; }
+        public DateTime timeOfSale { get; set; }
         public Decimal Lat { get; set; }
         public Decimal Lng { get; set; }
         public Decimal price { get; set; }
         public string type { get; set; }
         public List<Item> items { get; set; }
+
     }
 
     public class pull_orders
@@ -55,6 +57,7 @@ namespace FreshFarm
                     farmerId = offer.farmerId,
                     customerName = myQueueItem.customerName,
                     type = offer.type,
+                    timeOfSale = DateTime.Now,
                     collectionTime = myQueueItem.collectionTime,
                     price = offer.price,
                     collected = false,
