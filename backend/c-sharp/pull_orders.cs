@@ -13,6 +13,7 @@ namespace FreshFarm
         public string offerId { get; set; }
         public string customerName { get; set; }
         public string collectionTime { get; set; }
+        public string title { get; set; }
     }
 
     public class Item{
@@ -55,6 +56,7 @@ namespace FreshFarm
                 {
                     id = id,
                     farmerId = offer.farmerId,
+                    title = offer.title,
                     customerName = myQueueItem.customerName,
                     type = offer.type,
                     timeOfSale = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
