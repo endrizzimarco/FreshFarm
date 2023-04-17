@@ -11,6 +11,8 @@ const emit = defineEmits(['submitted'])
 const OfferForm = ref()
 const $q = useQuasar()
 
+const submitted = ref(false)
+
 const offerData = reactive({
   title: '',
   price: 0.0,
@@ -22,6 +24,7 @@ const offerData = reactive({
 const validateOffer = () => {
   OfferForm.value.validate().then(async success => {
     if (success) {
+      submitted.value = true
       let coords = await geocodeLocation()
       let requestBody = {
         title: offerData.title,
@@ -51,6 +54,7 @@ const validateOffer = () => {
         offerData.type = 'Dairy'
         offerData.description = ''
         offerData.location = ''
+        submitted.value = false
         emit('submitted')
       } else {
         $q.notify({ progress: true, position: 'top', type: 'negative', message: 'Offer creation failed' })
@@ -98,9 +102,12 @@ q-card.full-width
       clickable,
       color='primary',
       text-color='white',
-      icon='done',
       style='margin-top: -1px'
-    ) Submit Offer
+
+    ) 
+      q-icon.mr-1.text-xl(v-if='!submitted', name='done')
+      q-spinner-pie.mr-2.text-lg(v-else)
+      span Submit Offer
   //- 'Create Offer' Form
   q-form.q-pa-md(ref='OfferForm', data-cy='OfferForm' greedy autofocus)
     //- Offer title field
