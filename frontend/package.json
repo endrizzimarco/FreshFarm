@@ -14,6 +14,7 @@
     "@azure/msal-browser": "^2.34.0",
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
+    "chart.js": "^4.2.1",
     "dotenv": "^16.0.3",
     "mapbox-gl": "^2.13.0",
     "pinia": "^2.0.11",
@@ -21,6 +22,7 @@
     "three": "0.127.0",
     "troisjs": "0.2.3",
     "vue": "^3.0.0",
+    "vue-chartjs": "^5.2.0",
     "vue-pug-plugin": "^2.0.3",
     "vue-router": "^4.0.0"
   },
