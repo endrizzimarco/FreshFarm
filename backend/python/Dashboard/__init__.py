@@ -1,26 +1,51 @@
 import logging
 import azure.functions as func
 import json
-
+import time
 def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
-    items = []
-    for doc in doc:
-        # items.append(doc.to_dict())
-        item.get("customerName", "")
-
-    # Format the sales data as needed
-    sales_data_formatted = []
-    for item in items:
+    response = {
+        "total_month_revenue": 0,
+        "total_sales": len(doc),
+        "total_customers": len(set([s.get('customerName') for s in doc])),
+        "revenue_by_type":{},
+        "revenue_by_customerName":{},
+        "this_month_sales": [],
+        "uncollected_sales": [],
+    }
+    for s in doc:
         sale = {
-            'farmerId': item['farmerId'],
-            'customerName': item['customerName'],
-            'type': item['type'],
-            'collectionTime': item['collectionTime'],
-            'price': item['price'],
+            "id": s.get('id'),
+            "farmerId": s.get('farmerId'),
+            "customerName": s.get('customerName'),
+            "price": s.get('price'),
+            "type": s.get('type'),
+            "items": s.get('items'),
+            "timeOfSale": s.get('timeOfSale'),
+            "collectionTime": s.get('collectionTime'),
+            "collected": s.get('collected'),
         }
-        sales_data_formatted.append(sale)
+        response["this_month_sales"].append(sale)
+        response["total_month_revenue"] += sale['price']
+
+        if sale['type'] not in response["revenue_by_type"]:
+            response["revenue_by_type"][sale['type']] = sale['price']
+        else:
+            response["revenue_by_type"][sale['type']] += sale['price']
+
+        if sale['customerName'] not in response["revenue_by_customerName"]:
+            response["revenue_by_customerName"][sale['customerName']] = sale['price']
+        else:
+            response["revenue_by_customerName"][sale['customerName']] += sale['price']
+
+        if sale['collected'] == False:
+            response["uncollected_sales"].append(sale)
+
+    response["this_month_sales"].sort(key = lambda x: time.strptime(x['timeOfSale'], "%Y-%m-%d %H:%M:%S"), reverse=True)
+    response["uncollected_sales"].sort(key = lambda x: time.strptime(x['timeOfSale'], "%Y-%m-%d %H:%M:%S"), reverse=True)
+    response["revenue_by_type"] = dict(sorted(response["revenue_by_type"].items(), key = lambda x: x[1], reverse=True))
+    response["revenue_by_customerName"] = dict(sorted(response["revenue_by_customerName"].items(), key = lambda x: x[1], reverse=True))
 
     return func.HttpResponse(
-            json.dumps(sales_data_formatted),
+            json.dumps(response),
             status_code=200,
             mimetype="application/json")
