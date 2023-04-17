@@ -1,8 +1,6 @@
 <script setup>
 import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
-import { useUserStore } from 'src/stores/user-functions.js'
-import { useFunctionsStore } from 'src/stores/functions.js'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'

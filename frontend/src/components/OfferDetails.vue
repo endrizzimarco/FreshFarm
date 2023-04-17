@@ -53,7 +53,7 @@ q-card.my-card(flat)
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, defineEmits } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user-functions'
 import { getChipColor } from 'boot/utils'
