@@ -5,6 +5,7 @@ import time
 def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
     response = {
         "total_month_revenue": 0,
+        "average_sale_value": 0,
         "total_sales": len(doc),
         "total_customers": len(set([s.get('customerName') for s in doc])),
         "revenue_by_type":{},
@@ -44,6 +45,7 @@ def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
     response["uncollected_sales"].sort(key = lambda x: time.strptime(x['timeOfSale'], "%Y-%m-%d %H:%M:%S"), reverse=True)
     response["revenue_by_type"] = dict(sorted(response["revenue_by_type"].items(), key = lambda x: x[1], reverse=True))
     response["revenue_by_customerName"] = dict(sorted(response["revenue_by_customerName"].items(), key = lambda x: x[1], reverse=True))
+    response["average_sale_value"] = response["total_month_revenue"] / response["total_sales"]
 
     return func.HttpResponse(
             json.dumps(response),
