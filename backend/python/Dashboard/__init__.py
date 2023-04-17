@@ -17,6 +17,7 @@ def main(req: func.HttpRequest, doc: func.DocumentList) -> func.HttpResponse:
         sale = {
             "id": s.get('id'),
             "farmerId": s.get('farmerId'),
+            "title": s.get('title'),
             "customerName": s.get('customerName'),
             "price": s.get('price'),
             "type": s.get('type'),
