@@ -9,7 +9,7 @@ def main(req: func.HttpRequest, outputDocument: func.Out[func.Document], actions
     allowed_keys = ["id", "farmerId", "lat", "lng", "price", "type", "items", "description", "pictureUrl", "title"]
     req_body = req.get_json()
     new_offer = {k: req_body[k] for k in allowed_keys if k in req_body}
-    new_offer["id"] = uuid.uuid4()
+    new_offer["id"] = str(uuid.uuid4())
     logging.info(f"New offer: {new_offer}")
 
     if req:
