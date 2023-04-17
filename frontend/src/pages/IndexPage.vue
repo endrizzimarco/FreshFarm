@@ -21,7 +21,12 @@ onMounted(async () => {
     center: [-0.5608289, 51.2426316], // University of Surrey
     zoom: 12
   })
-  useUserStore().initLiveUpdates()
+  // mount all offers to map
+  store.offers.forEach(offer => {
+    const marker = createMarker(offer)
+    markers.push(marker)
+    marker.addTo(map.value)
+  })
   getLocation()
 })
 
@@ -32,7 +37,6 @@ const maxPriceFilter = ref(null)
 const $q = useQuasar()
 
 const filterOffers = maxPrice => {
-  console.log('Filtering with max Price: ' + maxPrice)
   filtering.value = false
   maxPriceFilter.value = null
 }
@@ -47,11 +51,11 @@ const offerAccepted = () => {
     icon: 'check_circle',
     position: 'top',
     actions: [
-            {
-              label: '✕',
-              color: 'white'
-            }
-          ]
+      {
+        label: '✕',
+        color: 'white'
+      }
+    ]
   })
 }
 
@@ -75,7 +79,7 @@ const createMarker = offer => {
     })
   })
   popup.on('close', () => popup_component && popup_component.unmount())
-  return marker.setPopup(popup)
+  return marker.setPopup(popup).setLngLat([offer.lng, offer.lat])
 }
 
 const getLocation = () => {
@@ -92,27 +96,20 @@ const flyToUser = () => {
   map.value.flyTo({ center: new mapboxgl.LngLat(store.user_coords.lng, store.user_coords.lat), zoom: 12 })
 }
 
-watch(
-  store.offers,
-  () => {
-    let oldValues = markers.length
-    let newValues = store.offers.length
-
-    if (oldValues > newValues) {
-      // removed
-
-      let diff = markers.filter(x => !store.offers.map(o => o.id).includes(x._element.id))
-      diff[0].remove()
-    } else if (newValues > oldValues) {
-      // added
-      let newOffers = store.offers.filter(x => !markers.includes(x))
-      newOffers.forEach(offer => {
-        markers.push(createMarker(offer).setLngLat([offer.lng, offer.lat]).addTo(map.value))
-      })
+watch(store.latestChange, () => {
+  console.log('latest change: ', store.latestChange)
+  if (store.latestChange.type === 'add') {
+    const marker = createMarker(store.latestChange.offer)
+    markers.push(marker)
+    marker.addTo(map.value)
+  } else if (store.latestChange.type === 'delete') {
+    let markerToRemove = markers.find(m => m._element.id === store.latestChange.offer.id)
+    if (markerToRemove) {
+      markers.splice(markers.indexOf(markerToRemove), 1)
+      markerToRemove.remove()
     }
-  },
-  // { immediate: true }
-)
+  }
+})
 
 watchEffect(() => {
   if (filteredMarkers) {
@@ -123,7 +120,7 @@ watchEffect(() => {
   if (store.activeFilters.maxPrice || store.activeFilters.type || store.activeFilters.maxRadius) {
     markers.forEach(marker => marker.remove())
     store.filteredOffers.forEach(offer => {
-      const m = createMarker(offer).setLngLat([offer.lng, offer.lat])
+      const m = createMarker(offer)
       filteredMarkers.push(m)
       m.addTo(map.value)
     }) ?? []
@@ -151,7 +148,7 @@ q-page.flex.flex-column.h-max.scroll
     style='position: absolute; right: 2.7em; bottom: 9em'
   )
   q-dialog(v-model="filtering")
-    OfferFilterForm(@submitted='filtering=false')
+    OfferFilterForm(@submitted='filtering = false')
 
   q-dialog(v-model="showOffer")
     OfferDetails(:offer="detailsOffer" @submitted='offerAccepted')

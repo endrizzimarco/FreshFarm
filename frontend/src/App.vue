@@ -1,16 +1,24 @@
 <script setup>
-import { defineComponent } from 'vue'
+import { onUnmounted, onBeforeMount, ref } from 'vue'
 import { useAuthStore } from 'stores/auth.js'
 import { useUserStore } from 'stores/user-functions.js'
-import { onMounted } from 'vue'
 
+var websockets = []
+const userStore = useUserStore()
 const store = useAuthStore()
-onMounted(async () => {
-  await store.handleRedirectPromise()
+const offersFetched = ref(false)
+
+onBeforeMount(async () => {
   store.initAuth()
+  await userStore.getOffers()
+  offersFetched.value = true
+  await store.handleRedirectPromise()
+  websockets = await userStore.initLiveUpdates()
 })
+
+onUnmounted(() => websockets.forEach(ws => ws.close()))
 </script>
 
 <template>
-  <router-view />
+  <router-view v-if="offersFetched" />
 </template>
