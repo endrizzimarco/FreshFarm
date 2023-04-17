@@ -44,7 +44,6 @@ const showMenu = grid => {
         id: 'createOffer'
       }
     )
-    console.log(actions)
   }
 
   const username = store.username ? `, ${store.username}` : ''

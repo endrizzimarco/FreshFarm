@@ -30,7 +30,7 @@ q-card.my-card(flat)
           q-btn(flat color='primary' label="Purchase" v-close-popup @click="slide=2")
       q-carousel-slide(:name='2')
         q-separator
-        q-form.py-3(@submit='', @reset='')
+        q-form.py-3(ref='orderForm')
           q-input(dense, filled, v-model='salesData.name', label='Name', lazy-rules, :rules="[ val => val && val.length > 0 || 'Please type something']")
           q-input(dense filled v-model='salesData.date', label='Pickup time')
             template(v-slot:prepend)
@@ -47,7 +47,7 @@ q-card.my-card(flat)
                       q-btn(v-close-popup='' label='Select' color='primary' flat)
         q-card-actions(align="right")
           q-btn(flat color="red-5" label="Back" @click="slide=1")
-          q-btn(:loading='spin' flat color='primary' label="Finalize" @click="submitOrder")
+          q-btn(:loading='spin' flat color='primary' label="Finalize" @click="validateOrder")
             template(v-slot:loading)
               q-spinner-tail.on-left
 </template>
@@ -60,29 +60,35 @@ import { useUserStore } from 'src/stores/user-functions'
 const emit = defineEmits(['submitted'])
 const store = useUserStore()
 const props = defineProps(['offer'])
-const slide = ref(1)
-const address = ref('')
-const seeMoreActive = ref(false)
+
+// Date stuff
 const options = ref([])
-const spin = ref(false)
-
-const submitOrder = async () => {
-  spin.value = true
-  await store.purchaseOffer({
-    customerName: salesData.name,
-    collectionTime: salesData.date,
-    offerId: props.offer.id,
-    farmerId: props.offer.farmerId
-  })
-  spin.value = false
-  emit('submitted')
-}
-
 const getDate = () => {
   let date = new Date().toISOString().split('T')
   return `${date[0] + ' ' + date[1].slice(0, 5)}`
 }
 
+// Form stuff
+const spin = ref(false)
+const slide = ref(1)
+const seeMoreActive = ref(false)
+const orderForm = ref()
+
+const validateOrder = async () => {
+  orderForm.value.validate().then(async success => {
+    if (success) {
+      spin.value = true
+      await store.purchaseOffer({
+        customerName: salesData.name,
+        collectionTime: salesData.date,
+        offerId: props.offer.id,
+        farmerId: props.offer.farmerId
+      })
+      spin.value = false
+      emit('submitted')
+    }
+  })
+}
 const salesData = reactive({
   name: '',
   date: getDate()
@@ -109,6 +115,7 @@ const getChipColor = type => {
   }
 }
 
+const address = ref('')
 let geocodeOfferAddress = async () => {
   let response = await axios.get(
     `https://api.mapbox.com/geocoding/v5/mapbox.places/${props.offer.lng},${props.offer.lat}.json`,

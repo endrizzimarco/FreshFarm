@@ -27,8 +27,8 @@ const submitFilter = async () => {
   if (filterData.maxRadius || filterData.maxPrice || filterData.type) {
     await store.filterOn(filterData)
   }
-    spin.value = false
-    emit('submitted')
+  spin.value = false
+  emit('submitted')
 }
 </script>
 
@@ -48,10 +48,10 @@ q-card.full-width
         rounded,
         type="number"
           )
-            template(v-slot:prepend)
-              q-icon(name="currency_pound")
-            template(v-slot:before)
-              span.text-subtitle1.text-blue-grey-10 Max Price:&nbsp&nbsp
+          template(v-slot:prepend)
+            q-icon(name="currency_pound")
+          template(v-slot:before)
+            span.text-subtitle1.text-blue-grey-10 Max Price:&nbsp&nbsp
 
     q-separator.my-5
     //- Offer Radius field
