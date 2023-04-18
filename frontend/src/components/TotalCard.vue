@@ -15,7 +15,7 @@ q-card.row.p-9
       q-icon.mt-1(:name='icon' size='xl')
   .col.mt-3.pl-7
     .row.text-2xl {{ value }}
-    .row.text-gray-400.font-normal {{ text }}  
+    .row.text-gray-400.font-normal {{ text }}
 </template>
 
 <style scoped>
