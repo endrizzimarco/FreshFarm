@@ -9,7 +9,7 @@ function toRadians(degrees) {
 function toDegrees(radians) {
   return (radians * 180.0) / Math.PI
 }
-// test
+
 function boundingBox(lat, lng, radius) {
   const R = 3963.0 // Earth's radius in miles
   const latRad = toRadians(lat)
