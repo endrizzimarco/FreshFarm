@@ -3,13 +3,17 @@ import { msalInstance } from 'src/boot/msal'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    isAuthenticated: false
+    isAuthenticated: false,
+    userID: null,
+    username: null
   }),
 
   actions: {
     initAuth() {
       const accounts = msalInstance.getAllAccounts()
       this.isAuthenticated = accounts?.length > 0
+      this.userID = accounts[0]?.localAccountId
+      this.username = accounts[0]?.idTokenClaims?.given_name
     },
 
     async handleRedirectPromise() {

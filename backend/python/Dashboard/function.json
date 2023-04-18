@@ -6,7 +6,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get", "post"]
+      "methods": ["get"]
     },
     {
       "type": "http",
@@ -14,11 +14,14 @@
       "name": "$return"
     },
     {
-      "type": "webPubSubConnection",
-      "name": "conn1",
-      "hub": "sales",
+      "type": "cosmosDB",
       "direction": "in",
-      "connectionStringSetting": "AzureWebPubSubConnectionString"
+      "name": "doc",
+      "databaseName": "FreshFarmDB",
+      "collectionName": "Sales",
+      "createIfNotExists": "true",
+      "connectionStringSetting": "CosmosDBConnectionString",
+      "sqlQuery": "SELECT * FROM c WHERE c.farmerId = {farmerId} AND STARTSWITH(c.timeOfSale, SUBSTRING(GetCurrentDateTime(),0,6))"
     }
   ]
 }

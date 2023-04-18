@@ -8,6 +8,7 @@ def main(req: func.HttpRequest, doc:func.DocumentList) -> func.HttpResponse:
     for offer in doc:
         offers_json.append({
             "id": offer.get('id'),
+            "title": offer.get('title'),
             "farmerId": offer.get('farmerId'),
             "lat": offer.get('lat'),
             "lng": offer.get('lng'),

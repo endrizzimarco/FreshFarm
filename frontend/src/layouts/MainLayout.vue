@@ -1,83 +1,107 @@
 <script setup>
-import EssentialLink from 'components/EssentialLink.vue'
+import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
-import { useUserStore } from 'src/stores/user-functions.js'
-import { useFunctionsStore } from 'src/stores/functions.js'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
-const essentialLinks = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
+const $q = useQuasar()
+const router = useRouter()
 const store = useAuthStore()
 const leftDrawerOpen = ref(false)
+
+const confirmLogout = ref(false)
+const offerForm = ref(false)
+const newOffer = ref(false)
+
+const currentRoute = computed(() => router.currentRoute.value.path)
+
+const showMenu = grid => {
+  let actions = [
+    {
+      label: 'Github',
+      img: 'https://img.icons8.com/plasticine/100/null/github-squared.png',
+      id: 'github'
+    },
+    {
+      label: 'About us',
+      img: 'https://img.icons8.com/plasticine/100/null/info.png',
+      id: 'about'
+    }
+  ]
+
+  if (store.isAuthenticated) {
+    actions.unshift(
+      {
+        label: 'Dashboard',
+        img: 'https://img.icons8.com/plasticine/100/null/bar-chart.png',
+        width: '100px',
+        id: 'dashboard'
+      },
+      {
+        label: 'Create Offer',
+        img: 'https://img.icons8.com/plasticine/100/null/plus-2-math.png',
+        id: 'createOffer'
+      }
+    )
+  }
+
+  const username = store.username ? `, ${store.username}` : ''
+
+  $q.bottomSheet({
+    message: `Hello${username}!`,
+    grid,
+    dark: true,
+    style: 'width: 30000px;',
+    actions: actions
+  }).onOk(action => {
+    switch (action.id) {
+      case 'github':
+        window.open('https://github.com/endrizzimarco/FreshFarm', '_blank')
+        break
+      case 'about':
+        router.push({ path: '/about' })
+        break
+      case 'dashboard':
+        router.push({ path: '/dashboard' })
+        break
+      case 'createOffer':
+        offerForm.value = true
+        break
+    }
+  })
+}
 </script>
 
-<template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-
-        <q-toolbar-title> FreshFarm </q-toolbar-title>
-        <q-btn v-if="!store.isAuthenticated" color="primary" label="Sign in" @click="store.signIn" />
-        <q-btn v-else color="primary" label="Sign out" @click="store.signOut" />
-        <q-btn color="secondary" label="Test Function" @click="useUserStore().test" />
-        <q-btn color="secondary" label="Test Function 2" @click="useFunctionsStore().test2" />
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+<template lang="pug">
+q-layout
+  q-dialog(v-model='offerForm')
+    OfferForm(@submitted='offerForm = false')
+  q-page-container.h-screen
+    router-view(v-slot='{ Component, route }')
+        transition(name='slide-fade', mode='out-in')
+          keep-alive
+            component(:is='Component', :key='route.path')
+    q-page-sticky(v-if='currentRoute != "/dashboard"' position='bottom' :offset='[18, 36]')
+      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
+      div(v-if='store.isAuthenticated')
+        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1em;')
+          q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
+      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1em;')
 </template>
+
+<style>
+.slide-fade-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>

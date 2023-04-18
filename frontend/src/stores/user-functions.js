@@ -1,37 +1,23 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { useAuthStore } from './auth.js'
 import { userAPI } from 'boot/axios'
 
 export const useUserStore = defineStore('userFunctions', {
-  state: () => ({}),
-  getters: {},
+  state: () => ({
+    user_coords: {},
+    offers: [],
+    filteredOffers: [],
+    filtered: false,
+    waiting: false,
+    activeFilters: { maxPrice: null, type: null, maxRadius: null, lat: null, lng: null },
+    latestChange: { offer: null, type: '' }
+  }),
 
   actions: {
-    async test() {
-      const response = await userAPI.get('create-offer', {
-        params: {
-          name: 'TESTING'
-        }
-      })
-      console.log('response: ', response.data)
-    },
-
-    async test2() {
-      const response = await api.get('/farmers/python-test-2', {
-        headers: {
-          Authorization: `Bearer ${await useAuthStore().getToken()}`
-        },
-        params: {
-          name: 'TESTING'
-        }
-      })
-      console.log(response.data)
+    async getOffers() {
+      this.offers = (await userAPI.get('read-offers')).data
     },
 
     async initLiveUpdates() {
-      let offers = (await userAPI.get('read-offers')).data
-      console.log(offers)
-
       let websockets = (await userAPI.get('offers-pubsub')).data
       let ws1 = new WebSocket(websockets.added.url)
       let ws2 = new WebSocket(websockets.deleted.url)
@@ -39,13 +25,39 @@ export const useUserStore = defineStore('userFunctions', {
       ws1.onopen = () => console.log('connected to add updates')
       ws2.onopen = () => console.log('connected to delete updates')
 
+      // ADD EVENT
       ws1.onmessage = event => {
-        console.log('added ' + event.data)
+        let newOffer = JSON.parse(event.data)
+        this.offers.push(newOffer)
+        Object.assign(this.latestChange, { offer: newOffer, type: 'add' })
       }
 
+      // DELETE EVENT
       ws2.onmessage = event => {
-        console.log('deleted' + event.data)
+        this.offers.find((offer, index) => {
+          if (offer?.id === event.data.split(' ')[1]) {
+            let deletedOffer = this.offers[index]
+            this.offers.splice(index, 1)
+            Object.assign(this.latestChange, { offer: deletedOffer, type: 'delete' })
+          }
+        })
+        this.waiting = false
       }
+
+      return [ws1, ws2]
+    },
+
+    async filterOn(params) {
+      this.filteredOffers = (await userAPI.get('filter-offers', { params })).data
+      this.activeFilters = params
+    },
+
+    async clearFilters() {
+      this.activeFilters = {}
+    },
+
+    async purchaseOffer(params) {
+      let result = (await userAPI.post('push_orders', params)).data
     }
   }
 })

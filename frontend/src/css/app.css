@@ -1,1 +1,86 @@
 /* app global css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+mapbox-search-listbox > * > * {
+  z-index: 99999 !important;
+}
+
+.q-bottom-sheet__item > img {
+  font-size: 100px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0px;
+  display: inline;
+}
+
+/* hack to stop flickering during css animations */
+body {
+  overflow-x: hidden;
+}
+
+.backbutton-gradient {
+  background: linear-gradient(270deg, #a51ff0, #0c84f9);
+  background-size: 400% 400%;
+
+  -webkit-animation: backbutton 6s ease-in-out infinite;
+  -moz-animation: backbutton 6s ease-in-out infinite;
+  -o-animation: backbutton 6s ease-in-out infinite;
+  animation: backbutton 6s ease-in-out infinite;
+}
+
+@-webkit-keyframes backbutton {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes backbutton {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-o-keyframes backbutton {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes backbutton {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
