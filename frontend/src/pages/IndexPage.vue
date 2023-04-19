@@ -1,9 +1,9 @@
 <script setup>
 import { createApp, ref, onMounted, watch, watchEffect } from 'vue'
 import mapboxgl from 'mapbox-gl'
-import OfferPopup from 'app/test/vitest/__tests__/demo/OfferPopup.vue.js'
+import OfferPopup from 'components/OfferPopup.vue'
 import OfferFilterForm from 'components/OfferFilterForm.vue'
-import OfferDetails from 'app/test/vitest/__tests__/demo/OfferDetails.vue.js'
+import OfferDetails from 'components/OfferDetails.vue'
 import { useUserStore } from 'src/stores/user-functions'
 import { useQuasar } from 'quasar'
 

@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import IndexPage from './demo/IndexPage.vue'
+import IndexPage from '../../../src/pages/IndexPage.vue'
 
 installQuasarPlugin()
 

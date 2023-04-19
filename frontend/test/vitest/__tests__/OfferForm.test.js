@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import ErrorNotFound from './demo/ErrorNotFound.vue'
+import ErrorNotFound from '../../../src/pages/ErrorNotFound.vue'
 import { createPinia } from 'pinia'
 
 installQuasarPlugin()

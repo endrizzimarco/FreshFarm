@@ -1,8 +1,8 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import OfferFilterForm from './demo/OfferFilterForm.vue'
-import { useUserStore } from 'src/stores/user-functions'
+import OfferFilterForm from '../../../src/components/OfferFilterForm.vue'
+import { useUserStore } from '../../../src/stores/user-functions'
 
 installQuasarPlugin()
 

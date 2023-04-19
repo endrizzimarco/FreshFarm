@@ -21,8 +21,8 @@ const getImage = async () => {
 }
 </script>
 
-<template lang="pug"> 
-span.font-semibold {{ props.title }} 
+<template lang="pug">
+span.font-semibold {{ props.title }}
 span.float-right £{{ price.toFixed(2) }}
 img(width="100", height="100" :src="image")
 .text-center

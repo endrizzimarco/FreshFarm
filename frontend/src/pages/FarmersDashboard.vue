@@ -109,7 +109,7 @@ import {
 } from 'chart.js'
 import { useRouter } from 'vue-router'
 import WeatherWidget from 'src/components/WeatherWidget.vue'
-import TotalCard from 'app/test/vitest/__tests__/demo/TotalCard.vue.js'
+import TotalCard from 'src/components/TotalCard.vue'
 import axios from 'axios'
 import { useFarmerStore } from 'src/stores/farmer-functions'
 import { useAuthStore } from 'src/stores/auth'

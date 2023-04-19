@@ -106,7 +106,7 @@ q-card.full-width
       text-color='white',
       style='margin-top: -1px'
 
-    ) 
+    )
       q-icon.mr-1.text-xl(v-if='!submitted', name='done')
       q-spinner-pie.mr-2.text-lg(v-else)
       span Submit Offer
@@ -167,7 +167,7 @@ q-card.full-width
       div.text-center(v-for='offerType in ["Dairy", "Eggs", "Meat", "Grain", "Fruit", "Veggies", "Other"]')
         img.cursor-pointer.q-pa-xs.w-16(
           :src='getOfferIcon(offerType)',
-          @click='offerData.type = offerType' 
+          @click='offerData.type = offerType'
           :style='offerData.type == offerType ? "box-shadow: 0 0 1pt 2pt #0080ff; border-radius: 30%" : ""'
         )
         span.text-xs.text-blue-grey-10.text-center {{offerType}}

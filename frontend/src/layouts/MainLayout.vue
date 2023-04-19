@@ -1,5 +1,5 @@
 <script setup>
-import OfferForm from 'components/OfferForm.vue'
+import OfferForm from '../components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'

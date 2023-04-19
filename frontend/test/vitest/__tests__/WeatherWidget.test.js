@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import WeatherWidget from './demo/WeatherWidget.vue'
+import WeatherWidget from '../../../src/components/WeatherWidget.vue'
 import { createPinia } from 'pinia'
 
 installQuasarPlugin()

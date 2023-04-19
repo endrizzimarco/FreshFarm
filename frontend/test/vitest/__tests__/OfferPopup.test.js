@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import OfferPopup from './demo/OfferPopup.vue'
+import OfferPopup from '../../../src/components/OfferPopup.vue'
 
 installQuasarPlugin()
 
@@ -17,7 +17,7 @@ describe('OfferPopup', () => {
     expect(wrapper.find('span').text()).toContain('Organic Eggs')
     // expect(wrapper.find('span').text()).toContain('£3.99')
   })
-
+  //s
   it('displays an image', async () => {
     const wrapper = mount(OfferPopup, {
       props: {
