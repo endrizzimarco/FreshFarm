@@ -19,7 +19,7 @@
         :value='"£"+farmerStore.dashboardData.total_month_revenue.toFixed(2)',
         text='Total Payouts'
       )
-    
+
     //- Total Sales
     .col-span-3.row-span-1
       TotalCard(
@@ -69,7 +69,7 @@
     .col-span-6
       q-card.p-4
         .title Monthly sales
-        .subtext Some cool subtext 
+        .subtext Some cool subtext
         Line(:options="chartOptions" :data="lineData")
 
     //- Table
@@ -109,7 +109,7 @@ import {
 } from 'chart.js'
 import { useRouter } from 'vue-router'
 import WeatherWidget from 'src/components/WeatherWidget.vue'
-import TotalCard from 'src/components/TotalCard.vue'
+import TotalCard from 'app/test/vitest/__tests__/demo/TotalCard.vue.js'
 import axios from 'axios'
 import { useFarmerStore } from 'src/stores/farmer-functions'
 import { useAuthStore } from 'src/stores/auth'

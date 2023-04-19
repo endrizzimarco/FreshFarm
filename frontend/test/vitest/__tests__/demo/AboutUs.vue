@@ -118,7 +118,7 @@ export default {
 </script>
 
 <template lang="pug">
-div 
+div
   q-btn(
     @click='router.push("/")',
     rounded,
@@ -143,21 +143,21 @@ div
 
 
   q-card.centered.opacity-90.rounded-xl.shadow-2xl.p-5
-    p.text-xl.font-semibold.pb-2 About us 
-    span Welcome to FreshFarm, a platform dedicated to supporting local farmers and bringing fresh produce to your doorstep. Our mission is to provide a hassle-free way for farmers to connect with customers who are looking for the freshest, healthiest and most delicious produce available. 
+    p.text-xl.font-semibold.pb-2 About us
+    span Welcome to FreshFarm, a platform dedicated to supporting local farmers and bringing fresh produce to your doorstep. Our mission is to provide a hassle-free way for farmers to connect with customers who are looking for the freshest, healthiest and most delicious produce available.
     span We believe in sustainable agriculture, and we are committed to helping farmers reduce food waste, increase profits, and grow their business.
     p At FreshFarm, we have a passion for supporting small farmers and promoting a healthy lifestyle. We believe that everyone deserves access to fresh, local food, and we are working hard to make it a reality. Our platform allows farmers to post their available produce on a map, making it easy for customers to find the closest farm and place an order. We believe that this is the future of food distribution and we are excited to be a part of it.
-    p.text-xl.font-semibold.mt-6 Privacy 
+    p.text-xl.font-semibold.mt-6 Privacy
     p.mt-2 At FreshFarm, we take your privacy seriously. We understand that you are trusting us with your personal information, and we are committed to protecting it. We will never share or sell your personal data to third parties without your consent, and we only collect the minimum amount of data necessary to provide our services. Here is what we collect and how we use it:
     ul.mt-2
-      li 
-        span.font-medium Personal information: 
+      li
+        span.font-medium Personal information:
         span We collect your name, email address, and phone number when you sign up for our service. This information is used to create your account and to contact you about your orders.
       li.mt-1
-        span.font-medium Payment information: 
+        span.font-medium Payment information:
         span We collect your payment information when you place an order. This information is encrypted and securely stored by our payment processor, and is only used to process your payment.
       li.mt-1
-        span.font-medium Location data: 
+        span.font-medium Location data:
         span We collect your location data when you use our platform. This information is used to display the location of nearby farms on a map, and to provide you with the most accurate information about available produce. We take all reasonable measures to protect your personal information from unauthorized access, use or disclosure. If you have any questions or concerns about our privacy policy, please don't hesitate to contact us.
 </template>
 
