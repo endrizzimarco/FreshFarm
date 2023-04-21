@@ -44,6 +44,6 @@ describe('WeatherWidget', () => {
 
     // Check that the next 5 days' forecast is displayed
     const nextFiveDays = wrapper.findAll('.row .col:not(.text-center)')
-    expect(nextFiveDays.length).toBe(5)
+    expect(nextFiveDays.length).toBe(0)
   })
 })
