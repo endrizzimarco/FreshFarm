@@ -11,7 +11,7 @@ export const useFarmerStore = defineStore('farmerFunctions', {
       average_sale_value: 0,
       this_month_sales: [],
       uncollected_sales: [],
-      total_revenue_by_type: {},
+      revenue_by_type: {},
       revenue_by_customerName: {}
     }
   }),

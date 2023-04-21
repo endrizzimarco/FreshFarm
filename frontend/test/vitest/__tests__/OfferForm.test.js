@@ -1,13 +1,9 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
+import OfferForm from '../../../src/components/OfferForm.vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import OfferForm from '../../../src/components/OfferForm.vue'
-import { createPinia } from 'pinia'
 
 installQuasarPlugin()
-
-const pinia = createPinia()
-pinia._testing = false
 
 const mapboxsearch = {
   autofill: vi.fn()

@@ -1,12 +1,10 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import WeatherWidget from '../../../src/components/WeatherWidget.vue'
-import { createPinia } from 'pinia'
+import { createTestingPinia } from '@pinia/testing'
 
 installQuasarPlugin()
-const pinia = createPinia()
-pinia._testing = true
 
 describe('WeatherWidget', () => {
   it('renders the weather forecast for the current location', async () => {
@@ -14,6 +12,9 @@ describe('WeatherWidget', () => {
     const userStore = { user_coords: { lat: 40.7128, lng: -74.006 } }
     const wrapper = mount(WeatherWidget, {
       global: {
+        global: {
+          plugins: [createTestingPinia({ createSpy: vi.fn() })]
+        },
         mocks: {
           $store: {
             getters: {
