@@ -78,20 +78,20 @@ let geocodeLocation = async () => {
   return response.data.features[0].center
 }
 
-onMounted(() => {
-  mapboxsearch.autofill({
-    accessToken: import.meta.env.VITE_MAP_API_KEY,
-    options: {
-      country: 'gb',
-      limit: 5,
-      types: 'address',
-      proximity: 'ip',
-      autocomplete: true,
-      fuzzyMatch: true,
-      language: 'en'
-    }
-  })
-})
+// onMounted(() => {
+//   mapboxsearch.autofill({
+//     accessToken: import.meta.env.VITE_MAP_API_KEY,
+//     options: {
+//       country: 'gb',
+//       limit: 5,
+//       types: 'address',
+//       proximity: 'ip',
+//       autocomplete: true,
+//       fuzzyMatch: true,
+//       language: 'en'
+//     }
+//   })
+// })
 </script>
 
 <template lang="pug">

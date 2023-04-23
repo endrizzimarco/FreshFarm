@@ -9,6 +9,6 @@ const msalConfig = {
   }
 }
 
-let msalInstance = new msal.PublicClientApplication(msalConfig)
+// let msalInstance = new msal.PublicClientApplication(msalConfig)
 
-export { msalInstance }
+// export { msalInstance }
