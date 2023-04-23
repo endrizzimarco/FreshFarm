@@ -1,7 +1,7 @@
 <script setup>
 import OfferForm from 'components/OfferForm.vue'
 import { useAuthStore } from 'stores/auth.js'
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
@@ -15,6 +15,10 @@ const offerForm = ref(false)
 const newOffer = ref(false)
 
 const currentRoute = computed(() => router.currentRoute.value.path)
+const hideActions = computed(() => {
+  return currentRoute.value == "/dashboard" || currentRoute.value == "/about"
+})
+const username = store.username ? `, ${store.username}` : ''
 
 const showMenu = grid => {
   let actions = [
@@ -46,7 +50,7 @@ const showMenu = grid => {
     )
   }
 
-  const username = store.username ? `, ${store.username}` : ''
+
 
   $q.bottomSheet({
     message: `Hello${username}!`,
@@ -82,12 +86,12 @@ q-layout
         transition(name='slide-fade', mode='out-in')
           keep-alive
             component(:is='Component', :key='route.path')
-    q-page-sticky(v-if='currentRoute != "/dashboard"' position='bottom' :offset='[18, 36]')
+    q-page-sticky(v-if='!hideActions' position='bottom' :offset='[18, 36]')
       q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
       div(v-if='store.isAuthenticated')
-        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1em;')
+        q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1.5em;')
           q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
-      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1em;')
+      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1.5em;')
 </template>
 
 <style>
