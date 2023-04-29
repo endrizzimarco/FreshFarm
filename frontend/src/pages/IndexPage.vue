@@ -35,11 +35,6 @@ const filtering = ref(false)
 const maxPriceFilter = ref(null)
 const $q = useQuasar()
 
-const filterOffers = maxPrice => {
-  filtering.value = false
-  maxPriceFilter.value = null
-}
-
 const offerAccepted = () => {
   showOffer.value = false
   $q.notify({
