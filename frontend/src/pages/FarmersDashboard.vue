@@ -243,7 +243,6 @@ export default {
         labels: Object.keys(this.farmerStore.dashboardData.revenue_by_type),
         datasets: [
           {
-            label: 'Data One',
             backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
             data: Object.values(this.farmerStore.dashboardData.revenue_by_type)
           }
