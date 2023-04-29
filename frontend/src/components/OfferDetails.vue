@@ -1,7 +1,7 @@
 <template lang="pug">
 q-card.my-card(flat)
   //- Will be offer pictureUrl
-  q-img(src='https://cdn.quasar.dev/img/chicken-salad.jpg')
+  q-img(:src='getOfferImg(offer.type)' class='q-pa-md')
   q-card-section
     q-btn.absolute(fab color='primary' @click="sendDirections()" icon='directions' style='top: 0; right: 12px; transform: translateY(-50%);')
     .row.items-center
@@ -56,7 +56,7 @@ q-card.my-card(flat)
 import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user-functions'
-import { getChipColor } from 'boot/utils'
+import { getChipColor, getOfferImg } from 'boot/utils'
 
 const emit = defineEmits(['submitted'])
 const store = useUserStore()

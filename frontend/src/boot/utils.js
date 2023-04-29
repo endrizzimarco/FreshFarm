@@ -17,6 +17,16 @@ const getOfferIcon = offerType => {
   }
 }
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+const getOfferImg = offerType => {
+  return 'src/assets/offer-images/' + offerType + getRandomInt(1, 3) + '.jpg'
+}
+
 const getChipColor = type => {
   switch (type) {
     case 'Dairy':
@@ -38,4 +48,4 @@ const getChipColor = type => {
   }
 }
 
-export { getOfferIcon, getChipColor }
+export { getOfferIcon, getChipColor, getOfferImg }

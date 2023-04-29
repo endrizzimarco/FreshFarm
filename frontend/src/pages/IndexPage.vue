@@ -69,7 +69,7 @@ const createMarker = offer => {
   // Create a popup and add it to the marker.
   let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`<div id="popup"></div>`)
   popup.on('open', () => {
-    popup_component = createApp(OfferPopup, { title: offer.title, price: offer.price })
+    popup_component = createApp(OfferPopup, { title: offer.title, price: offer.price, type: offer.type })
     popup_component.mount(`#popup`)
     document.getElementById('popupbtn').addEventListener('click', () => {
       detailsOffer.value = offer

@@ -1,28 +1,25 @@
 <script setup>
-import axios from 'axios'
 import { onBeforeMount, ref } from 'vue'
-
+import { getOfferImg } from 'boot/utils'
 const emit = defineEmits(['closed'])
 const emitClosed = () => emit('closed')
 
 const props = defineProps({
   title: String,
-  price: Number
+  price: Number,
+  type: String,
 })
 
 const image = ref('')
 
 onBeforeMount(async () => {
-  image.value = await getImage()
+  image.value = getOfferImg(props.type)
 })
-const getImage = async () => {
-  let res = await axios.get('https://dog.ceo/api/breeds/image/random')
-  return res.data.message
-}
+
 </script>
 
-<template lang="pug"> 
-span.font-semibold {{ props.title }} 
+<template lang="pug">
+span.font-semibold {{ props.title }}
 span.float-right £{{ price.toFixed(2) }}
 img(width="100", height="100" :src="image")
 .text-center
