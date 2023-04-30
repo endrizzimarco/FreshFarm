@@ -42,6 +42,7 @@ const validateOffer = () => {
           progress: true,
           position: 'top',
           type: 'positive',
+          color: 'green-4',
           message: `Offer ${offerData.title} created`,
           actions: [
             {
@@ -139,7 +140,7 @@ q-card.full-width
         type="number"
           )
             template(v-slot:prepend)
-              q-icon(name="attach_money")
+              q-icon(name="currency_pound")
             template(v-slot:before)
               span.text-subtitle1.text-blue-grey-10 Offer price:&nbsp&nbsp
 
