@@ -49,7 +49,7 @@ export const useUserStore = defineStore('userFunctions', {
 
     async filterOn(params) {
       this.filteredOffers = (await userAPI.get('filter-offers', { params })).data
-      Object.assign(this.activeFilters, params)
+      this.activeFilters = params
     },
 
     async clearFilters() {

@@ -17,9 +17,9 @@
         color='orange',
         icon='payments',
         :value='"£"+farmerStore.dashboardData.total_month_revenue.toFixed(2)',
-        text='Total Revenue'
+        text='Total Payouts'
       )
-
+    
     //- Total Sales
     .col-span-3.row-span-1
       TotalCard(
@@ -50,8 +50,8 @@
     //- Top 4 Customers
     .col-span-3.row-span-2.flex
       q-card.p-4.flex-grow
-        .title TOP {{ Object.entries(farmerStore.dashboardData.revenue_by_customerName).slice(0,4).length }} CUSTOMERS
-        .subtext.pb-5 for the month of {{ this.month }}
+        .title TOP CUSTOMERS
+        .subtext.pb-5 Your top {{ Object.entries(farmerStore.dashboardData.revenue_by_customerName).slice(0,4).length }} customers in {{  this.month }}
         q-list(bordered class="rounded-borders" style="max-width: 1000px")
           q-item.mb-1(clickable v-ripple v-for="obj in Object.entries(farmerStore.dashboardData.revenue_by_customerName).slice(0,4)" :key="obj")
             q-item-section(avatar)
@@ -68,8 +68,8 @@
     //- Line Chart
     .col-span-6
       q-card.p-4
-        .title Monthly Revenue
-        .subtext for the past 12 months
+        .title Monthly sales
+        .subtext Some cool subtext 
         Line(:options="chartOptions" :data="lineData")
 
     //- Table
@@ -87,8 +87,8 @@
     //- Pie Chart
     .col-span-2
       q-card.p-4.h-full
-        .title Revenue by Type
-        .subtext.pb-3 for the month of {{ this.month }}
+        .title Sales by Type
+        .subtext.pb-3 For the month of {{ this.month }}
         Doughnut.mt-10(:options="chartOptions" :data="pieData")
 </template>
 
@@ -243,6 +243,7 @@ export default {
         labels: Object.keys(this.farmerStore.dashboardData.revenue_by_type),
         datasets: [
           {
+            label: 'Data One',
             backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
             data: Object.values(this.farmerStore.dashboardData.revenue_by_type)
           }

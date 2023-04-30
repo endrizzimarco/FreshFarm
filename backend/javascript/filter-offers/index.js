@@ -10,7 +10,6 @@ function toDegrees(radians) {
   return (radians * 180.0) / Math.PI
 }
 
-// Returns a bounding box given a center point and radius
 function boundingBox(lat, lng, radius) {
   const R = 3963.0 // Earth's radius in miles
   const latRad = toRadians(lat)
@@ -32,18 +31,6 @@ function boundingBox(lat, lng, radius) {
     maxLng: maxLng,
     minLng: minLng
   }
-}
-// Haversine formula for calculating distance between two points on a sphere
-function getDistanceHaversine(lat1, lon1, lat2, lon2) {
-  const R = 3963.0 // Radius of the earth in miles
-  const dLat = toRadians(lat2 - lat1)
-  const dLon = toRadians(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  const d = R * c // Distance in miles
-  return d
 }
 
 module.exports = async function (context, req) {
@@ -96,19 +83,10 @@ module.exports = async function (context, req) {
       filterQuery += ` WHERE c.price <= ${maxPrice} AND c.type = '${type}' AND c.lat <= ${bb.maxLat} AND c.lat >= ${bb.minLat} AND c.lng <= ${bb.maxLng} AND c.lng >= ${bb.minLng}`
     }
     console.log(filterQuery)
-    const queryResult = await offersContainer.items.query(filterQuery).fetchAll()
-    const offers = queryResult.resources
-
-    // Handle offers on the bounding box edge
-    if (maxRadius && lat && lng) {
-      offers.forEach(offer => {
-        let distance = getDistanceHaversine(lat, lng, offer.lat, offer.lng)
-        if (distance > maxRadius) offers.splice(offers.indexOf(offer), 1)
-      })
-    }
+    const dbstuff = await offersContainer.items.query(filterQuery).fetchAll()
     context.res = {
       // status: 200,  /* Defaults to 200 */
-      body: offers
+      body: dbstuff.resources
     }
   }
 }

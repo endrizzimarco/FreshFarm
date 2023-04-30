@@ -1,5 +1,5 @@
 <script setup>
-import { createApp, ref, onMounted, watch } from 'vue'
+import { createApp, ref, onMounted, watch, watchEffect } from 'vue'
 import mapboxgl from 'mapbox-gl'
 import OfferPopup from 'components/OfferPopup.vue'
 import OfferFilterForm from 'components/OfferFilterForm.vue'
@@ -35,6 +35,11 @@ const filtering = ref(false)
 const maxPriceFilter = ref(null)
 const $q = useQuasar()
 
+const filterOffers = maxPrice => {
+  filtering.value = false
+  maxPriceFilter.value = null
+}
+
 const offerAccepted = () => {
   showOffer.value = false
   $q.notify({
@@ -64,7 +69,7 @@ const createMarker = offer => {
   // Create a popup and add it to the marker.
   let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`<div id="popup"></div>`)
   popup.on('open', () => {
-    popup_component = createApp(OfferPopup, { title: offer.title, price: offer.price, type: offer.type })
+    popup_component = createApp(OfferPopup, { title: offer.title, price: offer.price })
     popup_component.mount(`#popup`)
     document.getElementById('popupbtn').addEventListener('click', () => {
       detailsOffer.value = offer
@@ -104,7 +109,7 @@ watch(store.latestChange, () => {
   }
 })
 
-watch(store.activeFilters, () => {
+watchEffect(() => {
   if (filteredMarkers) {
     filteredMarkers.forEach(marker => marker.remove())
     filteredMarkers = []

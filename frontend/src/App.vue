@@ -19,11 +19,11 @@ const getLocation = () => {
 }
 
 onBeforeMount(async () => {
-  await store.handleRedirectPromise()
   store.initAuth()
   await userStore.getOffers()
   offersFetched.value = true
   getLocation()
+  await store.handleRedirectPromise()
   websockets = await userStore.initLiveUpdates()
 })
 
