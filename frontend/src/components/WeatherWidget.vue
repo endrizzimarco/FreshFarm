@@ -3,12 +3,12 @@ q-card.p-2
   q-card-section
     p.text-lg.font-semibold.text-gray-200 {{fullWeatherForecast?.location.name}} &nbsp;
       q-icon(name="near_me")
-    .float-left 
+    .float-left
       p.text-sm.pt-1 Currently
       p.text-xl {{fullWeatherForecast?.current.temp_c}}°
     .float-right
       p.text-sm {{fullWeatherForecast?.current.condition.text}}
-      q-icon(:name="'img:'+currentWeatherIcon" style="font-size: 2em") 
+      q-icon(:name="'img:'+currentWeatherIcon" style="font-size: 2em")
   br
   q-card-section
     .row.pt-2
@@ -17,10 +17,10 @@ q-card.p-2
         q-icon(:name="'img:'+h.condition.icon" style="font-size: 2em")
         p.text-sm {{h.temp_c}}°
 
-    p.text-sm.pt-5 Next 5 days
+    p.text-sm.pt-5 Upcoming
     .row
-      .col.text-center(v-for='d in nextFiveDaysFcast' :key='d.date')
-        p.text-xs.pt-2 {{new Date(d.date).toLocaleString('default', {day: 'numeric', month: 'short'})}}   
+      .col.text-center(v-for='d in upcomingDaysFcast' :key='d.date')
+        p.text-xs.pt-2 {{dateText(d.date)}}
         q-icon.pt-1(:name="'img:'+d.day.condition.icon" style="font-size: 2em")
         p.text.ml-1 {{d.day.avgtemp_c}}°
 </template>
@@ -32,6 +32,11 @@ import { useUserStore } from 'src/stores/user-functions'
 
 Date.prototype.addHours = function (h) {
   this.setTime(this.getTime() + h * 60 * 60 * 1000)
+  return this
+}
+
+Date.prototype.addDays = function (d) {
+  this.setTime(this.getTime() + d * 24 * 60 * 60 * 1000)
   return this
 }
 
@@ -56,10 +61,20 @@ const nextSixHoursFcast = computed(() => {
   return fcast
 })
 
-const nextFiveDaysFcast = computed(() => {
+const upcomingDaysFcast = computed(() => {
   //get the integer value of the current and next 5 hours
   if (fullWeatherForecast.value === undefined) return []
-  return fullWeatherForecast.value.forecast.forecastday.slice(1, 6)
+  return fullWeatherForecast.value.forecast.forecastday.slice(0,3)
+})
+
+const dateText = ((date) => {
+  if(new Date(date).getDate() === new Date().getDate()){
+    return 'Today'
+  } else if(new Date(date).getDate() === new Date().addDays(1).getDate()){
+    return 'Tomorrow'
+  } else {
+    return new Date(date).toLocaleString('default', {weekday: 'long'})
+  }
 })
 
 onMounted(async () => {
