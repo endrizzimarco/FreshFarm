@@ -1,5 +1,5 @@
 <script setup>
-import { createApp, ref, onMounted, watch, watchEffect } from 'vue'
+import { createApp, ref, onMounted, watch } from 'vue'
 import mapboxgl from 'mapbox-gl'
 import OfferPopup from 'components/OfferPopup.vue'
 import OfferFilterForm from 'components/OfferFilterForm.vue'
@@ -104,7 +104,7 @@ watch(store.latestChange, () => {
   }
 })
 
-watchEffect(() => {
+watch(store.activeFilters, () => {
   if (filteredMarkers) {
     filteredMarkers.forEach(marker => marker.remove())
     filteredMarkers = []
