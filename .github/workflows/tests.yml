@@ -3,20 +3,26 @@ name: Runs All Unit tests
 on: [push, pull_request]
 
 jobs:
-  build:
+  unit-tests:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: frontend
     strategy:
       matrix:
         node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
       - uses: actions/checkout@v3
-      - run: cd frontend
-      - uses: actions/setup-node@v3
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
-      - run: npm test
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: "Run unit tests"
+        run: |
+          npm ci
+          npm test
