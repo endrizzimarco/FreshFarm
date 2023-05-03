@@ -78,7 +78,7 @@ q-card.full-width
     //- Submit Filter action
     q-card-actions(align="right").pt3
       q-btn(v-close-popup flat color="red-6" label="Clear" @click="store.clearFilters()")
-      q-btn(:loading='spin' flat color="primary" label="Apply" @click="submitFilter()")
+      q-btn#submitfilter(:loading='spin' flat color="primary" label="Apply" @click="submitFilter()")
         template(v-slot:loading)
           q-spinner-tail.on-left
 </template>

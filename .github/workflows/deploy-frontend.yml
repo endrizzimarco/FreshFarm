@@ -1,0 +1,33 @@
+name: Deploy frontend
+
+on: [workflow_dispatch]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repo
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@main
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Create .env file"
+        run: |
+          cd frontend
+          touch .env
+          echo "$ENV_FILE" >> .env
+        shell: bash
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+
+      - name: "Build and deploy Container App"
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }}/frontend
+          acrName: freshfarmacr
+          containerAppName: freshfarm
+          resourceGroup: freshfarm

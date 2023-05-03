@@ -16,7 +16,7 @@ const newOffer = ref(false)
 
 const currentRoute = computed(() => router.currentRoute.value.path)
 const hideActions = computed(() => {
-  return currentRoute.value == "/dashboard" || currentRoute.value == "/about"
+  return currentRoute.value == '/dashboard' || currentRoute.value == '/about'
 })
 const username = store.username ? `, ${store.username}` : ''
 
@@ -49,8 +49,6 @@ const showMenu = grid => {
       }
     )
   }
-
-
 
   $q.bottomSheet({
     message: `Hello${username}!`,
@@ -87,11 +85,11 @@ q-layout
           keep-alive
             component(:is='Component', :key='route.path')
     q-page-sticky(v-if='!hideActions' position='bottom' :offset='[18, 36]')
-      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;')
+      q-btn(@click='showMenu(true)' fab color='blue' icon='expand_less' direction='up' data-cy='centerBtn' style='bottom: 1.5em;' aria-label="menu")
       div(v-if='store.isAuthenticated')
         q-fab(vertical-actions-align='left' color='red-5' icon='logout' data-cy='centerBtn' direction='right' style='position: absolute; left: 1em; bottom: 1.5em;')
           q-fab-action(@click='store.signOut' color='red' icon='logout' label='Confirm logout')
-      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1.5em;')
+      q-btn(v-else @click="store.signIn" fab color='purple-12' icon='login' style='position: absolute; left: 1em; bottom: 1.5em;', aria-label="Sign in")
 </template>
 
 <style>

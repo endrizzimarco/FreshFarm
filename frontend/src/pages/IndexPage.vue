@@ -130,7 +130,8 @@ q-page.flex.flex-column.h-max.scroll
   img(
     width= "200",
     src='~/assets/logo.png',
-    style="position: absolute; left: 1em; top: 0em"
+    style="position: absolute; left: 1em; top: 0em",
+    alt='logo'
   )
 
   q-btn(
@@ -139,6 +140,7 @@ q-page.flex.flex-column.h-max.scroll
     color='teal-14',
     icon='filter_alt',
     style='position: absolute; right: 2.7em; bottom: 9em'
+    aria-label="filter offers"
   )
   q-dialog(v-model="filtering")
     OfferFilterForm(@submitted='filtering = false')
@@ -151,6 +153,7 @@ q-page.flex.flex-column.h-max.scroll
     color='grey-10',
     icon='my_location',
     style='position: absolute; right: 2.7em; bottom: 4em'
+    aria-label="center location"
   )
 </template>
 
