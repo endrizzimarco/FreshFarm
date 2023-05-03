@@ -24,7 +24,7 @@ function getRandomInt(min, max) {
 }
 
 const getOfferImg = offerType => {
-  return 'src/assets/offer-images/' + offerType + getRandomInt(1, 3) + '.jpg'
+  return offerType + getRandomInt(1, 3) + '.jpg'
 }
 
 const getChipColor = type => {
