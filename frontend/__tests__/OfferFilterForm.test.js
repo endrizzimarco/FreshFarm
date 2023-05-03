@@ -41,7 +41,6 @@ describe('OfferFilterForm', () => {
 
     // Submit the form
     const applyButton = wrapper.find('#submitfilter')
-    console.log(applyButton)
     await applyButton.trigger('click')
 
     // Check that the filters were applied correctly
