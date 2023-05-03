@@ -6,6 +6,7 @@ import jsconfigPaths from 'vite-jsconfig-paths'
 // https://vitejs.dev/config/
 export default defineConfig({
   test: {
+    setupFiles: ['./__tests__/setup.js'],
     environment: 'happy-dom',
     include: [
       // Matches vitest tests in any subfolder of 'src' or into 'test/vitest/__tests__'
