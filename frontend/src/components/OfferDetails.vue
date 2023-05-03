@@ -27,7 +27,7 @@ q-card.my-card(flat)
         q-separator
         q-card-actions(align="right")
           q-btn(flat color="red-5" label="Close" v-close-popup)
-          q-btn(flat color='primary' label="Purchase" v-close-popup @click="slide=2")
+          q-btn#purchase(flat color='primary' label="Purchase" v-close-popup @click="slide=2")
       q-carousel-slide(:name='2')
         q-separator
         q-form.py-3(ref='orderForm')
@@ -47,7 +47,7 @@ q-card.my-card(flat)
                       q-btn(v-close-popup='' label='Select' color='primary' flat)
         q-card-actions(align="right")
           q-btn(flat color="red-5" label="Back" @click="slide=1")
-          q-btn(:loading='spin' flat color='primary' label="Finalize" @click="validateOrder")
+          q-btn#finalise(:loading='spin' flat color='primary' label="Finalize" @click="validateOrder")
             template(v-slot:loading)
               q-spinner-tail.on-left
 </template>

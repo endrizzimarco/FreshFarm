@@ -14,8 +14,10 @@ describe('OfferPopup', () => {
       }
     })
 
-    expect(wrapper.find('span').text()).toContain('Organic Eggs')
-    // expect(wrapper.find('span').text()).toContain('£3.99') TODO: fix this
+    expect(wrapper.find('.font-semibold').text()).toContain('Organic Eggs')
+    expect(wrapper.find('.float-right').text()).toContain('£3.99')
+    expect(wrapper.find('img')).toBeTruthy()
+    expect(wrapper.find('#popupbtn').text()).toContain('VIEW DETAILS')
   })
 
   it('displays an image', async () => {

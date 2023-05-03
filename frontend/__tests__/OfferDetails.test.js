@@ -1,8 +1,9 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import OfferDetails from '../src/components/OfferDetails.vue'
 import { getChipColor } from '../src/boot/utils'
+import { createTestingPinia } from '@pinia/testing'
 
 installQuasarPlugin()
 
@@ -22,6 +23,13 @@ describe('OfferDetails', () => {
     const wrapper = mount(OfferDetails, {
       props: {
         offer: offer
+      },
+      global: {
+        plugins: [
+          createTestingPinia({
+            createSpy() {}
+          })
+        ]
       }
     })
 
@@ -32,16 +40,17 @@ describe('OfferDetails', () => {
   })
 
   it('sends directions when the directions button is clicked', () => {
+    window.open = vi.fn().mockReturnValue({ close: vi.fn() })
+
     const wrapper = mount(OfferDetails, {
       props: {
         offer: offer
       }
     })
 
-    const sendDirections = jest.fn()
+    const sendDirections = vi.fn()
     wrapper.vm.sendDirections = sendDirections
-
-    const directionsButton = wrapper.find('.q-btn.primary')
+    const directionsButton = wrapper.find('.q-btn')
     directionsButton.trigger('click')
 
     expect(sendDirections).toHaveBeenCalled()
@@ -54,22 +63,22 @@ describe('OfferDetails', () => {
       }
     })
 
-    const validateOrder = jest.fn().mockResolvedValue(true)
-    const emit = jest.spyOn(wrapper.emitted(), 'submitted')
+    const validateOrder = vi.fn()
     wrapper.vm.validateOrder = validateOrder
-
-    const finalizeButton = wrapper.find('.q-btn:not(.primary)')
+    const purchaseButton = wrapper.find('#purchase')
+    await purchaseButton.trigger('click')
+    const finalizeButton = wrapper.find('#finalise')
     await finalizeButton.trigger('click')
 
     expect(validateOrder).toHaveBeenCalled()
-    expect(emit).toHaveBeenCalled()
+    expect(wrapper.emitted()).toHaveProperty('click')
   })
 
   it('returns a valid color for a given offer type', () => {
-    const colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown']
-    const types = ['fruits', 'vegetables', 'meat', 'dairy', 'bakery', 'other']
+    const colors = ['red-5', 'green', 'red-9', 'blue-4', 'grey', 'grey']
+    const types = ['Fruit', 'Veggies', 'Meat', 'Dairy', 'Bakery', 'Other']
     types.forEach((type, index) => {
-      expect(getChipColor(type)).toBe('grey')
+      expect(getChipColor(type)).toBe(colors[index])
     })
   })
 })

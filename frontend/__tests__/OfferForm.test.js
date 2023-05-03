@@ -1,13 +1,13 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest'
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import OfferForm from '../src/components/OfferForm.vue'
 
 installQuasarPlugin()
 
 describe('OfferForm', () => {
   it('renders the form fields correctly', async () => {
-    vi.stubGlobal('mapboxsearch', mapboxsearch)
+    vi.stubGlobal('mapboxsearch', { autofill: vi.fn() })
 
     const wrapper = mount(OfferForm)
 
@@ -29,6 +29,7 @@ describe('OfferForm', () => {
   })
 
   it('validates required fields before submitting', async () => {
+    vi.stubGlobal('mapboxsearch', { autofill: vi.fn() })
     const wrapper = mount(OfferForm)
 
     // Simulate a submit without filling out any fields
@@ -44,6 +45,7 @@ describe('OfferForm', () => {
   })
 
   it('validates that offer title is not empty', async () => {
+    vi.stubGlobal('mapboxsearch', { autofill: vi.fn() })
     const wrapper = mount(OfferForm)
     const titleField = wrapper.find('input[type="text"]')
 

@@ -16,6 +16,5 @@ describe('ErrorNotFound', () => {
     const wrapper = mount(ErrorNotFound)
     expect(wrapper.find('.q-btn').exists()).toBe(true)
     expect(wrapper.find('.q-btn').text()).toBe('Go Home')
-    // expect(wrapper.find('.q-btn').attributes('to')).toBe('/') // TODO: fix this
   })
 })

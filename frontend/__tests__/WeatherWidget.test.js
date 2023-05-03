@@ -50,7 +50,7 @@ describe('WeatherWidget', () => {
     })
   })
 
-  it('displays the weather forecast for the next 5 days', async () => {
+  it('displays the weather forecast for the next 3 days', async () => {
     const wrapper = mount(WeatherWidget, {
       global: {
         plugins: [createTestingPinia({ createSpy: vi.fn() })]
@@ -89,9 +89,8 @@ describe('WeatherWidget', () => {
 
     // Wait for the weather forecast to be fetched
     await wrapper.vm.$nextTick()
-
     // Check that the location name is displayed
-    expect(wrapper.text()).toContain('near_meCurrently°Next 5 day')
+    expect(wrapper.text()).toContain('near_meCurrently°Upcoming')
 
     // Check that the current temperature is displayed
     const currentTemp = wrapper.find('.float-left p.text-xl')
