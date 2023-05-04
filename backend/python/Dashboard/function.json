@@ -21,7 +21,7 @@
       "collectionName": "Sales",
       "createIfNotExists": "true",
       "connectionStringSetting": "CosmosDBConnectionString",
-      "sqlQuery": "SELECT * FROM c WHERE c.farmerId = {farmerId} AND STARTSWITH(c.timeOfSale, SUBSTRING(GetCurrentDateTime(),0,6))"
+      "sqlQuery": "SELECT * FROM c WHERE c.farmerId = {farmerId} AND STARTSWITH(c.timeOfSale, SUBSTRING(GetCurrentDateTime(),0,7))"
     }
   ]
 }
