@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { userAPI } from 'boot/axios'
+import { useAuthStore } from 'src/stores/auth'
 
 export const useUserStore = defineStore('userFunctions', {
   state: () => ({
@@ -18,6 +19,7 @@ export const useUserStore = defineStore('userFunctions', {
     },
 
     async initLiveUpdates() {
+      const authStore = useAuthStore()
       let websockets = (await userAPI.get('offers-pubsub')).data
       let ws1 = new WebSocket(websockets.added.url)
       let ws2 = new WebSocket(websockets.deleted.url)
@@ -29,7 +31,11 @@ export const useUserStore = defineStore('userFunctions', {
       ws1.onmessage = event => {
         let newOffer = JSON.parse(event.data)
         this.offers.push(newOffer)
-        Object.assign(this.latestChange, { offer: newOffer, type: 'add' })
+        Object.assign(this.latestChange, {
+          offer: newOffer,
+          type: 'add',
+          shouldNotify: !authStore.isAuthenticated || !(authStore.userID === newOffer.farmerId)
+        })
       }
 
       // DELETE EVENT
