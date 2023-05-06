@@ -59,7 +59,7 @@ export const useUserStore = defineStore('userFunctions', {
     },
 
     async clearFilters() {
-      this.activeFilters = {}
+      Object.assign(this.activeFilters, { maxPrice: null, type: null, maxRadius: null, lat: null, lng: null })
     },
 
     async purchaseOffer(params) {
