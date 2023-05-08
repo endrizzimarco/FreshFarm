@@ -95,6 +95,22 @@ watch(store.latestChange, () => {
     const marker = createMarker(store.latestChange.offer)
     markers.push(marker)
     marker.addTo(map.value)
+    if(store.latestChange.shouldNotify){
+      $q.notify({
+        message: `A new offer was added to the map!`,
+        progress: true,
+        color: 'blue-4',
+        textColor: 'white',
+        icon: 'info',
+        position: 'top',
+        actions: [
+          {
+            label: '✕',
+            color: 'white'
+          }
+        ]
+      })
+    }
   } else if (store.latestChange.type === 'delete') {
     let markerToRemove = markers.find(m => m._element.id === store.latestChange.offer.id)
     if (markerToRemove) {

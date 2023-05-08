@@ -43,7 +43,7 @@ const validateOffer = () => {
           position: 'top',
           type: 'positive',
           color: 'green-4',
-          message: `Offer ${offerData.title} created`,
+          message: `Offer: ${offerData.title} created successfully!`,
           actions: [
             {
               label: '✕',
